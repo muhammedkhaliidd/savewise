@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">SaveWise</string>
+    <string name="title_activity_main">SaveWise</string>
+    <string name="package_name">com.moneycalculator.app</string>
+    <string name="custom_url_scheme">com.moneycalculator.app</string>
+</resources>
