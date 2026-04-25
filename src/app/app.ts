@@ -25,14 +25,14 @@ import { SavingsStore } from './stores/savings.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <app-layout>
-      <div class="grid gap-6 max-w-4xl mx-auto">
+      <div class="mx-auto grid w-full max-w-5xl gap-4 md:gap-6">
         <app-savings-total
           [total]="savingsStore.totalInBase()"
           [entryCount]="savingsStore.entryCount()"
           [baseCurrency]="exchangeStore.currentBase()"
         />
 
-        <div class="grid md:grid-cols-2 gap-4">
+        <div class="grid gap-4 sm:grid-cols-2">
           <app-savings-form
             [baseCurrency]="exchangeStore.currentBase()"
             (entryAdded)="savingsStore.addEntry($event)"

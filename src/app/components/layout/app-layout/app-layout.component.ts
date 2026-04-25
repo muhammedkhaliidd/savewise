@@ -25,7 +25,7 @@ import { CurrencyService } from '../../../core/services/currency.service';
         (baseCurrencyChange)="exchangeStore.setBaseCurrency($event)"
       />
 
-      <main class="flex-1 overflow-auto p-4">
+      <main class="flex-1 overflow-auto p-3 sm:p-4 md:p-6 lg:p-8">
         <ng-content></ng-content>
       </main>
 

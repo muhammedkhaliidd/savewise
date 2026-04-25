@@ -27,11 +27,11 @@ import type { ExchangeRate } from '../../../models/exchange-rate.model';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="bg-[var(--color-surface)] rounded-[var(--radius)] shadow-sm border border-[var(--color-border)] p-4">
-      <h3 class="text-lg font-semibold mb-4 text-[var(--color-text)]">Configure Exchange Rate</h3>
+    <div class="bg-[var(--color-surface)] rounded-[var(--radius)] shadow-sm border border-[var(--color-border)] p-3 sm:p-4">
+      <h3 class="text-base font-semibold mb-4 text-[var(--color-text)] sm:text-lg">Configure Exchange Rate</h3>
 
       <div class="grid gap-4">
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
           <div>
             <label class="block text-sm font-medium text-[var(--color-text-muted)] mb-1">From</label>
             <app-currency-select

@@ -31,14 +31,14 @@ import type { SavingsEntry } from '../../../models/savings-entry.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div
-      class="bg-[var(--color-surface)] rounded-[var(--radius)] shadow-sm border border-[var(--color-border)] p-4"
+      class="bg-[var(--color-surface)] rounded-[var(--radius)] shadow-sm border border-[var(--color-border)] p-3 sm:p-4"
     >
-      <h3 class="text-lg font-semibold mb-4 text-[var(--color-text)]">Add Savings</h3>
+      <h3 class="text-base font-semibold mb-4 text-[var(--color-text)] sm:text-lg">Add Savings</h3>
 
       <div class="grid gap-4">
         <div>
           <label class="block text-sm font-medium text-[var(--color-text-muted)] mb-1"
-            >Label (optional)</label
+            >Name of the savings</label
           >
           <input
             pInputText
@@ -48,7 +48,7 @@ import type { SavingsEntry } from '../../../models/savings-entry.model';
           />
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
           <div>
             <label class="block text-sm font-medium text-[var(--color-text-muted)] mb-1"
               >Currency</label
@@ -109,7 +109,7 @@ export class SavingsFormComponent {
   canAdd = computed(() => {
     const curr = this.currency();
     const amount = this.amountValue();
-    return curr && amount > 0;
+    return curr && amount > 0 && this.labelValue().trim() !== '';
   });
 
   addEntry(): void {

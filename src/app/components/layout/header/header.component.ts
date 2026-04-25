@@ -11,15 +11,16 @@ import type { Currency } from '../../../models/currency.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <header
-      class="sticky top-0 z-50 flex items-center justify-between px-4 py-3 bg-[var(--color-primary)] text-white shadow-md"
+      class="sticky top-0 z-50 bg-[var(--color-primary)] text-white shadow-md px-3 py-3 sm:px-4 sm:py-3"
     >
+      <div class="mx-auto flex w-full max-w-5xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
       <div class="flex items-center gap-2">
-        <img src="assets/icons/logo.png" alt="SaveWise" class="w-10 h-10" />
-        <span class="text-xl font-bold">SaveWise</span>
+        <img src="assets/icons/logo.png" alt="SaveWise" class="w-8 h-8 sm:w-10 sm:h-10" />
+        <span class="text-lg font-bold sm:text-xl">SaveWise</span>
       </div>
 
-      <div class="flex items-center gap-3">
-        <label class="text-sm text-white/90">Base Currency:</label>
+      <div class="flex items-center gap-2 w-full sm:w-auto sm:gap-3">
+        <label class="hidden text-sm text-white/90 sm:inline">Base Currency:</label>
         <p-select
           [options]="currencies()"
           [ngModel]="selectedBase()"
@@ -29,8 +30,8 @@ import type { Currency } from '../../../models/currency.model';
           filterBy="code,name"
           placeholder="Select"
           (onChange)="baseCurrencyChange.emit($event.value)"
-          style="w-40"
-          [style]="{ 'min-width': '10rem' }"
+          styleClass="w-full sm:w-44"
+          [style]="{ width: '100%' }"
         >
           <ng-template let-currency pTemplate="item">
             <div class="flex items-center gap-2">
@@ -41,6 +42,7 @@ import type { Currency } from '../../../models/currency.model';
             </div>
           </ng-template>
         </p-select>
+      </div>
       </div>
     </header>
   `,
