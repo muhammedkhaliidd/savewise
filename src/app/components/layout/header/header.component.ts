@@ -20,7 +20,7 @@ import type { Currency } from '../../../models/currency.model';
       </div>
 
       <div class="flex items-center gap-2 w-full sm:w-auto sm:gap-3">
-        <label class="hidden text-sm text-white/90 sm:inline">Base Currency:</label>
+        <label class="hidden whitespace-nowrap text-sm text-white/90 sm:inline">Base Currency:</label>
         <p-select
           [options]="currencies()"
           [ngModel]="selectedBase()"
@@ -31,12 +31,16 @@ import type { Currency } from '../../../models/currency.model';
           placeholder="Select"
           (onChange)="baseCurrencyChange.emit($event.value)"
           styleClass="w-full sm:w-44"
+          [panelStyle]="{
+            width: 'min(22rem, calc(100vw - 1rem))',
+            'max-width': 'calc(100vw - 1rem)'
+          }"
           [style]="{ width: '100%' }"
         >
           <ng-template let-currency pTemplate="item">
-            <div class="flex items-center gap-2">
+            <div class="flex min-w-0 items-center gap-2">
               <span class="font-semibold">{{ currency.code }}</span>
-              <span class="text-[var(--color-text-muted)] text-sm truncate">{{
+              <span class="min-w-0 flex-1 truncate text-[var(--color-text-muted)] text-sm">{{
                 currency.name
               }}</span>
             </div>

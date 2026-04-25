@@ -27,11 +27,17 @@ import type { Currency } from '../../../models/currency.model';
       [placeholder]="placeholder()"
       (onChange)="selectionChange.emit($event.value)"
       [styleClass]="styleClass()"
+      [panelStyle]="{
+        width: 'min(22rem, calc(100vw - 1rem))',
+        'max-width': 'calc(100vw - 1rem)'
+      }"
     >
       <ng-template let-currency pTemplate="item">
-        <div class="flex items-center gap-2">
+        <div class="flex min-w-0 items-center gap-2">
           <span class="font-semibold">{{ currency.code }}</span>
-          <span class="text-[var(--color-text-muted)] text-sm truncate">{{ currency.name }}</span>
+          <span class="min-w-0 flex-1 truncate text-[var(--color-text-muted)] text-sm">{{
+            currency.name
+          }}</span>
         </div>
       </ng-template>
     </p-select>
