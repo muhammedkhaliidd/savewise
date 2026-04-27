@@ -1,4 +1,4 @@
-package com.moneycalculator.app;
+package com.savewise.app;
 
 import com.getcapacitor.BridgeActivity;
 

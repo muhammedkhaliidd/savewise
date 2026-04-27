@@ -86,5 +86,17 @@ export const SavingsStore = signalStore(
         lastInputDate: null,
       });
     },
+    reorderEntries(newEntries: SavingsEntry[]): void {
+      console.log('reorderEntries', newEntries);
+      const newDate = new Date().toISOString();
+      patchState(store, {
+        entries: newEntries,
+        lastInputDate: newDate,
+      });
+      storage.saveSavings({
+        entries: newEntries,
+        lastInputDate: newDate,
+      });
+    },
   })),
 );

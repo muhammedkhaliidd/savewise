@@ -18,22 +18,24 @@ import type { ExchangeRate } from '../../../models/exchange-rate.model';
 @Component({
   selector: 'app-rate-config',
   standalone: true,
-  imports: [
-    CommonModule,
-    ButtonModule,
-    InputNumberModule,
-    FormsModule,
-    CurrencySelectComponent,
-  ],
+  imports: [CommonModule, ButtonModule, InputNumberModule, FormsModule, CurrencySelectComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="bg-[var(--color-surface)] rounded-[var(--radius)] shadow-sm border border-[var(--color-border)] p-3 sm:p-4">
-      <h3 class="text-base font-semibold mb-4 text-[var(--color-text)] sm:text-lg">Configure Exchange Rate</h3>
+    <div
+      class="bg-[var(--color-surface)] rounded-[var(--radius)] shadow-sm border border-[var(--color-border)] p-3 sm:p-4"
+    >
+      @if (!editMode()) {
+        <h3 class="text-base font-semibold mb-4 text-[var(--color-text)] sm:text-lg">
+          Configure Exchange Rate
+        </h3>
+      }
 
       <div class="grid gap-4">
         <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
           <div>
-            <label class="block text-sm font-medium text-[var(--color-text-muted)] mb-1">From</label>
+            <label class="block text-sm font-medium text-[var(--color-text-muted)] mb-1"
+              >From</label
+            >
             <app-currency-select
               [currencies]="allCurrencies()"
               [selectedCode]="fromCurrency()"
@@ -66,7 +68,7 @@ import type { ExchangeRate } from '../../../models/exchange-rate.model';
         </div>
 
         <p-button
-          label="Add Rate"
+          [label]="editMode() ? 'Save' : 'Add Rate'"
           (onClick)="addRate()"
           [disabled]="!canAdd()"
           styleClass="w-full"
@@ -78,12 +80,11 @@ import type { ExchangeRate } from '../../../models/exchange-rate.model';
 export class RateConfigComponent {
   private readonly currencyService = inject(CurrencyService);
 
-  existingRates = input<Record<string, number>>({});
+  existingRates = input<ExchangeRate[]>([]);
+  editMode = input(false);
   rateAdded = output<ExchangeRate>();
 
-  readonly allCurrencies = computed(() =>
-    this.currencyService.getAllCurrencies()
-  );
+  readonly allCurrencies = computed(() => this.currencyService.getAllCurrencies());
 
   fromCurrency = signal('');
   toCurrency = signal('');
@@ -102,6 +103,19 @@ export class RateConfigComponent {
         to: this.toCurrency(),
         rate: this.rateValue(),
       });
+      this.reset();
     }
+  }
+
+  reset(): void {
+    this.fromCurrency.set('');
+    this.toCurrency.set('');
+    this.rateValue.set(1);
+  }
+
+  setValues(from: string, to: string, rate: number): void {
+    this.fromCurrency.set(from);
+    this.toCurrency.set(to);
+    this.rateValue.set(rate);
   }
 }

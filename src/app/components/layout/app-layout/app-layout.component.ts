@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
@@ -18,14 +12,14 @@ import { CurrencyService } from '../../../core/services/currency.service';
   imports: [CommonModule, HeaderComponent, FooterComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="flex flex-col h-full">
+    <div class="flex flex-col h-screen overflow-hidden">
       <app-header
         [currencies]="allCurrencies()"
         [baseCurrency]="exchangeStore.currentBase()"
         (baseCurrencyChange)="exchangeStore.setBaseCurrency($event)"
       />
 
-      <main class="flex-1 overflow-auto p-3 sm:p-4 md:p-6 lg:p-8">
+      <main class="flex-1 min-h-0 overflow-auto p-3 sm:p-4 md:p-6 lg:p-8">
         <ng-content></ng-content>
       </main>
 
@@ -38,9 +32,7 @@ export class AppLayoutComponent implements OnInit {
   readonly savingsStore = inject(SavingsStore);
   private readonly currencyService = inject(CurrencyService);
 
-  readonly allCurrencies = computed(() =>
-    this.currencyService.getAllCurrencies()
-  );
+  readonly allCurrencies = computed(() => this.currencyService.getAllCurrencies());
 
   ngOnInit(): void {
     this.exchangeStore.loadFromStorage();

@@ -3,6 +3,7 @@ export interface SavingsEntry {
   currency: string;
   amount: number;
   label?: string;
+  order?: number;
 }
 
 export interface SavingsState {

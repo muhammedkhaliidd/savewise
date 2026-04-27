@@ -33,7 +33,9 @@ import type { SavingsEntry } from '../../../models/savings-entry.model';
     <div
       class="bg-[var(--color-surface)] rounded-[var(--radius)] shadow-sm border border-[var(--color-border)] p-3 sm:p-4"
     >
-      <h3 class="text-base font-semibold mb-4 text-[var(--color-text)] sm:text-lg">Add Savings</h3>
+      @if (!editMode()) {
+        <h3 class="text-base font-semibold mb-4 text-[var(--color-text)] sm:text-lg">Add Savings</h3>
+      }
 
       <div class="grid gap-4">
         <div>
@@ -76,7 +78,7 @@ import type { SavingsEntry } from '../../../models/savings-entry.model';
         </div>
 
         <p-button
-          label="Add Savings"
+          [label]="editMode() ? 'Save' : 'Add Savings'"
           (onClick)="addEntry()"
           [disabled]="!canAdd()"
           styleClass="w-full"
@@ -89,13 +91,14 @@ export class SavingsFormComponent {
   private readonly currencyService = inject(CurrencyService);
 
   baseCurrency = input.required<string>();
+  editMode = input(false);
   entryAdded = output<Omit<SavingsEntry, 'id'>>();
 
   readonly allCurrencies = computed(() => this.currencyService.getAllCurrencies());
 
   labelValue = signal('');
   currency = signal('');
-  amountValue = signal(0);
+  amountValue = signal<number | null>(null);
 
   constructor() {
     effect(() => {
@@ -109,15 +112,16 @@ export class SavingsFormComponent {
   canAdd = computed(() => {
     const curr = this.currency();
     const amount = this.amountValue();
-    return curr && amount > 0 && this.labelValue().trim() !== '';
+    return curr && amount !== null && amount > 0 && this.labelValue().trim() !== '';
   });
 
   addEntry(): void {
     if (this.canAdd()) {
+      const amount = this.amountValue();
       this.entryAdded.emit({
         label: this.labelValue() || undefined,
         currency: this.currency(),
-        amount: this.amountValue(),
+        amount: amount!,
       });
       this.reset();
     }
@@ -126,6 +130,6 @@ export class SavingsFormComponent {
   reset(): void {
     this.labelValue.set('');
     this.currency.set(this.baseCurrency());
-    this.amountValue.set(0);
+    this.amountValue.set(null);
   }
 }
