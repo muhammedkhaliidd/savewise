@@ -27,9 +27,9 @@
 
 html,
 body {
+  height: 100%;
   margin: 0;
   padding: 0;
-  height: 100%;
 }
 
 body {
@@ -50,4 +50,13 @@ body {
 app-root {
   display: block;
   height: 100%;
+}
+
+// Styles for PrimeNG OrderList
+.p-listbox {
+  display: flex !important;
+
+  .p-listbox-list-container {
+    width: 100% !important;
+  }
 }

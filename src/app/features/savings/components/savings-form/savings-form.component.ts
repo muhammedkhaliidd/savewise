@@ -13,9 +13,9 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FormsModule } from '@angular/forms';
-import { CurrencySelectComponent } from '../../currency/currency-select/currency-select.component';
-import { CurrencyService } from '../../../core/services/currency.service';
-import type { SavingsEntry } from '../../../models/savings-entry.model';
+import { CurrencySelectComponent } from '../../../currency/components/currency-select/currency-select.component';
+import { CurrencyService } from '../../../../core/services/currency.service';
+import type { SavingsEntry } from '../../models/savings-entry.model';
 
 @Component({
   selector: 'app-savings-form',
@@ -34,7 +34,9 @@ import type { SavingsEntry } from '../../../models/savings-entry.model';
       class="bg-[var(--color-surface)] rounded-[var(--radius)] shadow-sm border border-[var(--color-border)] p-3 sm:p-4"
     >
       @if (!editMode()) {
-        <h3 class="text-base font-semibold mb-4 text-[var(--color-text)] sm:text-lg">Add Savings</h3>
+        <h3 class="text-base font-semibold mb-4 text-[var(--color-text)] sm:text-lg">
+          Add Savings
+        </h3>
       }
 
       <div class="grid gap-4">

@@ -1,19 +1,12 @@
 import { computed, inject } from '@angular/core';
-import {
-  patchState,
-  signalStore,
-  withComputed,
-  withMethods,
-  withState,
-  type StateSource,
-} from '@ngrx/signals';
+import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { StorageService } from '../core/services/storage.service';
 import type {
   ExchangeRate,
   ExchangeRatesState,
   LegacyExchangeRatesState,
   RateKey,
-} from '../models/exchange-rate.model';
+} from '../features/exchange/models/exchange-rate.model';
 
 const initialState: ExchangeRatesState = {
   rates: [],

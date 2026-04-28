@@ -12,19 +12,20 @@ import { CurrencyService } from '../../../core/services/currency.service';
   imports: [CommonModule, HeaderComponent, FooterComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="flex flex-col h-screen overflow-hidden">
+    <article class="flex flex-col h-screen overflow-hidden">
       <app-header
         [currencies]="allCurrencies()"
         [baseCurrency]="exchangeStore.currentBase()"
         (baseCurrencyChange)="exchangeStore.setBaseCurrency($event)"
       />
 
-      <main class="flex-1 min-h-0 overflow-auto p-3 sm:p-4 md:p-6 lg:p-8">
-        <ng-content></ng-content>
-      </main>
-
-      <app-footer [lastInputDate]="savingsStore.lastInputDate()" />
-    </div>
+      <section class="flex-1 min-h-0 overflow-auto ">
+        <main class="p-3 sm:p-4 md:p-6 lg:p-8">
+          <ng-content></ng-content>
+        </main>
+        <app-footer [lastInputDate]="savingsStore.lastInputDate()" />
+      </section>
+    </article>
   `,
 })
 export class AppLayoutComponent implements OnInit {

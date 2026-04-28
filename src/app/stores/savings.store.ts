@@ -1,7 +1,7 @@
 import { computed, inject } from '@angular/core';
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { StorageService } from '../core/services/storage.service';
-import type { SavingsEntry, SavingsState } from '../models/savings-entry.model';
+import type { SavingsEntry, SavingsState } from '../features/savings/models/savings-entry.model';
 import { ExchangeRateStore } from './exchange-rate.store';
 
 const initialState: SavingsState = {

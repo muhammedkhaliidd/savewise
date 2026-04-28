@@ -1,0 +1,66 @@
+<div
+  class="bg-[var(--color-surface)] rounded-[var(--radius)] shadow-sm border border-[var(--color-border)] p-3 sm:p-4"
+>
+  <h3 class="text-base font-semibold mb-4 text-[var(--color-text)] sm:text-lg">Savings Entries</h3>
+
+  @if (entries().length === 0) {
+    <p class="text-[var(--color-text-muted)] text-center py-4">
+      No savings entries yet. Add your first entry above.
+    </p>
+  } @else {
+    <p-orderList
+      [value]="entriesWithConversion()"
+      [dragdrop]="true"
+      [responsive]="true"
+      (onReorder)="onReorder($event)"
+      dataKey="id"
+      class="w-full"
+      appendTo="body"
+      dataKey="id"
+      scrollHeight="192px"
+    >
+      <ng-template let-entry pTemplate="item">
+        <div
+          class="flex w-full items-center justify-between gap-3 p-2 rounded border border-[var(--color-border)] bg-white"
+        >
+          <div class="flex-1 min-w-0">
+            <p class="truncate font-semibold text-[var(--color-text)]">
+              {{ entry.label || 'Untitled' }}
+            </p>
+            <p class="text-xs text-[var(--color-text-muted)]">
+              @if (entry.currency === baseCurrency()) {
+                <span class="text-[var(--color-primary)] font-semibold">
+                  {{ entry.amount | number: '1.2-2' }} {{ entry.currency }}
+                </span>
+              } @else {
+                {{ entry.amount | number: '1.2-4' }} {{ entry.currency }}
+                =
+                <span class="text-[var(--color-primary)] font-semibold">
+                  {{ entry.convertedAmount | number: '1.2-2' }} {{ baseCurrency() }}
+                </span>
+              }
+            </p>
+          </div>
+          <div class="flex gap-1">
+            <p-button
+              icon="pi pi-pencil"
+              severity="secondary"
+              [outlined]="true"
+              [rounded]="true"
+              size="small"
+              (onClick)="editEntry.emit(entry); $event.stopPropagation()"
+            />
+            <p-button
+              icon="pi pi-trash"
+              severity="danger"
+              [outlined]="true"
+              [rounded]="true"
+              size="small"
+              (onClick)="confirmDelete(entry.id); $event.stopPropagation()"
+            />
+          </div>
+        </div>
+      </ng-template>
+    </p-orderList>
+  }
+</div>

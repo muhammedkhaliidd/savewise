@@ -1,0 +1,62 @@
+<div class="mx-auto grid w-full max-w-5xl gap-4 md:gap-6">
+  <app-savings-total
+    [total]="savingsStore.totalInBase()"
+    [entryCount]="savingsStore.entryCount()"
+    [baseCurrency]="exchangeStore.currentBase()"
+  />
+
+  <div class="grid gap-4 sm:grid-cols-2">
+    <app-savings-form
+      [baseCurrency]="exchangeStore.currentBase()"
+      (entryAdded)="onSavingsAdded($event)"
+    />
+
+    <app-rate-config [existingRates]="exchangeStore.allRates()" (rateAdded)="onRateAdded($event)" />
+  </div>
+
+  <app-savings-list
+    [entries]="savingsStore.allEntries()"
+    [baseCurrency]="exchangeStore.currentBase()"
+    [exchangeStore]="exchangeStore"
+    (deleteEntry)="savingsStore.deleteEntry($event)"
+    (editEntry)="onEditSavingsEntry($event)"
+    (reorder)="savingsStore.reorderEntries($event)"
+  />
+
+  <app-rate-list
+    [rates]="exchangeStore.allRates()"
+    (deleteRate)="onRateDeleted($event)"
+    (editRate)="onEditRate($event)"
+    (reorder)="exchangeStore.reorderRates($event)"
+  />
+</div>
+
+<!-- Edit Savings Dialog -->
+<p-dialog
+  [(visible)]="editSavingsDialogVisible"
+  [modal]="true"
+  header="Edit Savings Entry"
+  [style]="{ width: '90vw', maxWidth: '30rem' }"
+>
+  <app-savings-form
+    #editSavingsForm
+    [editMode]="true"
+    [baseCurrency]="exchangeStore.currentBase()"
+    (entryAdded)="onSaveSavingsEdit($event)"
+  />
+</p-dialog>
+
+<!-- Edit Rate Dialog -->
+<p-dialog
+  [(visible)]="editRateDialogVisible"
+  [modal]="true"
+  header="Edit Exchange Rate"
+  [style]="{ width: '90vw', maxWidth: '30rem' }"
+>
+  <app-rate-config
+    #editRateForm
+    [editMode]="true"
+    [existingRates]="exchangeStore.allRates()"
+    (rateAdded)="onSaveRateEdit($event)"
+  />
+</p-dialog>

@@ -1,15 +1,8 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  effect,
-  input,
-  output,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SelectModule } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
-import type { Currency } from '../../../models/currency.model';
+import type { Currency } from '../../models/currency.model';
 
 @Component({
   selector: 'app-currency-select',
@@ -29,7 +22,7 @@ import type { Currency } from '../../../models/currency.model';
       [styleClass]="styleClass()"
       [panelStyle]="{
         width: 'min(22rem, calc(100vw - 1rem))',
-        'max-width': 'calc(100vw - 1rem)'
+        'max-width': 'calc(100vw - 1rem)',
       }"
     >
       <ng-template let-currency pTemplate="item">

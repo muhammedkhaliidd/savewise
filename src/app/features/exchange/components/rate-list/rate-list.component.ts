@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, input, output } from '@angular/core
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { OrderListModule } from 'primeng/orderlist';
-import type { ExchangeRate } from '../../../models/exchange-rate.model';
+import type { ExchangeRate } from '../../models/exchange-rate.model';
 
 @Component({
   selector: 'app-rate-list',

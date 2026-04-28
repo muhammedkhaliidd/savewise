@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import type { ExchangeRatesState } from '../../models/exchange-rate.model';
-import type { SavingsState } from '../../models/savings-entry.model';
+import type { ExchangeRatesState } from '../../features/exchange/models/exchange-rate.model';
+import type { SavingsState } from '../../features/savings/models/savings-entry.model';
 
 const STORAGE_KEYS = {
   EXCHANGE_RATES: 'money-calc-rates',

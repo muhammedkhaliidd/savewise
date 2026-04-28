@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import currencyCodes from 'currency-codes';
-import type { Currency } from '../../models/currency.model';
+import type { Currency } from '../../features/currency/models/currency.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CurrencyService {
-  private currencies: Currency[] = currencyCodes.data.map((c) => ({
+  private readonly currencies: Currency[] = currencyCodes.data.map((c) => ({
     code: c.code,
     name: c.currency,
-    number: parseInt(c.number, 10),
+    number: Number.parseInt(c.number, 10),
     digits: c.digits,
   }));
 

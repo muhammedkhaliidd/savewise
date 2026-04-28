@@ -11,9 +11,9 @@ import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FormsModule } from '@angular/forms';
-import { CurrencySelectComponent } from '../../currency/currency-select/currency-select.component';
-import { CurrencyService } from '../../../core/services/currency.service';
-import type { ExchangeRate } from '../../../models/exchange-rate.model';
+import { CurrencySelectComponent } from '../../../currency/components/currency-select/currency-select.component';
+import { CurrencyService } from '../../../../core/services/currency.service';
+import type { ExchangeRate } from '../../models/exchange-rate.model';
 
 @Component({
   selector: 'app-rate-config',
