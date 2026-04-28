@@ -51,6 +51,7 @@
     "@angular/build": "^21.1.4",
     "@angular/cli": "^21.1.4",
     "@angular/compiler-cli": "^21.1.0",
+    "@capacitor/assets": "^3.0.5",
     "@capacitor/cli": "^7.6.2",
     "angular-cli-ghpages": "^3.0.3",
     "jsdom": "^27.1.0",
