@@ -8,6 +8,7 @@ import {
   output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CdkDragHandle } from '@angular/cdk/drag-drop';
 import { ButtonModule } from 'primeng/button';
 import { OrderListModule } from 'primeng/orderlist';
 import type { SavingsEntry } from '../../models/savings-entry.model';
@@ -17,7 +18,7 @@ import { ConfirmService } from '../../../../core/services/confirm.service';
 @Component({
   selector: 'app-savings-list',
   standalone: true,
-  imports: [CommonModule, ButtonModule, OrderListModule],
+  imports: [CommonModule, CdkDragHandle, ButtonModule, OrderListModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './savings-list.component.html',
 })

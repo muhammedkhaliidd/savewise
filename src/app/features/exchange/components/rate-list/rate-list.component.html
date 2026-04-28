@@ -1,15 +1,15 @@
 <div
   class="bg-[var(--color-surface)] rounded-[var(--radius)] shadow-sm border border-[var(--color-border)] p-3 sm:p-4"
 >
-  <h3 class="text-base font-semibold mb-4 text-[var(--color-text)] sm:text-lg">Savings Entries</h3>
+  <h3 class="text-base font-semibold mb-4 text-[var(--color-text)] sm:text-lg">Configured Rates</h3>
 
-  @if (entries().length === 0) {
+  @if (rates().length === 0) {
   <p class="text-[var(--color-text-muted)] text-center py-4">
-    No savings entries yet. Add your first entry above.
+    No custom rates configured. Default rate of 1 will be used.
   </p>
   } @else {
   <p-orderList
-    [value]="entriesWithConversion()"
+    [value]="rates()"
     [dragdrop]="true"
     [responsive]="true"
     (onReorder)="onReorder($event)"
@@ -17,27 +17,15 @@
     class="w-full"
     scrollHeight="192px"
   >
-    <ng-template let-entry pTemplate="item">
+    <ng-template let-rate pTemplate="item">
       <div
         class="flex w-full items-center justify-between gap-3 p-2 rounded border border-[var(--color-border)] bg-white"
       >
         <i class="pi pi-bars cursor-grab text-[var(--color-text-muted)]" cdkDragHandle></i>
         <div class="flex-1 min-w-0">
-          <p class="truncate font-semibold text-[var(--color-text)]">
-            {{ entry.label || 'Untitled' }}
-          </p>
+          <p class="font-semibold text-[var(--color-text)]">{{ rate.from }} → {{ rate.to }}</p>
           <p class="text-xs text-[var(--color-text-muted)]">
-            @if (entry.currency === baseCurrency()) {
-            <span class="text-[var(--color-primary)] font-semibold">
-              {{ entry.amount | number : '1.2-2' }} {{ entry.currency }}
-            </span>
-            } @else {
-            {{ entry.amount | number : '1.2-4' }} {{ entry.currency }}
-            =
-            <span class="text-[var(--color-primary)] font-semibold">
-              {{ entry.convertedAmount | number : '1.2-2' }} {{ baseCurrency() }}
-            </span>
-            }
+            1 {{ rate.from }} = {{ rate.rate | number : '1.2-6' }} {{ rate.to }}
           </p>
         </div>
         <div class="flex gap-1">
@@ -47,7 +35,7 @@
             [outlined]="true"
             [rounded]="true"
             size="small"
-            (onClick)="editEntry.emit(entry); $event.stopPropagation()"
+            (onClick)="editRate.emit(rate); $event.stopPropagation()"
           />
           <p-button
             icon="pi pi-trash"
@@ -55,7 +43,7 @@
             [outlined]="true"
             [rounded]="true"
             size="small"
-            (onClick)="confirmDelete(entry.id); $event.stopPropagation()"
+            (onClick)="deleteRate.emit(rate); $event.stopPropagation()"
           />
         </div>
       </div>
