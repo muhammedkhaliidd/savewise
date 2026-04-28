@@ -49,6 +49,7 @@ app-root {
 // Styles for PrimeNG OrderList
 .p-listbox {
   display: flex !important;
+  --p-listbox-option-padding: 0 !important;
 
   .p-listbox-list-container {
     width: 100% !important;

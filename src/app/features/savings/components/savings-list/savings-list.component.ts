@@ -21,6 +21,7 @@ import { ConfirmService } from '../../../../core/services/confirm.service';
   imports: [CommonModule, CdkDragHandle, ButtonModule, OrderListModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './savings-list.component.html',
+  styles: [':host ::ng-deep li:last-child > div { border-bottom-width: 0; }'],
 })
 export class SavingsListComponent implements AfterViewInit {
   private readonly confirmService = inject(ConfirmService);

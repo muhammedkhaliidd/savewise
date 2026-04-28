@@ -9,7 +9,8 @@
     "test": "ng test",
     "build:gh": "ng build --configuration production --base-href \"/savewise/\"",
     "deploy:gh": "npx angular-cli-ghpages --dir=dist/money-calculator/browser",
-    "publish:gh": "npm run build:gh && npm run deploy:gh"
+    "publish:gh": "npm run build:gh && npm run deploy:gh",
+    "cap-sync": "ng build && npx cap sync"
   },
   "prettier": {
     "printWidth": 100,

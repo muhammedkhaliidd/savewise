@@ -11,6 +11,7 @@ import type { ExchangeRate } from '../../models/exchange-rate.model';
   imports: [CommonModule, CdkDragHandle, ButtonModule, OrderListModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './rate-list.component.html',
+  styles: [':host ::ng-deep li:last-child > div { border-bottom-width: 0; }'],
 })
 export class RateListComponent {
   rates = input.required<ExchangeRate[]>();
