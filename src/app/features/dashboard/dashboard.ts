@@ -1,6 +1,7 @@
 import { Component, inject, OnInit, signal, viewChild } from '@angular/core';
 import { RateConfigComponent } from '../exchange/components/rate-config/rate-config.component';
 import { RateListComponent } from '../exchange/components/rate-list/rate-list.component';
+import { ApiRateListComponent } from '../exchange/components/api-rate-list/api-rate-list.component';
 import { SavingsFormComponent } from '../savings/components/savings-form/savings-form.component';
 import { SavingsTotalComponent } from '../savings/components/savings-total/savings-total.component';
 import { SavingsListComponent } from '../savings/components/savings-list/savings-list.component';
@@ -16,6 +17,7 @@ import { SavingsEntry } from '../savings/models/savings-entry.model';
   imports: [
     RateConfigComponent,
     RateListComponent,
+    ApiRateListComponent,
     SavingsFormComponent,
     SavingsListComponent,
     SavingsTotalComponent,
@@ -58,6 +60,15 @@ export class Dashboard implements OnInit {
 
   onRateDeleted(event: { from: string; to: string }): void {
     this.exchangeStore.deleteRate(event.from, event.to);
+  }
+
+  async onSyncFromApi(): Promise<void> {
+    try {
+      await this.exchangeStore.syncFromApi();
+      this.toast.success('Synced', 'Live exchange rates updated');
+    } catch {
+      this.toast.error('Sync failed', 'Could not fetch live exchange rates');
+    }
   }
 
   onEditSavingsEntry(entry: SavingsEntry): void {

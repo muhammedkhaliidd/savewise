@@ -10,7 +10,9 @@
     "build:gh": "ng build --configuration production --base-href \"/savewise/\"",
     "deploy:gh": "npx angular-cli-ghpages --dir=dist/money-calculator/browser",
     "publish:gh": "npm run build:gh && npm run deploy:gh",
-    "cap-sync": "ng build && npx cap sync"
+    "sync-cross-platform": "ng build && npx cap sync",
+    "open-android": "npx cap open android",
+    "sync-open-android": "npm run sync-cross-platform && npm run open-android"
   },
   "prettier": {
     "printWidth": 100,

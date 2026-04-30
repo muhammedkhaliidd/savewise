@@ -29,6 +29,14 @@
     (editRate)="onEditRate($event)"
     (reorder)="exchangeStore.reorderRates($event)"
   />
+
+  <app-api-rate-list
+    [rates]="exchangeStore.apiRateRows()"
+    [baseCurrency]="exchangeStore.currentBase()"
+    [lastSyncedAt]="exchangeStore.lastSyncedAt()"
+    [isSyncing]="exchangeStore.isSyncing()"
+    (sync)="onSyncFromApi()"
+  />
 </div>
 
 <!-- Edit Savings Dialog -->
