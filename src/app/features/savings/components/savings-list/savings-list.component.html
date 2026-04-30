@@ -1,7 +1,10 @@
 <div
   class="bg-[var(--color-surface)] rounded-[var(--radius)] shadow-sm border border-[var(--color-border)] p-3 sm:p-4"
 >
-  <h3 class="text-base font-semibold mb-4 text-[var(--color-text)] sm:text-lg">Savings Entries</h3>
+  <h3 class="flex items-center gap-2 text-base font-semibold mb-4 text-[var(--color-text)] sm:text-lg">
+    <i class="pi pi-wallet text-[var(--color-primary)]"></i>
+    Savings Entries
+  </h3>
 
   @if (entries().length === 0) {
   <p class="text-[var(--color-text-muted)] text-center py-4">

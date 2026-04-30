@@ -59,3 +59,9 @@ app-root {
     display: none !important;
   }
 }
+
+// Styles for PrimeNG ConfirmDialog
+.p-confirmdialog {
+  max-width: 94%;
+  --p-confirmdialog-icon-size: 1.5rem;
+}

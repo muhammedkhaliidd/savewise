@@ -1,8 +1,19 @@
 <div
   class="bg-[var(--color-surface)] rounded-[var(--radius)] shadow-sm border border-[var(--color-border)] p-3 sm:p-4"
 >
-  <div class="flex items-center justify-between mb-3">
-    <h3 class="text-base font-semibold text-[var(--color-text)] sm:text-lg">Live Exchange Rates</h3>
+  <div class="flex justify-between gap-2 mb-3">
+    <div class="flex flex-wrap flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+      <h3
+        class="flex items-center gap-2 text-base font-semibold text-[var(--color-text)] sm:text-lg"
+      >
+        <i class="pi pi-bolt text-[var(--color-primary)]"></i>
+        Live Exchange Rates
+      </h3>
+      <p-iconField iconPosition="left">
+        <p-inputIcon class="pi pi-search" />
+        <input #searchInput pInputText type="text" placeholder="Search" />
+      </p-iconField>
+    </div>
     <p-button
       icon="pi pi-refresh"
       severity="secondary"
@@ -15,37 +26,38 @@
   </div>
 
   <p class="text-xs text-[var(--color-text-muted)] mb-3">
-    @if (lastSyncedAt()) {
-      Synced {{ lastSyncedAt() | date: 'short' }}
-    } @else {
-      Not synced yet
-    }
+    @if (lastSyncedAt()) { Synced {{ lastSyncedAt() | date : 'short' }}
+    } @else { Not synced yet }
   </p>
 
   @if (rates().length === 0) {
-    <p class="text-[var(--color-text-muted)] text-center py-4">
-      No live rates yet — click refresh to sync.
-    </p>
+  <p class="text-[var(--color-text-muted)] text-center py-4">
+    No live rates yet — click refresh to sync.
+  </p>
+  } @else if (filteredRates().length === 0) {
+  <p class="text-[var(--color-text-muted)] text-center py-4">
+    No currencies match "{{ searchQuery() }}".
+  </p>
   } @else {
-    <ul class="max-h-64 overflow-y-auto">
-      @for (row of rates(); track row.currency) {
-        <li
-          class="flex w-full flex-wrap items-center justify-between gap-x-3 gap-y-1 p-2 border-b border-[var(--color-border)]"
-        >
-          <p class="font-semibold text-[var(--color-text)]">
-            1 {{ row.currency }} → {{ row.apiToBase | number: '1.2-6' }} {{ baseCurrency() }}
-          </p>
-          @if (row.customToBase !== null) {
-            <span
-              class="inline-flex items-center gap-1 rounded bg-[var(--color-primary)]/10 px-2 py-0.5 text-xs font-semibold text-[var(--color-primary)]"
-              title="Your override"
-            >
-              <i class="pi pi-pencil" style="font-size: 0.65rem"></i>
-              {{ row.customToBase | number: '1.2-6' }} {{ baseCurrency() }}
-            </span>
-          }
-        </li>
+  <ul class="max-h-64 overflow-y-auto">
+    @for (row of filteredRates(); track row.currency) {
+    <li
+      class="flex w-full flex-wrap items-center justify-between gap-x-3 gap-y-1 p-2 border-b border-[var(--color-border)]"
+    >
+      <p class="font-semibold text-[var(--color-text)]">
+        1 {{ row.currency }} → {{ row.apiToBase | number : '1.2-6' }} {{ baseCurrency() }}
+      </p>
+      @if (row.customToBase !== null) {
+      <span
+        class="inline-flex items-center gap-1 rounded bg-[var(--color-primary)]/10 px-2 py-0.5 text-xs font-semibold text-[var(--color-primary)]"
+        title="Your override"
+      >
+        <i class="pi pi-bookmark" style="font-size: 0.65rem"></i>
+        {{ row.customToBase | number : '1.2-6' }} {{ baseCurrency() }}
+      </span>
       }
-    </ul>
+    </li>
+    }
+  </ul>
   }
 </div>

@@ -10,29 +10,25 @@ import type { SyncIntervalSetting } from '../../../features/exchange/models/exch
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <footer
-      class="flex flex-col gap-1 px-3 py-2 bg-[var(--color-surface)] border-t border-[var(--color-border)] text-xs sm:flex-row sm:items-center sm:justify-between sm:px-4 sm:py-3 sm:text-sm"
+      class="flex items-center justify-between gap-1 px-3 py-2 bg-[var(--color-surface)] border-t border-[var(--color-border)] text-xs sm:flex-row sm:items-center sm:justify-between sm:px-4 sm:py-3 sm:text-sm"
     >
-      <span class="text-[var(--color-text-muted)]"> SaveWise </span>
-
-      <div class="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
-        <span class="text-[var(--color-text-muted)]">
-          @if (lastInputDate()) {
-            Last updated: {{ lastInputDate() | date: 'medium' }}
-          } @else {
-            No savings yet
-          }
-        </span>
-
-        <span class="flex items-center gap-2 text-[var(--color-text-muted)]">
-          Sync: {{ syncIntervalLabel() }}
+      <span class="text-[var(--color-text-muted)]">SaveWise</span>
+      <div class="flex flex-col justify-between sm:flex-row sm:items-center sm:gap-4">
+        <span class="flex items-center gap-1 text-[var(--color-text-muted)]">
+          Exchange Sync: {{ syncIntervalLabel() }}
           <p-button
-            icon="pi pi-pencil"
+            icon="pi pi-pen-to-square"
             severity="secondary"
             [text]="true"
             [rounded]="true"
             size="small"
             (onClick)="editInterval.emit()"
+            styleClass="!p-[0px] !w-[20px] !h-[20px]"
           />
+        </span>
+        <span class="text-[var(--color-text-muted)]">
+          @if (lastInputDate()) { Savings updated: {{ lastInputDate() | date : 'medium' }}
+          } @else { No savings yet }
         </span>
       </div>
     </footer>

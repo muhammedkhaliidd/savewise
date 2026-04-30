@@ -36,7 +36,7 @@ import type { SyncIntervalSetting } from '../../../features/exchange/models/exch
       <app-header
         [currencies]="allCurrencies()"
         [baseCurrency]="exchangeStore.currentBase()"
-        (baseCurrencyChange)="exchangeStore.setBaseCurrency($event)"
+        (baseCurrencyChange)="onBaseCurrencyChanged($event)"
       />
 
       <section class="flex-1 min-h-0 overflow-auto flex flex-col gap-1 space-between">
@@ -88,6 +88,11 @@ export class AppLayoutComponent implements OnInit {
     this.exchangeStore.setSyncInterval(setting.value, setting.unit);
     this.editIntervalDialogVisible.set(false);
     this.toast.success('Updated', 'Sync interval changed');
+  }
+
+  onBaseCurrencyChanged(currency: string): void {
+    this.exchangeStore.setBaseCurrency(currency);
+    void this.runSync();
   }
 
   private listenToSyncInterval(): void {

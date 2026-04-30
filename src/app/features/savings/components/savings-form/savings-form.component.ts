@@ -34,16 +34,17 @@ import type { SavingsEntry } from '../../models/savings-entry.model';
       class="bg-[var(--color-surface)] rounded-[var(--radius)] shadow-sm border border-[var(--color-border)] p-3 sm:p-4"
     >
       @if (!editMode()) {
-        <h3 class="text-base font-semibold mb-4 text-[var(--color-text)] sm:text-lg">
+        <h3 class="flex items-center gap-2 text-base font-semibold mb-4 text-[var(--color-text)] sm:text-lg">
+          <i class="pi pi-plus-circle text-[var(--color-primary)]"></i>
           Add Savings
         </h3>
       }
 
       <div class="grid gap-4">
         <div>
-          <label class="block text-sm font-medium text-[var(--color-text-muted)] mb-1"
-            >Name of the savings</label
-          >
+          <label class="block text-sm font-medium text-[var(--color-text-muted)] mb-1">
+            Name of the savings <span class="text-red-500">*</span>
+          </label>
           <input
             pInputText
             [(ngModel)]="labelValue"
@@ -54,9 +55,9 @@ import type { SavingsEntry } from '../../models/savings-entry.model';
 
         <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
           <div>
-            <label class="block text-sm font-medium text-[var(--color-text-muted)] mb-1"
-              >Currency</label
-            >
+            <label class="block text-sm font-medium text-[var(--color-text-muted)] mb-1">
+              Currency <span class="text-red-500">*</span>
+            </label>
             <app-currency-select
               [currencies]="allCurrencies()"
               [selectedCode]="currency()"
@@ -65,9 +66,9 @@ import type { SavingsEntry } from '../../models/savings-entry.model';
           </div>
 
           <div>
-            <label class="block text-sm font-medium text-[var(--color-text-muted)] mb-1"
-              >Amount</label
-            >
+            <label class="block text-sm font-medium text-[var(--color-text-muted)] mb-1">
+              Amount <span class="text-red-500">*</span>
+            </label>
             <p-inputNumber
               [(ngModel)]="amountValue"
               mode="decimal"

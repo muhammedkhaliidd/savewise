@@ -27,7 +27,7 @@ import type {
       <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
         <div>
           <label class="block text-sm font-medium text-[var(--color-text-muted)] mb-1">
-            Every
+            Every <span class="text-red-500">*</span>
           </label>
           <p-inputNumber
             [(ngModel)]="value"
@@ -41,7 +41,7 @@ import type {
 
         <div>
           <label class="block text-sm font-medium text-[var(--color-text-muted)] mb-1">
-            Unit
+            Unit <span class="text-red-500">*</span>
           </label>
           <p-select
             [(ngModel)]="unit"

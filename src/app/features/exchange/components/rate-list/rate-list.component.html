@@ -1,7 +1,10 @@
 <div
   class="bg-[var(--color-surface)] rounded-[var(--radius)] shadow-sm border border-[var(--color-border)] p-3 sm:p-4"
 >
-  <h3 class="text-base font-semibold mb-4 text-[var(--color-text)] sm:text-lg">Configured Rates</h3>
+  <h3 class="flex items-center gap-2 text-base font-semibold mb-4 text-[var(--color-text)] sm:text-lg">
+    <i class="pi pi-bookmark text-[var(--color-primary)]"></i>
+    Configured Rates
+  </h3>
 
   @if (rates().length === 0) {
   <p class="text-[var(--color-text-muted)] text-center py-4">
@@ -43,7 +46,7 @@
             [outlined]="true"
             [rounded]="true"
             size="small"
-            (onClick)="deleteRate.emit(rate); $event.stopPropagation()"
+            (onClick)="confirmDelete(rate); $event.stopPropagation()"
           />
         </div>
       </div>
