@@ -1,97 +1,41 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  effect,
-  inject,
-  input,
-  output,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SelectModule } from 'primeng/select';
+import { RouterLink } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { FormsModule } from '@angular/forms';
-import type { Currency } from '../../../features/currency/models/currency.model';
-import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, SelectModule, ButtonModule, FormsModule],
+  imports: [CommonModule, RouterLink, ButtonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <header
-      class="sticky top-0 z-50 bg-[var(--color-primary)] text-white shadow-md px-3 py-3 sm:px-4 sm:py-3"
+      class="sticky top-0 z-50 bg-[var(--color-surface)] text-[var(--color-text)] border-b border-[var(--color-border)] shadow-sm px-3 py-3 sm:px-4 sm:py-3"
     >
-      <div
-        class="mx-auto flex w-full max-w-5xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
-      >
-        <section class="flex items-center gap-2 justify-between flex-1">
-          <div class="flex items-center gap-2">
-            <img src="assets/icons/logo.png" alt="SaveWise" class="w-8 h-8 sm:w-10 sm:h-10" />
-            <span class="text-lg font-bold sm:text-xl">SaveWise</span>
-          </div>
+      <div class="mx-auto flex w-full max-w-5xl items-center justify-between gap-3">
+        <div class="flex items-center gap-2 min-w-0">
+          <img src="assets/icons/web-transparent-logo.png" alt="SaveWise" class="w-20 h-8" />
+        </div>
+
+        <div class="flex items-center gap-2 sm:gap-3">
+          <span class="text-xs sm:text-sm text-[var(--color-text-muted)] whitespace-nowrap">
+            Base currency:
+            <span class="font-semibold text-[var(--color-text)]">{{ baseCurrency() }}</span>
+          </span>
           <p-button
-            [icon]="theme.isDark() ? 'pi pi-sun' : 'pi pi-moon'"
+            icon="pi pi-cog"
             severity="secondary"
             [text]="true"
             [rounded]="true"
             size="small"
-            (onClick)="theme.toggle()"
-            [ariaLabel]="theme.isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
-            styleClass="!text-white"
+            routerLink="/settings"
+            ariaLabel="Open settings"
           />
-        </section>
-
-        <div class="flex items-center gap-2 w-full sm:w-auto sm:gap-3">
-          <label class="hidden whitespace-nowrap text-sm text-white/90 sm:inline"
-            >Base Currency:</label
-          >
-          <p-select
-            [options]="currencies()"
-            [ngModel]="selectedBase()"
-            optionLabel="code"
-            optionValue="code"
-            [filter]="true"
-            filterBy="code,name"
-            placeholder="Select"
-            (onChange)="baseCurrencyChange.emit($event.value)"
-            styleClass="w-full sm:w-44"
-            [panelStyle]="{
-              width: 'min(22rem, calc(100vw - 1rem))',
-              'max-width': 'calc(100vw - 1rem)',
-            }"
-            [style]="{ width: '100%' }"
-          >
-            <ng-template let-currency pTemplate="item">
-              <div class="flex min-w-0 items-center gap-2">
-                <span class="font-semibold">{{ currency.code }}</span>
-                <span class="min-w-0 flex-1 truncate text-[var(--color-text-muted)] text-sm">{{
-                  currency.name
-                }}</span>
-              </div>
-            </ng-template>
-          </p-select>
         </div>
       </div>
     </header>
   `,
 })
 export class HeaderComponent {
-  readonly theme = inject(ThemeService);
-
-  currencies = input.required<Currency[]>();
   baseCurrency = input.required<string>();
-  baseCurrencyChange = output<string>();
-
-  selectedBase = signal('');
-
-  constructor() {
-    effect(() => {
-      const base = this.baseCurrency();
-      if (base) {
-        this.selectedBase.set(base);
-      }
-    });
-  }
 }

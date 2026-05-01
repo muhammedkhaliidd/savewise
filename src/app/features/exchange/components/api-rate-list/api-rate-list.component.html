@@ -14,15 +14,20 @@
         <input #searchInput pInputText type="text" placeholder="Search" />
       </p-iconField>
     </div>
-    <p-button
-      icon="pi pi-refresh"
-      severity="secondary"
-      [outlined]="true"
-      [rounded]="true"
-      size="small"
-      [loading]="isSyncing()"
-      (onClick)="sync.emit()"
-    />
+    <div class="flex items-center gap-2">
+      <span class="text-xs text-[var(--color-text-muted)] whitespace-nowrap">
+        Auto sync: <span class="font-semibold">{{ autoSyncLabel() }}</span>
+      </span>
+      <p-button
+        icon="pi pi-refresh"
+        severity="secondary"
+        [outlined]="true"
+        [rounded]="true"
+        size="small"
+        [loading]="isSyncing()"
+        (onClick)="sync.emit()"
+      />
+    </div>
   </div>
 
   <p class="text-xs text-[var(--color-text-muted)] mb-3">

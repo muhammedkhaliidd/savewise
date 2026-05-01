@@ -35,6 +35,7 @@
     [baseCurrency]="exchangeStore.currentBase()"
     [lastSyncedAt]="exchangeStore.lastSyncedAt()"
     [isSyncing]="exchangeStore.isSyncing()"
+    [syncInterval]="exchangeStore.syncInterval()"
     (sync)="onSyncFromApi()"
   />
 </div>

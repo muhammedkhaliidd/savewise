@@ -13,6 +13,7 @@ export class ThemeService {
   constructor() {
     effect(() => {
       const dark = this.isDark();
+      console.log('dark', dark);
       const root = document.documentElement;
       root.classList.toggle('dark', dark);
       localStorage.setItem(STORAGE_KEY, this._mode());
@@ -26,6 +27,6 @@ export class ThemeService {
   private initialMode(): ThemeMode {
     const saved = localStorage.getItem(STORAGE_KEY) as ThemeMode | null;
     if (saved === 'light' || saved === 'dark') return saved;
-    return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    return globalThis.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   }
 }

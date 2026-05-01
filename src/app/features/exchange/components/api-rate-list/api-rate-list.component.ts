@@ -19,7 +19,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
-import type { ApiRateRow } from '../../models/exchange-rate.model';
+import type { ApiRateRow, SyncIntervalSetting } from '../../models/exchange-rate.model';
 
 @Component({
   selector: 'app-api-rate-list',
@@ -36,7 +36,16 @@ export class ApiRateListComponent {
   baseCurrency = input.required<string>();
   lastSyncedAt = input<number | null>(null);
   isSyncing = input(false);
+  syncInterval = input.required<SyncIntervalSetting>();
   sync = output<void>();
+
+  readonly autoSyncLabel = computed(() => {
+    const { value, unit } = this.syncInterval();
+    const singular = unit === 'hours' ? 'Hour' : 'Min';
+    const plural = unit === 'hours' ? 'Hours' : 'Mins';
+    const noun = value === 1 ? singular : plural;
+    return `${value} ${noun}`;
+  });
 
   readonly searchInput = viewChild<ElementRef<HTMLInputElement>>('searchInput');
   searchQuery = signal('');
