@@ -1,13 +1,23 @@
-import { ChangeDetectionStrategy, Component, effect, input, output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SelectModule } from 'primeng/select';
+import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import type { Currency } from '../../../features/currency/models/currency.model';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, SelectModule, FormsModule],
+  imports: [CommonModule, SelectModule, ButtonModule, FormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <header
@@ -16,10 +26,22 @@ import type { Currency } from '../../../features/currency/models/currency.model'
       <div
         class="mx-auto flex w-full max-w-5xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
       >
-        <div class="flex items-center gap-2">
-          <img src="assets/icons/logo.png" alt="SaveWise" class="w-8 h-8 sm:w-10 sm:h-10" />
-          <span class="text-lg font-bold sm:text-xl">SaveWise</span>
-        </div>
+        <section class="flex items-center gap-2 justify-between flex-1">
+          <div class="flex items-center gap-2">
+            <img src="assets/icons/logo.png" alt="SaveWise" class="w-8 h-8 sm:w-10 sm:h-10" />
+            <span class="text-lg font-bold sm:text-xl">SaveWise</span>
+          </div>
+          <p-button
+            [icon]="theme.isDark() ? 'pi pi-sun' : 'pi pi-moon'"
+            severity="secondary"
+            [text]="true"
+            [rounded]="true"
+            size="small"
+            (onClick)="theme.toggle()"
+            [ariaLabel]="theme.isDark() ? 'Switch to light mode' : 'Switch to dark mode'"
+            styleClass="!text-white"
+          />
+        </section>
 
         <div class="flex items-center gap-2 w-full sm:w-auto sm:gap-3">
           <label class="hidden whitespace-nowrap text-sm text-white/90 sm:inline"
@@ -56,6 +78,8 @@ import type { Currency } from '../../../features/currency/models/currency.model'
   `,
 })
 export class HeaderComponent {
+  readonly theme = inject(ThemeService);
+
   currencies = input.required<Currency[]>();
   baseCurrency = input.required<string>();
   baseCurrencyChange = output<string>();
