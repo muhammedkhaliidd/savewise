@@ -1,8 +1,8 @@
 <div
   class="bg-[var(--color-surface)] rounded-[var(--radius)] shadow-sm border border-[var(--color-border)] p-3 sm:p-4"
 >
-  <div class="flex justify-between gap-2 mb-3">
-    <div class="flex flex-wrap flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
+  <div class="flex flex-col gap-2 mb-3 sm:flex-row sm:items-center sm:justify-between">
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4">
       <h3
         class="flex items-center gap-2 text-base font-semibold text-[var(--color-text)] sm:text-lg"
       >
@@ -49,7 +49,7 @@
     <li
       class="flex w-full flex-wrap items-center justify-between gap-x-3 gap-y-1 p-2 border-b border-[var(--color-border)]"
     >
-      <p class="font-semibold text-[var(--color-text)]">
+      <p class="font-semibold text-[var(--color-text)] min-w-0 break-words">
         1 {{ row.currency }} → {{ row.apiToBase | number : '1.2-6' }} {{ baseCurrency() }}
       </p>
       @if (row.customToBase !== null) {

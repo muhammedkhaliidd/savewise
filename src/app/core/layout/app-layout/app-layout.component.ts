@@ -32,11 +32,13 @@ export class AppLayoutComponent implements OnInit {
   readonly savingsStore = inject(SavingsStore);
   private readonly toast = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
-  // Eagerly instantiate ThemeService so the dark/light class is applied on bootstrap
-  // (it's providedIn: 'root' so otherwise wouldn't run until /settings is visited).
-  private readonly _theme = inject(ThemeService);
 
   syncIntervalObservable = toObservable(this.exchangeStore.syncIntervalMs);
+
+  constructor() {
+    // Eagerly instantiate so the dark class is applied on bootstrap regardless of route.
+    inject(ThemeService);
+  }
 
   ngOnInit(): void {
     this.exchangeStore.loadFromStorage();
