@@ -2,6 +2,7 @@ export interface ExchangeRate {
   from: string;
   to: string;
   rate: number;
+  active?: boolean;
 }
 
 export type RateKey = `${string}-${string}`;

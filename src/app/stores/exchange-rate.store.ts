@@ -39,7 +39,7 @@ export const ExchangeRateStore = signalStore(
   withState(initialState),
   withComputed(({ customRates, apiRates, baseCurrency, syncInterval }) => ({
     getRate: computed(() => {
-      const customs = customRates();
+      const customs = customRates().filter((r) => r.active !== false);
       const apis = apiRates();
       return (from: string, to: string): number => {
         if (from === to) return 1;
@@ -48,7 +48,7 @@ export const ExchangeRateStore = signalStore(
     }),
     getRateToBase: computed(() => {
       const base = baseCurrency();
-      const customs = customRates();
+      const customs = customRates().filter((r) => r.active !== false);
       const apis = apiRates();
       return (from: string): number => {
         if (from === base) return 1;
@@ -60,7 +60,7 @@ export const ExchangeRateStore = signalStore(
     currentBase: computed(() => baseCurrency()),
     apiRateRows: computed((): ApiRateRow[] => {
       const base = baseCurrency();
-      const customs = customRates();
+      const customs = customRates().filter((r) => r.active !== false);
       return apiRates().map((api) => {
         const customToBase = lookupRate(customs, api.to, base);
         return {
@@ -110,12 +110,13 @@ export const ExchangeRateStore = signalStore(
           newFrom: string,
           newTo: string,
           rate: number,
+          active?: boolean,
         ): void {
           const next = store
             .customRates()
             .map((r) =>
               r.from === originalFrom && r.to === originalTo
-                ? { from: newFrom, to: newTo, rate }
+                ? { from: newFrom, to: newTo, rate, active: active ?? r.active }
                 : r,
             );
           patchState(store, { customRates: next });
@@ -123,6 +124,13 @@ export const ExchangeRateStore = signalStore(
         },
         deleteRate(from: string, to: string): void {
           const next = store.customRates().filter((r) => !(r.from === from && r.to === to));
+          patchState(store, { customRates: next });
+          persist();
+        },
+        setRateActive(from: string, to: string, active: boolean): void {
+          const next = store
+            .customRates()
+            .map((r) => (r.from === from && r.to === to ? { ...r, active } : r));
           patchState(store, { customRates: next });
           persist();
         },

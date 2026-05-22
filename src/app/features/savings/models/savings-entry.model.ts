@@ -4,6 +4,7 @@ export interface SavingsEntry {
   amount: number;
   label?: string;
   order?: number;
+  active?: boolean;
 }
 
 export interface SavingsState {

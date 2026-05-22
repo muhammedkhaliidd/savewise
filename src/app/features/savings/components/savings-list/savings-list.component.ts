@@ -8,9 +8,11 @@ import {
   output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { CdkDragHandle } from '@angular/cdk/drag-drop';
 import { ButtonModule } from 'primeng/button';
 import { OrderListModule } from 'primeng/orderlist';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import type { SavingsEntry } from '../../models/savings-entry.model';
 import { ExchangeRateStore } from '../../../../stores/exchange-rate.store';
 import { ConfirmService } from '../../../../core/services/confirm.service';
@@ -18,7 +20,7 @@ import { ConfirmService } from '../../../../core/services/confirm.service';
 @Component({
   selector: 'app-savings-list',
   standalone: true,
-  imports: [CommonModule, CdkDragHandle, ButtonModule, OrderListModule],
+  imports: [CommonModule, FormsModule, CdkDragHandle, ButtonModule, OrderListModule, ToggleSwitchModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './savings-list.component.html',
   styles: [':host ::ng-deep li:last-child > div { border-bottom-width: 0; }'],
@@ -31,6 +33,8 @@ export class SavingsListComponent implements AfterViewInit {
   exchangeStore = input.required<InstanceType<typeof ExchangeRateStore>>();
   deleteEntry = output<string>();
   editEntry = output<SavingsEntry>();
+  addEntry = output<void>();
+  toggleActive = output<{ id: string; active: boolean }>();
   reorder = output<SavingsEntry[]>();
 
   ngAfterViewInit(): void {
@@ -43,14 +47,11 @@ export class SavingsListComponent implements AfterViewInit {
     }, 1000);
   }
 
-  entriesWithConversion = computed(() => {
-    const store = this.exchangeStore();
-    const getRateToBase = store.getRateToBase;
-    return this.entries().map((entry) => ({
-      ...entry,
-      convertedAmount: entry.amount * getRateToBase()(entry.currency),
-    }));
-  });
+  entriesView = computed(() => [...this.entries()]);
+
+  convertedAmount(entry: SavingsEntry): number {
+    return entry.amount * this.exchangeStore().getRateToBase()(entry.currency);
+  }
 
   confirmDelete(id: string): void {
     this.confirmService.confirm({
@@ -63,8 +64,7 @@ export class SavingsListComponent implements AfterViewInit {
     });
   }
 
-  onReorder(value: Array<SavingsEntry & { convertedAmount: number }>): void {
-    console.log(',onReorder', value);
-    this.reorder.emit(this.entriesWithConversion());
+  onReorder(): void {
+    this.reorder.emit([...this.entriesView()]);
   }
 }

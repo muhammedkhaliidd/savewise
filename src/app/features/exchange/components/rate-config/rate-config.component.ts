@@ -10,6 +10,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { FormsModule } from '@angular/forms';
 import { CurrencySelectComponent } from '../../../currency/components/currency-select/currency-select.component';
 import { CurrencyService } from '../../../../core/services/currency.service';
@@ -18,7 +19,14 @@ import type { ExchangeRate } from '../../models/exchange-rate.model';
 @Component({
   selector: 'app-rate-config',
   standalone: true,
-  imports: [CommonModule, ButtonModule, InputNumberModule, FormsModule, CurrencySelectComponent],
+  imports: [
+    CommonModule,
+    ButtonModule,
+    InputNumberModule,
+    ToggleSwitchModule,
+    FormsModule,
+    CurrencySelectComponent,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div
@@ -70,6 +78,11 @@ import type { ExchangeRate } from '../../models/exchange-rate.model';
           />
         </div>
 
+        <div class="flex items-center justify-between">
+          <label class="text-sm font-medium text-[var(--color-text-muted)]">Active</label>
+          <p-toggleSwitch [(ngModel)]="activeValue" ariaLabel="Toggle rate active" />
+        </div>
+
         <p-button
           [label]="editMode() ? 'Save' : 'Add Rate'"
           (onClick)="addRate()"
@@ -92,6 +105,7 @@ export class RateConfigComponent {
   fromCurrency = signal('');
   toCurrency = signal('');
   rateValue = signal(1);
+  activeValue = signal(true);
 
   canAdd = computed(() => {
     const from = this.fromCurrency();
@@ -105,6 +119,7 @@ export class RateConfigComponent {
         from: this.fromCurrency(),
         to: this.toCurrency(),
         rate: this.rateValue(),
+        active: this.activeValue(),
       });
       this.reset();
     }
@@ -114,11 +129,13 @@ export class RateConfigComponent {
     this.fromCurrency.set('');
     this.toCurrency.set('');
     this.rateValue.set(1);
+    this.activeValue.set(true);
   }
 
-  setValues(from: string, to: string, rate: number): void {
+  setValues(from: string, to: string, rate: number, active: boolean = true): void {
     this.fromCurrency.set(from);
     this.toCurrency.set(to);
     this.rateValue.set(rate);
+    this.activeValue.set(active);
   }
 }

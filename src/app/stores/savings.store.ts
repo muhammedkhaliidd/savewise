@@ -17,12 +17,13 @@ export const SavingsStore = signalStore(
   withState(initialState),
   withComputed((state, exchangeStore = inject(ExchangeRateStore)) => ({
     allEntries: computed(() => state.entries()),
-    entryCount: computed(() => state.entries().length),
+    entryCount: computed(() => state.entries().filter((e) => e.active !== false).length),
     hasEntries: computed(() => state.entries().length > 0),
     totalInBase: computed(() => {
       const rateToBase = exchangeStore.getRateToBase();
       return state
         .entries()
+        .filter((entry) => entry.active !== false)
         .reduce((sum, entry) => sum + entry.amount * rateToBase(entry.currency), 0);
     }),
   })),

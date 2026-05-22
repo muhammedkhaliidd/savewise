@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { FormsModule } from '@angular/forms';
 import { CurrencySelectComponent } from '../../../currency/components/currency-select/currency-select.component';
 import { CurrencyService } from '../../../../core/services/currency.service';
@@ -25,6 +26,7 @@ import type { SavingsEntry } from '../../models/savings-entry.model';
     ButtonModule,
     InputTextModule,
     InputNumberModule,
+    ToggleSwitchModule,
     FormsModule,
     CurrencySelectComponent,
   ],
@@ -80,6 +82,11 @@ import type { SavingsEntry } from '../../models/savings-entry.model';
           </div>
         </div>
 
+        <div class="flex items-center justify-between">
+          <label class="text-sm font-medium text-[var(--color-text-muted)]">Active</label>
+          <p-toggleSwitch [(ngModel)]="activeValue" ariaLabel="Toggle entry active" />
+        </div>
+
         <p-button
           [label]="editMode() ? 'Save' : 'Add Savings'"
           (onClick)="addEntry()"
@@ -102,6 +109,7 @@ export class SavingsFormComponent {
   labelValue = signal('');
   currency = signal('');
   amountValue = signal<number | null>(null);
+  activeValue = signal(true);
 
   constructor() {
     effect(() => {
@@ -125,6 +133,7 @@ export class SavingsFormComponent {
         label: this.labelValue() || undefined,
         currency: this.currency(),
         amount: amount!,
+        active: this.activeValue(),
       });
       this.reset();
     }
@@ -134,5 +143,6 @@ export class SavingsFormComponent {
     this.labelValue.set('');
     this.currency.set(this.baseCurrency());
     this.amountValue.set(null);
+    this.activeValue.set(true);
   }
 }

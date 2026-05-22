@@ -38,6 +38,8 @@ export class Dashboard implements OnInit {
   // Dialog visibility signals
   readonly editSavingsDialogVisible = signal(false);
   readonly editRateDialogVisible = signal(false);
+  readonly addSavingsDialogVisible = signal(false);
+  readonly addRateDialogVisible = signal(false);
 
   // Track what we're editing
   private editingSavingsId: string | null = null;
@@ -56,6 +58,32 @@ export class Dashboard implements OnInit {
   onRateAdded(event: { from: string; to: string; rate: number }): void {
     this.exchangeStore.setRate(event.from, event.to, event.rate);
     this.toast.success('Saved', 'Exchange rate added');
+  }
+
+  onAddSavingsClicked(): void {
+    this.addSavingsDialogVisible.set(true);
+  }
+
+  onAddRateClicked(): void {
+    this.addRateDialogVisible.set(true);
+  }
+
+  onSavingsAddedFromDialog(entry: Omit<SavingsEntry, 'id'>): void {
+    this.onSavingsAdded(entry);
+    this.addSavingsDialogVisible.set(false);
+  }
+
+  onRateAddedFromDialog(event: { from: string; to: string; rate: number }): void {
+    this.onRateAdded(event);
+    this.addRateDialogVisible.set(false);
+  }
+
+  onToggleSavingsActive(event: { id: string; active: boolean }): void {
+    this.savingsStore.updateEntry(event.id, { active: event.active });
+  }
+
+  onToggleRateActive(event: { from: string; to: string; active: boolean }): void {
+    this.exchangeStore.setRateActive(event.from, event.to, event.active);
   }
 
   onRateDeleted(event: { from: string; to: string }): void {
@@ -82,6 +110,7 @@ export class Dashboard implements OnInit {
         form.labelValue.set(entry.label || '');
         form.currency.set(entry.currency);
         form.amountValue.set(entry.amount);
+        form.activeValue.set(entry.active !== false);
       }
     }, 0);
   }
@@ -101,7 +130,7 @@ export class Dashboard implements OnInit {
     setTimeout(() => {
       const form = this.editRateForm();
       if (form) {
-        form.setValues(rate.from, rate.to, rate.rate);
+        form.setValues(rate.from, rate.to, rate.rate, rate.active !== false);
       }
     }, 0);
   }
@@ -114,6 +143,7 @@ export class Dashboard implements OnInit {
         rate.from,
         rate.to,
         rate.rate,
+        rate.active,
       );
       this.editingRateOriginal = null;
       this.editRateDialogVisible.set(false);

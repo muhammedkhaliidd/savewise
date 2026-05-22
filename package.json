@@ -12,7 +12,8 @@
     "publish:gh": "npm run build:gh && npm run deploy:gh",
     "sync-cross-platform": "ng build && npx cap sync",
     "open-android": "npx cap open android",
-    "sync-open-android": "npm run sync-cross-platform && npm run open-android"
+    "sync-open-android": "npm run sync-cross-platform && npm run open-android",
+    "build-android-hot-reload": "ng serve --host 0.0.0.0 --port 4200"
   },
   "prettier": {
     "printWidth": 100,

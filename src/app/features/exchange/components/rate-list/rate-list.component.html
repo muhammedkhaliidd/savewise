@@ -1,10 +1,20 @@
 <div
   class="bg-[var(--color-surface)] rounded-[var(--radius)] shadow-sm border border-[var(--color-border)] p-3 sm:p-4"
 >
-  <h3 class="flex items-center gap-2 text-base font-semibold mb-4 text-[var(--color-text)] sm:text-lg">
-    <i class="pi pi-bookmark text-[var(--color-primary)]"></i>
-    Configured Rates
-  </h3>
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="flex items-center gap-2 text-base font-semibold text-[var(--color-text)] sm:text-lg">
+      <i class="pi pi-bookmark text-[var(--color-primary)]"></i>
+      Configured Rates
+    </h3>
+    <p-button
+      icon="pi pi-plus"
+      severity="primary"
+      [rounded]="true"
+      size="small"
+      aria-label="Add exchange rate"
+      (onClick)="addRate.emit()"
+    />
+  </div>
 
   @if (rates().length === 0) {
   <p class="text-[var(--color-text-muted)] text-center py-4">
@@ -18,11 +28,12 @@
     (onReorder)="onReorder($event)"
     dataKey="id"
     class="w-full"
-    scrollHeight="192px"
+    scrollHeight="320px"
   >
     <ng-template let-rate pTemplate="item">
       <div
         class="flex w-full items-center justify-between gap-3 p-2 border-b border-[var(--color-border)]"
+        [class.opacity-50]="rate.active === false"
       >
         <i class="pi pi-bars cursor-grab text-[var(--color-text-muted)]" cdkDragHandle></i>
         <div class="flex-1 min-w-0">
@@ -31,7 +42,12 @@
             1 {{ rate.from }} = {{ rate.rate | number : '1.2-6' }} {{ rate.to }}
           </p>
         </div>
-        <div class="flex gap-1">
+        <div class="flex items-center gap-2">
+          <p-toggleSwitch
+            [ngModel]="rate.active !== false"
+            (ngModelChange)="toggleActive.emit({ from: rate.from, to: rate.to, active: $event })"
+            ariaLabel="Toggle rate active"
+          />
           <p-button
             icon="pi pi-pencil"
             severity="secondary"

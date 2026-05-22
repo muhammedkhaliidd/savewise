@@ -1,15 +1,17 @@
 import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { CdkDragHandle } from '@angular/cdk/drag-drop';
 import { ButtonModule } from 'primeng/button';
 import { OrderListModule } from 'primeng/orderlist';
+import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import type { ExchangeRate } from '../../models/exchange-rate.model';
 import { ConfirmService } from '../../../../core/services/confirm.service';
 
 @Component({
   selector: 'app-rate-list',
   standalone: true,
-  imports: [CommonModule, CdkDragHandle, ButtonModule, OrderListModule],
+  imports: [CommonModule, FormsModule, CdkDragHandle, ButtonModule, OrderListModule, ToggleSwitchModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './rate-list.component.html',
   styles: [':host ::ng-deep li:last-child > div { border-bottom-width: 0; }'],
@@ -20,6 +22,8 @@ export class RateListComponent {
   rates = input.required<ExchangeRate[]>();
   deleteRate = output<ExchangeRate>();
   editRate = output<ExchangeRate>();
+  addRate = output<void>();
+  toggleActive = output<{ from: string; to: string; active: boolean }>();
   reorder = output<ExchangeRate[]>();
 
   onReorder(_value: ExchangeRate[]): void {
