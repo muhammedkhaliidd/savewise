@@ -1,12 +1,15 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { APP_INITIALIZER, ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
+import { provideTranslateService } from '@ngx-translate/core';
+import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { providePrimeNG } from 'primeng/config';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import Aura from '@primeng/themes/aura';
 import { definePreset } from '@primeng/themes';
 
 import { routes } from './app.routes';
+import { initLocale } from './core/i18n/translate-init';
 
 const appPreset = definePreset(Aura, {
   semantic: {
@@ -49,6 +52,19 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideHttpClient(),
+    provideTranslateService({
+      fallbackLang: 'en',
+      lang: 'en',
+    }),
+    ...provideTranslateHttpLoader({
+      prefix: './assets/i18n/',
+      suffix: '.json',
+    }),
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initLocale,
+      multi: true,
+    },
     providePrimeNG({
       theme: {
         preset: appPreset,

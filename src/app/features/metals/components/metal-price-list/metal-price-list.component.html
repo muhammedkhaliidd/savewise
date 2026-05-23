@@ -4,21 +4,21 @@
   <div class="flex items-center justify-between mb-4">
     <h3 class="flex items-center gap-2 text-base font-semibold text-[var(--color-text)] sm:text-lg">
       <i class="pi pi-bookmark text-[var(--color-primary)]"></i>
-      Configured Metal Prices
+      {{ 'metals.configuredPrices' | translate }}
     </h3>
     <p-button
       icon="pi pi-plus"
       severity="primary"
       [rounded]="true"
       size="small"
-      aria-label="Add metal price"
+      [ariaLabel]="'metals.addPrice' | translate"
       (onClick)="addPrice.emit()"
     />
   </div>
 
   @if (prices().length === 0) {
   <p class="text-[var(--color-text-muted)] text-center py-4">
-    No custom metal prices configured. Live prices will be used.
+    {{ 'metals.emptyPrices' | translate }}
   </p>
   } @else {
   <p-orderList
@@ -50,7 +50,7 @@
             (ngModelChange)="
               toggleActive.emit({ metal: price.metal, purityLabel: price.purityLabel, active: $event })
             "
-            ariaLabel="Toggle metal price active"
+            [ariaLabel]="'metals.togglePriceActive' | translate"
           />
           <p-button
             icon="pi pi-pencil"

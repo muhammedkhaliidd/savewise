@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CdkDragHandle } from '@angular/cdk/drag-drop';
 import { ButtonModule } from 'primeng/button';
 import { OrderListModule } from 'primeng/orderlist';
@@ -11,13 +12,22 @@ import { ConfirmService } from '../../../../core/services/confirm.service';
 @Component({
   selector: 'app-rate-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, CdkDragHandle, ButtonModule, OrderListModule, ToggleSwitchModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    TranslateModule,
+    CdkDragHandle,
+    ButtonModule,
+    OrderListModule,
+    ToggleSwitchModule,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './rate-list.component.html',
   styles: [':host ::ng-deep li:last-child > div { border-bottom-width: 0; }'],
 })
 export class RateListComponent {
   private readonly confirmService = inject(ConfirmService);
+  private readonly translate = inject(TranslateService);
 
   rates = input.required<ExchangeRate[]>();
   deleteRate = output<ExchangeRate>();
@@ -32,10 +42,13 @@ export class RateListComponent {
 
   confirmDelete(rate: ExchangeRate): void {
     this.confirmService.confirm({
-      header: 'Delete Custom Rate',
-      message: `Are you sure you want to delete the custom rate ${rate.from} → ${rate.to}?`,
+      header: this.translate.instant('confirm.deleteRate'),
+      message: this.translate.instant('confirm.deleteRateMessage', {
+        from: rate.from,
+        to: rate.to,
+      }),
       icon: 'pi pi-trash',
-      actionText: 'Delete',
+      actionText: this.translate.instant('common.delete'),
       actionSeverity: 'danger',
       onConfirm: () => this.deleteRate.emit(rate),
     });

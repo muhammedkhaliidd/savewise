@@ -1,8 +1,31 @@
 <div class="mx-auto grid w-full max-w-2xl gap-4 md:gap-6">
   <h2 class="flex items-center gap-2 text-lg font-semibold text-[var(--color-text)] sm:text-xl">
     <i class="pi pi-cog text-[var(--color-primary)]"></i>
-    Settings
+    {{ 'settings.title' | translate }}
   </h2>
+
+  <!-- Language -->
+  <div
+    class="bg-[var(--color-surface)] rounded-[var(--radius)] shadow-sm border border-[var(--color-border)] p-3 sm:p-4"
+  >
+    <h3
+      class="flex items-center gap-2 text-base font-semibold mb-1 text-[var(--color-text)] sm:text-lg"
+    >
+      <i class="pi pi-language text-[var(--color-primary)]"></i>
+      {{ 'settings.language' | translate }}
+    </h3>
+    <p class="text-xs text-[var(--color-text-muted)] mb-3">
+      {{ 'settings.languageDesc' | translate }}
+    </p>
+    <p-selectButton
+      [options]="languageOptions()"
+      [ngModel]="localeService.locale()"
+      optionLabel="label"
+      optionValue="code"
+      (onChange)="onLanguageChange($event.value)"
+      styleClass="w-full"
+    />
+  </div>
 
   <!-- Base currency -->
   <div
@@ -12,10 +35,10 @@
       class="flex items-center gap-2 text-base font-semibold mb-1 text-[var(--color-text)] sm:text-lg"
     >
       <i class="pi pi-globe text-[var(--color-primary)]"></i>
-      Base Currency
+      {{ 'settings.baseCurrency' | translate }}
     </h3>
     <p class="text-xs text-[var(--color-text-muted)] mb-3">
-      All savings totals and exchange rates are displayed relative to this currency.
+      {{ 'settings.baseCurrencyDesc' | translate }}
     </p>
     <p-select
       [options]="allCurrencies()"
@@ -24,7 +47,7 @@
       optionValue="code"
       [filter]="true"
       filterBy="code,name"
-      placeholder="Select"
+      [placeholder]="'common.select' | translate"
       (onChange)="onBaseCurrencyChange($event.value)"
       styleClass="w-full"
       [style]="{ width: '100%' }"
@@ -48,21 +71,25 @@
       class="flex items-center gap-2 text-base font-semibold mb-1 text-[var(--color-text)] sm:text-lg"
     >
       <i class="pi pi-palette text-[var(--color-primary)]"></i>
-      Theme
+      {{ 'settings.theme' | translate }}
     </h3>
-    <p class="text-xs text-[var(--color-text-muted)] mb-3">Toggle between light and dark mode.</p>
+    <p class="text-xs text-[var(--color-text-muted)] mb-3">{{ 'settings.themeDesc' | translate }}</p>
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-2">
         <i [class]="theme.isDark() ? 'pi pi-moon' : 'pi pi-sun'" class="text-[var(--color-primary)]"></i>
         <span class="text-sm text-[var(--color-text)]">
-          {{ theme.isDark() ? 'Dark' : 'Light' }} mode
+          @if (theme.isDark()) {
+            {{ 'settings.darkMode' | translate }}
+          } @else {
+            {{ 'settings.lightMode' | translate }}
+          }
         </span>
       </div>
       <p-toggleSwitch
         [ngModel]="theme.isDark()"
         (ngModelChange)="theme.toggle()"
         inputId="theme-toggle"
-        ariaLabel="Toggle dark mode"
+        [ariaLabel]="'settings.toggleDarkMode' | translate"
       />
     </div>
   </div>
@@ -75,14 +102,14 @@
       class="flex items-center gap-2 text-base font-semibold mb-1 text-[var(--color-text)] sm:text-lg"
     >
       <i class="pi pi-clock text-[var(--color-primary)]"></i>
-      Exchange Rate Auto-Sync
+      {{ 'settings.syncInterval' | translate }}
     </h3>
     <p class="text-xs text-[var(--color-text-muted)] mb-3">
-      How often to refresh live exchange rates from the API while the app is open.
+      {{ 'settings.syncIntervalDesc' | translate }}
     </p>
     <div class="flex items-center justify-between gap-3">
       <div class="min-w-0">
-        <p class="text-xs text-[var(--color-text-muted)]">Current interval</p>
+        <p class="text-xs text-[var(--color-text-muted)]">{{ 'settings.currentInterval' | translate }}</p>
         <p class="text-sm font-semibold text-[var(--color-text)] truncate">
           {{ syncIntervalLabel() }}
         </p>
@@ -93,7 +120,7 @@
         [outlined]="true"
         [rounded]="true"
         size="small"
-        ariaLabel="Edit sync interval"
+        [ariaLabel]="'settings.editSyncInterval' | translate"
         (onClick)="openSyncIntervalDialog()"
       />
     </div>
@@ -103,7 +130,7 @@
 <p-dialog
   [(visible)]="syncIntervalDialogVisible"
   [modal]="true"
-  header="Edit Sync Interval"
+  [header]="'settings.editSyncIntervalHeader' | translate"
   [style]="{ width: '90vw', maxWidth: '30rem' }"
   (onShow)="overlayStack.register('sync-interval', () => syncIntervalDialogVisible.set(false))"
   (onHide)="overlayStack.release('sync-interval')"

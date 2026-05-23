@@ -8,6 +8,8 @@ import {
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
@@ -21,6 +23,7 @@ import type { ExchangeRate } from '../../models/exchange-rate.model';
   standalone: true,
   imports: [
     CommonModule,
+    TranslateModule,
     ButtonModule,
     InputNumberModule,
     ToggleSwitchModule,
@@ -33,7 +36,7 @@ import type { ExchangeRate } from '../../models/exchange-rate.model';
         <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
           <div>
             <label class="block text-sm font-medium text-[var(--color-text-muted)] mb-1">
-              From <span class="text-red-500">*</span>
+              {{ 'exchange.form.from' | translate }} <span class="text-red-500">*</span>
             </label>
             <app-currency-select
               [currencies]="allCurrencies()"
@@ -44,7 +47,7 @@ import type { ExchangeRate } from '../../models/exchange-rate.model';
 
           <div>
             <label class="block text-sm font-medium text-[var(--color-text-muted)] mb-1">
-              To <span class="text-red-500">*</span>
+              {{ 'exchange.form.to' | translate }} <span class="text-red-500">*</span>
             </label>
             <app-currency-select
               [currencies]="allCurrencies()"
@@ -56,7 +59,7 @@ import type { ExchangeRate } from '../../models/exchange-rate.model';
 
         <div>
           <label class="block text-sm font-medium text-[var(--color-text-muted)] mb-1">
-            Rate (1 {{ fromCurrency() || 'USD' }} = ? {{ toCurrency() || 'USD' }}) <span class="text-red-500">*</span>
+            {{ rateLabel() }} <span class="text-red-500">*</span>
           </label>
           <p-inputNumber
             [(ngModel)]="rateValue"
@@ -69,12 +72,17 @@ import type { ExchangeRate } from '../../models/exchange-rate.model';
         </div>
 
         <div class="flex items-center justify-between">
-          <label class="text-sm font-medium text-[var(--color-text-muted)]">Active</label>
-          <p-toggleSwitch [(ngModel)]="activeValue" ariaLabel="Toggle rate active" />
+          <label class="text-sm font-medium text-[var(--color-text-muted)]">{{
+            'common.active' | translate
+          }}</label>
+          <p-toggleSwitch
+            [(ngModel)]="activeValue"
+            [ariaLabel]="'exchange.form.toggleActive' | translate"
+          />
         </div>
 
       <p-button
-        [label]="editMode() ? 'Save' : 'Add Rate'"
+        [label]="editMode() ? ('common.save' | translate) : ('exchange.form.addRate' | translate)"
         [icon]="editMode() ? 'pi pi-check' : 'pi pi-plus'"
         (onClick)="addRate()"
         [disabled]="!canAdd()"
@@ -85,12 +93,22 @@ import type { ExchangeRate } from '../../models/exchange-rate.model';
 })
 export class RateConfigComponent {
   private readonly currencyService = inject(CurrencyService);
+  private readonly translate = inject(TranslateService);
+  private readonly langTick = toSignal(this.translate.onLangChange, { initialValue: null });
 
   existingRates = input<ExchangeRate[]>([]);
   editMode = input(false);
   rateAdded = output<ExchangeRate>();
 
   readonly allCurrencies = computed(() => this.currencyService.getAllCurrencies());
+
+  readonly rateLabel = computed(() => {
+    this.langTick();
+    return this.translate.instant('exchange.form.rateLabel', {
+      from: this.fromCurrency() || 'USD',
+      to: this.toCurrency() || 'USD',
+    });
+  });
 
   fromCurrency = signal('');
   toCurrency = signal('');

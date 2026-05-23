@@ -7,16 +7,22 @@
         class="flex items-center gap-2 text-base font-semibold text-[var(--color-text)] sm:text-lg"
       >
         <i class="pi pi-bolt text-[var(--color-primary)]"></i>
-        Live Exchange Rates
+        {{ 'exchange.liveRates' | translate }}
       </h3>
       <p-iconField iconPosition="left">
         <p-inputIcon class="pi pi-search" />
-        <input #searchInput pInputText type="text" placeholder="Search" />
+        <input
+          #searchInput
+          pInputText
+          type="text"
+          [placeholder]="'common.search' | translate"
+        />
       </p-iconField>
     </div>
     <div class="flex items-center gap-2">
       <span class="text-xs text-[var(--color-text-muted)] whitespace-nowrap">
-        Auto sync: <span class="font-semibold">{{ autoSyncLabel() }}</span>
+        {{ 'exchange.autoSync' | translate }}
+        <span class="font-semibold">{{ autoSyncLabel() }}</span>
       </span>
       <p-button
         icon="pi pi-refresh"
@@ -31,17 +37,20 @@
   </div>
 
   <p class="text-xs text-[var(--color-text-muted)] mb-3">
-    @if (lastSyncedAt()) { Synced {{ lastSyncedAt() | date : 'short' }}
-    } @else { Not synced yet }
+    @if (lastSyncedAt()) {
+      {{ 'exchange.syncedAt' | translate : { date: (lastSyncedAt() | date : 'short') } }}
+    } @else {
+      {{ 'exchange.notSyncedYet' | translate }}
+    }
   </p>
 
   @if (rates().length === 0) {
   <p class="text-[var(--color-text-muted)] text-center py-4">
-    No live rates yet — click refresh to sync.
+    {{ 'exchange.emptyLive' | translate }}
   </p>
   } @else if (filteredRates().length === 0) {
   <p class="text-[var(--color-text-muted)] text-center py-4">
-    No currencies match "{{ searchQuery() }}".
+    {{ 'exchange.noMatch' | translate : { query: searchQuery() } }}
   </p>
   } @else {
   <ul class="max-h-64 overflow-y-auto">
@@ -55,9 +64,9 @@
       @if (row.customToBase !== null) {
       <span
         class="inline-flex items-center gap-1 rounded bg-[var(--color-primary)]/10 px-2 py-0.5 text-xs font-semibold text-[var(--color-primary)]"
-        title="Your override"
+        [title]="'exchange.yourOverride' | translate"
       >
-        <i class="pi pi-bookmark" style="font-size: 0.65rem"></i>
+        <i class="pi pi-bookmark" style="font-size: 0.65rem" aria-hidden="true"></i>
         {{ row.customToBase | number : '1.2-6' }} {{ baseCurrency() }}
       </span>
       }

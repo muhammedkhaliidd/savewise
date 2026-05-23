@@ -4,21 +4,21 @@
   <div class="flex items-center justify-between mb-4">
     <h3 class="flex items-center gap-2 text-base font-semibold text-[var(--color-text)] sm:text-lg">
       <i class="pi pi-bookmark text-[var(--color-primary)]"></i>
-      Configured Rates
+      {{ 'exchange.configuredRates' | translate }}
     </h3>
     <p-button
       icon="pi pi-plus"
       severity="primary"
       [rounded]="true"
       size="small"
-      aria-label="Add exchange rate"
+      [ariaLabel]="'exchange.addRate' | translate"
       (onClick)="addRate.emit()"
     />
   </div>
 
   @if (rates().length === 0) {
   <p class="text-[var(--color-text-muted)] text-center py-4">
-    No custom rates configured. Default rate of 1 will be used.
+    {{ 'exchange.emptyRates' | translate }}
   </p>
   } @else {
   <p-orderList
@@ -46,7 +46,7 @@
           <p-toggleSwitch
             [ngModel]="rate.active !== false"
             (ngModelChange)="toggleActive.emit({ from: rate.from, to: rate.to, active: $event })"
-            ariaLabel="Toggle rate active"
+            [ariaLabel]="'exchange.toggleRateActive' | translate"
           />
           <p-button
             icon="pi pi-pencil"

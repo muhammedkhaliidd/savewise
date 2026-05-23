@@ -1,4 +1,5 @@
 import { Injectable, inject } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { ConfirmationService } from 'primeng/api';
 import { OverlayStackService } from './overlay-stack.service';
 
@@ -18,6 +19,7 @@ export interface ConfirmOptions {
 export class ConfirmService {
   private readonly confirmationService = inject(ConfirmationService);
   private readonly overlayStack = inject(OverlayStackService);
+  private readonly translate = inject(TranslateService);
   private counter = 0;
 
   confirm(options: ConfirmOptions): void {
@@ -25,8 +27,8 @@ export class ConfirmService {
       message,
       header,
       icon,
-      actionText = 'Confirm',
-      cancelText = 'Cancel',
+      actionText = this.translate.instant('common.confirm'),
+      cancelText = this.translate.instant('common.cancel'),
       actionSeverity = 'primary',
       cancelSeverity = 'secondary',
       onConfirm,

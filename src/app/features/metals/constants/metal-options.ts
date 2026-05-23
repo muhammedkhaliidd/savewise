@@ -50,6 +50,12 @@ export function lookupPurityFactor(metal: MetalCode, label: string): number {
   return PURITY_OPTIONS[metal]?.find((o) => o.label === label)?.factor ?? 0;
 }
 
+export function metalLabelKey(code: MetalCode | undefined): string {
+  if (!code) return '';
+  return `metals.${code}`;
+}
+
+/** @deprecated Use metalLabelKey with TranslateService.instant */
 export function metalLabel(code: MetalCode | undefined): string {
   if (!code) return '';
   return METAL_OPTIONS.find((o) => o.code === code)?.label ?? code;

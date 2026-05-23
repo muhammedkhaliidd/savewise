@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CdkDragHandle } from '@angular/cdk/drag-drop';
 import { ButtonModule } from 'primeng/button';
 import { OrderListModule } from 'primeng/orderlist';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import type { MetalPrice } from '../../models/metal-price.model';
-import { metalLabel } from '../../constants/metal-options';
+import { metalLabelKey } from '../../constants/metal-options';
 import { ConfirmService } from '../../../../core/services/confirm.service';
 
 @Component({
@@ -15,6 +16,7 @@ import { ConfirmService } from '../../../../core/services/confirm.service';
   imports: [
     CommonModule,
     FormsModule,
+    TranslateModule,
     CdkDragHandle,
     ButtonModule,
     OrderListModule,
@@ -26,6 +28,7 @@ import { ConfirmService } from '../../../../core/services/confirm.service';
 })
 export class MetalPriceListComponent {
   private readonly confirmService = inject(ConfirmService);
+  private readonly translate = inject(TranslateService);
 
   prices = input.required<MetalPrice[]>();
   baseCurrency = input.required<string>();
@@ -35,7 +38,9 @@ export class MetalPriceListComponent {
   toggleActive = output<{ metal: MetalPrice['metal']; purityLabel: string; active: boolean }>();
   reorder = output<MetalPrice[]>();
 
-  metalLabel = metalLabel;
+  metalLabel(code: MetalPrice['metal']): string {
+    return this.translate.instant(metalLabelKey(code));
+  }
 
   onReorder(): void {
     this.reorder.emit(this.prices());
@@ -43,10 +48,13 @@ export class MetalPriceListComponent {
 
   confirmDelete(price: MetalPrice): void {
     this.confirmService.confirm({
-      header: 'Delete Metal Price',
-      message: `Are you sure you want to delete ${metalLabel(price.metal)} · ${price.purityLabel}?`,
+      header: this.translate.instant('confirm.deleteMetalPrice'),
+      message: this.translate.instant('confirm.deleteMetalPriceMessage', {
+        metal: this.metalLabel(price.metal),
+        purity: price.purityLabel,
+      }),
       icon: 'pi pi-trash',
-      actionText: 'Delete',
+      actionText: this.translate.instant('common.delete'),
       actionSeverity: 'danger',
       onConfirm: () => this.deletePrice.emit(price),
     });

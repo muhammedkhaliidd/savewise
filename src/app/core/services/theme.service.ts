@@ -13,7 +13,6 @@ export class ThemeService {
   constructor() {
     effect(() => {
       const dark = this.isDark();
-      console.log('dark', dark);
       const root = document.documentElement;
       root.classList.toggle('dark', dark);
       localStorage.setItem(STORAGE_KEY, this._mode());

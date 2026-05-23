@@ -1,5 +1,7 @@
-import { ChangeDetectionStrategy, Component, effect, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SelectModule } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
 import type { Currency } from '../../models/currency.model';
@@ -7,7 +9,7 @@ import type { Currency } from '../../models/currency.model';
 @Component({
   selector: 'app-currency-select',
   standalone: true,
-  imports: [CommonModule, SelectModule, FormsModule],
+  imports: [CommonModule, SelectModule, FormsModule, TranslateModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <p-select
@@ -17,7 +19,7 @@ import type { Currency } from '../../models/currency.model';
       optionValue="code"
       [filter]="true"
       filterBy="code,name"
-      [placeholder]="placeholder()"
+      [placeholder]="resolvedPlaceholder()"
       (onChange)="selectionChange.emit($event.value)"
       [styleClass]="styleClass()"
       [panelStyle]="{
@@ -37,13 +39,22 @@ import type { Currency } from '../../models/currency.model';
   `,
 })
 export class CurrencySelectComponent {
+  private readonly translate = inject(TranslateService);
+  private readonly langTick = toSignal(this.translate.onLangChange, { initialValue: null });
+
   currencies = input.required<Currency[]>();
   selectedCode = input<string>('');
-  placeholder = input<string>('Select currency');
+  placeholder = input<string>('');
   styleClass = input<string>('w-full');
   selectionChange = output<string>();
 
   selectedValue = signal('');
+
+  resolvedPlaceholder(): string {
+    this.langTick();
+    const custom = this.placeholder();
+    return custom || this.translate.instant('currency.selectCurrency');
+  }
 
   constructor() {
     effect(() => {

@@ -3,11 +3,14 @@ import {
   Component,
   computed,
   effect,
+  inject,
   input,
   output,
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -21,6 +24,7 @@ import { METAL_OPTIONS, PURITY_OPTIONS } from '../../constants/metal-options';
   standalone: true,
   imports: [
     CommonModule,
+    TranslateModule,
     FormsModule,
     ButtonModule,
     InputNumberModule,
@@ -33,14 +37,14 @@ import { METAL_OPTIONS, PURITY_OPTIONS } from '../../constants/metal-options';
         <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
           <div>
             <label class="block text-sm font-medium text-[var(--color-text-muted)] mb-1">
-              Metal <span class="text-red-500">*</span>
+              {{ 'metals.form.metal' | translate }} <span class="text-red-500">*</span>
             </label>
             <p-select
-              [options]="metalOptions"
+              [options]="metalOptions()"
               [ngModel]="metal()"
               optionLabel="label"
               optionValue="code"
-              placeholder="Select metal"
+              [placeholder]="'metals.form.selectMetal' | translate"
               styleClass="w-full"
               (onChange)="metal.set($event.value)"
             />
@@ -48,14 +52,14 @@ import { METAL_OPTIONS, PURITY_OPTIONS } from '../../constants/metal-options';
 
           <div>
             <label class="block text-sm font-medium text-[var(--color-text-muted)] mb-1">
-              Purity <span class="text-red-500">*</span>
+              {{ 'metals.form.purity' | translate }} <span class="text-red-500">*</span>
             </label>
             <p-select
               [options]="purityOptions()"
               [ngModel]="purityLabel()"
               optionLabel="label"
               optionValue="label"
-              placeholder="Select purity"
+              [placeholder]="'metals.form.selectPurity' | translate"
               styleClass="w-full"
               [disabled]="!metal()"
               (onChange)="purityLabel.set($event.value)"
@@ -65,7 +69,7 @@ import { METAL_OPTIONS, PURITY_OPTIONS } from '../../constants/metal-options';
 
         <div>
           <label class="block text-sm font-medium text-[var(--color-text-muted)] mb-1">
-            Price per gram ({{ baseCurrency() || 'base' }}) <span class="text-red-500">*</span>
+            {{ pricePerGramLabel() }} <span class="text-red-500">*</span>
           </label>
           <p-inputNumber
             [(ngModel)]="pricePerGramValue"
@@ -76,17 +80,22 @@ import { METAL_OPTIONS, PURITY_OPTIONS } from '../../constants/metal-options';
             styleClass="w-full"
           />
           <p class="text-xs text-[var(--color-text-muted)] mt-1">
-            Enter the price you pay at this purity (e.g. jeweller's quoted price).
+            {{ 'metals.form.priceHint' | translate }}
           </p>
         </div>
 
         <div class="flex items-center justify-between">
-          <label class="text-sm font-medium text-[var(--color-text-muted)]">Active</label>
-          <p-toggleSwitch [(ngModel)]="activeValue" ariaLabel="Toggle price active" />
+          <label class="text-sm font-medium text-[var(--color-text-muted)]">{{
+            'common.active' | translate
+          }}</label>
+          <p-toggleSwitch
+            [(ngModel)]="activeValue"
+            [ariaLabel]="'metals.form.toggleActive' | translate"
+          />
         </div>
 
       <p-button
-        [label]="editMode() ? 'Save' : 'Add Price'"
+        [label]="editMode() ? ('common.save' | translate) : ('metals.form.addPrice' | translate)"
         [icon]="editMode() ? 'pi pi-check' : 'pi pi-plus'"
         (onClick)="addPrice()"
         [disabled]="!canAdd()"
@@ -96,20 +105,36 @@ import { METAL_OPTIONS, PURITY_OPTIONS } from '../../constants/metal-options';
   `,
 })
 export class MetalPriceConfigComponent {
+  private readonly translate = inject(TranslateService);
+  private readonly langTick = toSignal(this.translate.onLangChange, { initialValue: null });
+
   editMode = input(false);
   baseCurrency = input<string>('');
   priceAdded = output<MetalPrice>();
-
-  metalOptions = METAL_OPTIONS;
 
   metal = signal<MetalCode | ''>('');
   purityLabel = signal('');
   pricePerGramValue = signal<number | null>(null);
   activeValue = signal(true);
 
+  readonly metalOptions = computed(() => {
+    this.langTick();
+    return METAL_OPTIONS.map((o) => ({
+      ...o,
+      label: this.translate.instant(`metals.${o.code}`),
+    }));
+  });
+
   readonly purityOptions = computed(() => {
     const m = this.metal();
     return m ? PURITY_OPTIONS[m] : [];
+  });
+
+  readonly pricePerGramLabel = computed(() => {
+    this.langTick();
+    return this.translate.instant('metals.form.pricePerGram', {
+      currency: this.baseCurrency() || this.translate.instant('common.base'),
+    });
   });
 
   canAdd = computed(() => {

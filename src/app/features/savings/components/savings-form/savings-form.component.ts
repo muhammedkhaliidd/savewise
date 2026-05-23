@@ -9,6 +9,8 @@ import {
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -27,6 +29,7 @@ import { METAL_OPTIONS, PURITY_OPTIONS } from '../../../metals/constants/metal-o
   standalone: true,
   imports: [
     CommonModule,
+    TranslateModule,
     ButtonModule,
     InputTextModule,
     InputNumberModule,
@@ -41,17 +44,38 @@ import { METAL_OPTIONS, PURITY_OPTIONS } from '../../../metals/constants/metal-o
 })
 export class SavingsFormComponent {
   private readonly currencyService = inject(CurrencyService);
+  private readonly translate = inject(TranslateService);
+  private readonly langTick = toSignal(this.translate.onLangChange, { initialValue: null });
 
   baseCurrency = input.required<string>();
   editMode = input(false);
   entryAdded = output<Omit<SavingsEntry, 'id'>>();
 
   readonly allCurrencies = computed(() => this.currencyService.getAllCurrencies());
-  readonly metalOptions = METAL_OPTIONS;
-  readonly typeOptions = [
-    { label: 'Money', value: 'money' as SavingsEntryType, icon: 'pi pi-money-bill text-emerald-500' },
-    { label: 'Metal', value: 'metal' as SavingsEntryType, icon: 'pi pi-star-fill text-amber-500' },
-  ];
+
+  readonly typeOptions = computed(() => {
+    this.langTick();
+    return [
+      {
+        label: this.translate.instant('savings.form.typeMoney'),
+        value: 'money' as SavingsEntryType,
+        icon: 'pi pi-money-bill text-emerald-500',
+      },
+      {
+        label: this.translate.instant('savings.form.typeMetal'),
+        value: 'metal' as SavingsEntryType,
+        icon: 'pi pi-star-fill text-amber-500',
+      },
+    ];
+  });
+
+  readonly metalOptions = computed(() => {
+    this.langTick();
+    return METAL_OPTIONS.map((o) => ({
+      ...o,
+      label: this.translate.instant(`metals.${o.code}`),
+    }));
+  });
 
   type = signal<SavingsEntryType>('money');
 

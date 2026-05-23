@@ -4,21 +4,21 @@
   <div class="flex items-center justify-between mb-4">
     <h3 class="flex items-center gap-2 text-base font-semibold text-[var(--color-text)] sm:text-lg">
       <i class="pi pi-wallet text-[var(--color-primary)]"></i>
-      Savings Entries
+      {{ 'savings.listTitle' | translate }}
     </h3>
     <p-button
       icon="pi pi-plus"
       severity="primary"
       [rounded]="true"
       size="small"
-      aria-label="Add savings entry"
+      [ariaLabel]="'savings.addEntry' | translate"
       (onClick)="addEntry.emit()"
     />
   </div>
 
   @if (entries().length === 0) {
   <p class="text-[var(--color-text-muted)] text-center py-4">
-    No savings entries yet. Add your first entry above.
+    {{ 'savings.empty' | translate }}
   </p>
   } @else {
   <p-orderList
@@ -39,13 +39,13 @@
         <div class="flex-1 min-w-0">
           <div class="flex items-center gap-2 min-w-0">
             <p class="truncate font-semibold text-[var(--color-text)]">
-              {{ entry.label || 'Untitled' }}
+              {{ entry.label || ('common.untitled' | translate) }}
             </p>
             <span
               class="inline-flex items-center gap-1 rounded-full px-2 py-1 text-[10px] font-semibold leading-none whitespace-nowrap"
               [class]="tagClass(entry)"
             >
-              <i [class]="tagIcon(entry)" style="font-size: 10px"></i>
+              <i [class]="tagIcon(entry)" style="font-size: 10px" aria-hidden="true"></i>
               {{ tagLabel(entry) }}
             </span>
           </div>
@@ -66,7 +66,9 @@
               {{ entry.grams | number : '1.2-4' }}g · {{ entry.purityLabel }}
               =
               @if (convertedAmount(entry) === null) {
-                <span class="text-[var(--color-text-muted)] italic">Price unavailable</span>
+                <span class="text-[var(--color-text-muted)] italic">{{
+                  'savings.priceUnavailable' | translate
+                }}</span>
               } @else {
                 <span class="text-[var(--color-primary)] font-semibold">
                   {{ convertedAmount(entry) | number : '1.2-2' }} {{ baseCurrency() }}
@@ -79,7 +81,7 @@
           <p-toggleSwitch
             [ngModel]="entry.active !== false"
             (ngModelChange)="toggleActive.emit({ id: entry.id, active: $event })"
-            ariaLabel="Toggle entry active"
+            [ariaLabel]="'savings.toggleActive' | translate"
           />
           <p-button
             icon="pi pi-pencil"

@@ -1,0 +1,188 @@
+{
+  "app": {
+    "title": "SaveWise"
+  },
+  "common": {
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "confirm": "تأكيد",
+    "delete": "حذف",
+    "search": "بحث",
+    "active": "نشط",
+    "select": "اختر",
+    "untitled": "بدون عنوان",
+    "add": "إضافة",
+    "synced": "تمت المزامنة",
+    "updated": "تم التحديث",
+    "saved": "تم الحفظ",
+    "syncFailed": "فشلت المزامنة",
+    "minute": "دقيقة",
+    "minutes": "دقائق",
+    "hour": "ساعة",
+    "hours": "ساعات",
+    "min": "د",
+    "mins": "د",
+    "every": "كل",
+    "unit": "الوحدة",
+    "from": "من",
+    "to": "إلى",
+    "base": "أساس"
+  },
+  "nav": {
+    "back": "رجوع",
+    "openSettings": "فتح الإعدادات",
+    "pressBackAgain": "اضغط رجوع مرة أخرى للخروج"
+  },
+  "header": {
+    "baseCurrency": "العملة الأساسية:"
+  },
+  "footer": {
+    "savingsUpdated": "آخر تحديث للمدخرات:",
+    "noSavingsYet": "لا توجد مدخرات بعد"
+  },
+  "settings": {
+    "title": "الإعدادات",
+    "baseCurrency": "العملة الأساسية",
+    "baseCurrencyDesc": "تُعرض جميع إجماليات المدخرات وأسعار الصرف بالنسبة لهذه العملة.",
+    "theme": "المظهر",
+    "themeDesc": "التبديل بين الوضع الفاتح والداكن.",
+    "lightMode": "الوضع الفاتح",
+    "darkMode": "الوضع الداكن",
+    "toggleDarkMode": "تبديل الوضع الداكن",
+    "language": "اللغة",
+    "languageDesc": "اختر لغة عرض التطبيق.",
+    "langEn": "English",
+    "langAr": "العربية",
+    "syncInterval": "مزامنة أسعار الصرف تلقائياً",
+    "syncIntervalDesc": "عدد مرات تحديث أسعار الصرف الحية من الواجهة أثناء فتح التطبيق.",
+    "currentInterval": "الفترة الحالية",
+    "editSyncInterval": "تعديل فترة المزامنة",
+    "editSyncIntervalHeader": "تعديل فترة المزامنة",
+    "syncEvery": "كل {{value}} {{unit}}"
+  },
+  "dashboard": {
+    "editSavings": "تعديل مدخرة",
+    "addSavings": "إضافة مدخرة",
+    "editRate": "تعديل سعر صرف",
+    "addRate": "إضافة سعر صرف",
+    "editMetalPrice": "تعديل سعر معدن",
+    "addMetalPrice": "إضافة سعر معدن"
+  },
+  "savings": {
+    "total": "إجمالي المدخرات",
+    "totalEntries": "{{count}} {{entries}}",
+    "entry": "مدخرة",
+    "entries": "مدخرات",
+    "listTitle": "مدخراتي",
+    "addEntry": "إضافة مدخرة",
+    "empty": "لا توجد مدخرات بعد. أضف أول مدخرة.",
+    "toggleActive": "تفعيل/إيقاف المدخرة",
+    "priceUnavailable": "السعر غير متوفر",
+    "tagMoney": "نقد",
+    "form": {
+      "type": "النوع",
+      "name": "اسم المدخرة",
+      "namePlaceholder": "مثال: صندوق طوارئ",
+      "currency": "العملة",
+      "amount": "المبلغ",
+      "metal": "المعدن",
+      "selectMetal": "اختر المعدن",
+      "purity": "العيار",
+      "selectPurity": "اختر العيار",
+      "grams": "الجرامات",
+      "toggleActive": "تفعيل/إيقاف المدخرة",
+      "addSavings": "إضافة مدخرة",
+      "typeMoney": "نقد",
+      "typeMetal": "معدن"
+    }
+  },
+  "exchange": {
+    "configuredRates": "أسعار الصرف المخصصة",
+    "addRate": "إضافة سعر صرف",
+    "emptyRates": "لا توجد أسعار مخصصة. سيتم استخدام السعر الافتراضي 1.",
+    "toggleRateActive": "تفعيل/إيقاف السعر",
+    "rateLine": "1 {{from}} = {{rate}} {{to}}",
+    "liveRates": "أسعار الصرف الافتراضية",
+    "autoSync": "مزامنة تلقائية:",
+    "syncedAt": "تمت المزامنة {{date}}",
+    "notSyncedYet": "لم تتم المزامنة بعد",
+    "emptyLive": "لا توجد أسعار افتراضية — اضغط تحديث للمزامنة.",
+    "noMatch": "لا توجد عملات تطابق \"{{query}}\".",
+    "yourOverride": "سعرك المخصص",
+    "form": {
+      "from": "من",
+      "to": "إلى",
+      "rateLabel": "السعر (1 {{from}} = ? {{to}})",
+      "toggleActive": "تفعيل/إيقاف السعر",
+      "addRate": "إضافة سعر"
+    },
+    "syncForm": {
+      "every": "كل",
+      "unit": "الوحدة",
+      "minutes": "دقائق",
+      "hours": "ساعات",
+      "allowed": "المسموح: {{min}}–{{max}} {{unit}}"
+    }
+  },
+  "metals": {
+    "gold": "ذهب",
+    "silver": "فضة",
+    "platinum": "بلاتين",
+    "palladium": "بالاديوم",
+    "configuredPrices": "أسعار المعادن المخصصة",
+    "addPrice": "إضافة سعر معدن",
+    "emptyPrices": "لا توجد أسعار مخصصة. ستُستخدم الأسعار الحية.",
+    "togglePriceActive": "تفعيل/إيقاف السعر",
+    "perGram": "{{price}} {{currency}} / غ",
+    "livePrices": "أسعار المعادن الافتراضية",
+    "emptyLive": "لا توجد أسعار افتراضية — اضغط تحديث للمزامنة.",
+    "noMatch": "لا توجد معادن تطابق \"{{query}}\".",
+    "yourOverride": "سعرك المخصص (مكافئ المعدن الخالص)",
+    "priceLine": "1 غ {{metal}} → {{price}} {{currency}}",
+    "form": {
+      "metal": "المعدن",
+      "selectMetal": "اختر المعدن",
+      "purity": "العيار",
+      "selectPurity": "اختر العيار",
+      "pricePerGram": "السعر للغرام ({{currency}})",
+      "priceHint": "أدخل السعر الذي تدفعه لهذا العيار (مثال: سعر الصائغ).",
+      "toggleActive": "تفعيل/إيقاف السعر",
+      "addPrice": "إضافة سعر"
+    }
+  },
+  "currency": {
+    "selectCurrency": "اختر العملة"
+  },
+  "toast": {
+    "saved": "تم الحفظ",
+    "savingsAdded": "تمت إضافة المدخرة",
+    "savingsUpdated": "تم تحديث المدخرة",
+    "rateAdded": "تمت إضافة سعر الصرف",
+    "rateUpdated": "تم تحديث سعر الصرف",
+    "metalPriceAdded": "تمت إضافة سعر المعدن",
+    "metalPriceUpdated": "تم تحديث سعر المعدن",
+    "synced": "تمت المزامنة",
+    "ratesUpdated": "تم تحديث أسعار الصرف الافتراضية",
+    "metalPricesUpdated": "تم تحديث أسعار المعادن الافتراضية",
+    "syncFailed": "فشلت المزامنة",
+    "ratesSyncFailed": "تعذر جلب أسعار الصرف الافتراضية",
+    "metalSyncFailed": "تعذر جلب أسعار المعادن الافتراضية",
+    "updated": "تم التحديث",
+    "baseCurrencyChanged": "تم تغيير العملة الأساسية إلى {{code}}",
+    "syncIntervalChanged": "تم تغيير فترة المزامنة",
+    "metalsCleared": "تم مسح أسعار المعادن المخصصة",
+    "metalsClearedDetail": "كانت قيمها مرتبطة بالعملة الأساسية السابقة."
+  },
+  "confirm": {
+    "deleteEntry": "حذف المدخرة",
+    "deleteEntryMessage": "هل أنت متأكد من حذف هذه المدخرة؟",
+    "deleteRate": "حذف سعر مخصص",
+    "deleteRateMessage": "هل أنت متأكد من حذف السعر المخصص {{from}} → {{to}}؟",
+    "deleteMetalPrice": "حذف سعر المعدن",
+    "deleteMetalPriceMessage": "هل أنت متأكد من حذف {{metal}} · {{purity}}؟"
+  },
+  "errors": {
+    "syncRatesFailed": "فشلت مزامنة الأسعار",
+    "syncMetalFailed": "فشلت مزامنة أسعار المعادن"
+  }
+}

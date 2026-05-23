@@ -67,6 +67,21 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+html[lang='ar'] body {
+  font-family:
+    'Segoe UI',
+    'Noto Sans Arabic',
+    'Tahoma',
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+html[dir='rtl'] .pi-arrow-left::before {
+  transform: scaleX(-1);
+  display: inline-block;
+}
+
 app-root {
   display: block;
   height: 100%;

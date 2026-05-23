@@ -59,7 +59,7 @@
 <p-dialog
   [(visible)]="editSavingsDialogVisible"
   [modal]="true"
-  header="Edit Savings Entry"
+  [header]="'dashboard.editSavings' | translate"
   [style]="{ width: '90vw', maxWidth: '30rem' }"
   (onShow)="overlayStack.register('edit-savings', () => editSavingsDialogVisible.set(false))"
   (onHide)="overlayStack.release('edit-savings')"
@@ -76,7 +76,7 @@
 <p-dialog
   [(visible)]="editRateDialogVisible"
   [modal]="true"
-  header="Edit Exchange Rate"
+  [header]="'dashboard.editRate' | translate"
   [style]="{ width: '90vw', maxWidth: '30rem' }"
   (onShow)="overlayStack.register('edit-rate', () => editRateDialogVisible.set(false))"
   (onHide)="overlayStack.release('edit-rate')"
@@ -93,7 +93,7 @@
 <p-dialog
   [(visible)]="editMetalPriceDialogVisible"
   [modal]="true"
-  header="Edit Metal Price"
+  [header]="'dashboard.editMetalPrice' | translate"
   [style]="{ width: '90vw', maxWidth: '30rem' }"
   (onShow)="overlayStack.register('edit-metal-price', () => editMetalPriceDialogVisible.set(false))"
   (onHide)="overlayStack.release('edit-metal-price')"
@@ -110,7 +110,7 @@
 <p-dialog
   [(visible)]="addSavingsDialogVisible"
   [modal]="true"
-  header="Add Savings Entry"
+  [header]="'dashboard.addSavings' | translate"
   [style]="{ width: '90vw', maxWidth: '30rem' }"
   (onShow)="overlayStack.register('add-savings', () => addSavingsDialogVisible.set(false))"
   (onHide)="overlayStack.release('add-savings')"
@@ -125,7 +125,7 @@
 <p-dialog
   [(visible)]="addRateDialogVisible"
   [modal]="true"
-  header="Add Exchange Rate"
+  [header]="'dashboard.addRate' | translate"
   [style]="{ width: '90vw', maxWidth: '30rem' }"
   (onShow)="overlayStack.register('add-rate', () => addRateDialogVisible.set(false))"
   (onHide)="overlayStack.release('add-rate')"
@@ -140,7 +140,7 @@
 <p-dialog
   [(visible)]="addMetalPriceDialogVisible"
   [modal]="true"
-  header="Add Metal Price"
+  [header]="'dashboard.addMetalPrice' | translate"
   [style]="{ width: '90vw', maxWidth: '30rem' }"
   (onShow)="overlayStack.register('add-metal-price', () => addMetalPriceDialogVisible.set(false))"
   (onHide)="overlayStack.release('add-metal-price')"

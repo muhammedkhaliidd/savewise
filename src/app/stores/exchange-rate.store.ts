@@ -168,7 +168,7 @@ export const ExchangeRateStore = signalStore(
             });
             persist();
           } catch (err) {
-            const message = err instanceof Error ? err.message : 'Failed to sync rates';
+            const message = err instanceof Error ? err.message : 'errors.syncRatesFailed';
             patchState(store, { isSyncing: false, syncError: message });
             throw err;
           }

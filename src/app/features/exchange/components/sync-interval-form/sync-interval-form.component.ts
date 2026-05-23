@@ -3,11 +3,14 @@ import {
   Component,
   computed,
   effect,
+  inject,
   input,
   output,
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
@@ -20,14 +23,21 @@ import type {
 @Component({
   selector: 'app-sync-interval-form',
   standalone: true,
-  imports: [CommonModule, FormsModule, ButtonModule, InputNumberModule, SelectModule],
+  imports: [
+    CommonModule,
+    TranslateModule,
+    FormsModule,
+    ButtonModule,
+    InputNumberModule,
+    SelectModule,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="grid gap-4">
       <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
         <div>
           <label class="block text-sm font-medium text-[var(--color-text-muted)] mb-1">
-            Every <span class="text-red-500">*</span>
+            {{ 'exchange.syncForm.every' | translate }} <span class="text-red-500">*</span>
           </label>
           <p-inputNumber
             [(ngModel)]="value"
@@ -41,11 +51,11 @@ import type {
 
         <div>
           <label class="block text-sm font-medium text-[var(--color-text-muted)] mb-1">
-            Unit <span class="text-red-500">*</span>
+            {{ 'exchange.syncForm.unit' | translate }} <span class="text-red-500">*</span>
           </label>
           <p-select
             [(ngModel)]="unit"
-            [options]="unitOptions"
+            [options]="unitOptions()"
             optionLabel="label"
             optionValue="value"
             styleClass="w-full"
@@ -54,11 +64,11 @@ import type {
       </div>
 
       <p class="text-xs text-[var(--color-text-muted)]">
-        Allowed: {{ bounds().min }}–{{ bounds().max }} {{ unit() }}
+        {{ allowedHint() }}
       </p>
 
       <p-button
-        [label]="'Save'"
+        [label]="'common.save' | translate"
         (onClick)="save()"
         [disabled]="!canSave()"
         styleClass="w-full"
@@ -67,20 +77,44 @@ import type {
   `,
 })
 export class SyncIntervalFormComponent {
+  private readonly translate = inject(TranslateService);
+  private readonly langTick = toSignal(this.translate.onLangChange, { initialValue: null });
+
   initial = input.required<SyncIntervalSetting>();
   intervalChanged = output<SyncIntervalSetting>();
 
   value = signal(1);
   unit = signal<SyncIntervalUnit>('hours');
 
-  readonly unitOptions = [
-    { label: 'Minutes', value: 'minutes' as SyncIntervalUnit },
-    { label: 'Hours', value: 'hours' as SyncIntervalUnit },
-  ];
+  readonly unitOptions = computed(() => {
+    this.langTick();
+    return [
+      { label: this.translate.instant('exchange.syncForm.minutes'), value: 'minutes' as SyncIntervalUnit },
+      { label: this.translate.instant('exchange.syncForm.hours'), value: 'hours' as SyncIntervalUnit },
+    ];
+  });
 
   readonly bounds = computed(() =>
     this.unit() === 'minutes' ? { min: 30, max: 1440 } : { min: 1, max: 24 },
   );
+
+  readonly allowedHint = computed(() => {
+    this.langTick();
+    const { min, max } = this.bounds();
+    const unitKey =
+      this.unit() === 'minutes'
+        ? max === 1
+          ? 'common.minute'
+          : 'common.minutes'
+        : max === 1
+          ? 'common.hour'
+          : 'common.hours';
+    return this.translate.instant('exchange.syncForm.allowed', {
+      min,
+      max,
+      unit: this.translate.instant(unitKey),
+    });
+  });
 
   readonly canSave = computed(() => {
     const v = this.value();

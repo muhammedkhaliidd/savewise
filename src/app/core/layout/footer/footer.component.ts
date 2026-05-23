@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, DatePipe, TranslateModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <footer
@@ -13,8 +14,11 @@ import { CommonModule, DatePipe } from '@angular/common';
       <img src="assets/icons/web-transparent-logo.png" alt="SaveWise" class="w-16 h-6" />
 
       <span class="text-[var(--color-text-muted)]">
-        @if (lastInputDate()) { Savings updated: {{ lastInputDate() | date : 'medium' }}
-        } @else { No savings yet }
+        @if (lastInputDate()) {
+          {{ 'footer.savingsUpdated' | translate }} {{ lastInputDate() | date : 'medium' }}
+        } @else {
+          {{ 'footer.noSavingsYet' | translate }}
+        }
       </span>
     </footer>
   `,

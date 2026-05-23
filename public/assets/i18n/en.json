@@ -1,0 +1,188 @@
+{
+  "app": {
+    "title": "SaveWise"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "search": "Search",
+    "active": "Active",
+    "select": "Select",
+    "untitled": "Untitled",
+    "add": "Add",
+    "synced": "Synced",
+    "updated": "Updated",
+    "saved": "Saved",
+    "syncFailed": "Sync failed",
+    "minute": "minute",
+    "minutes": "minutes",
+    "hour": "hour",
+    "hours": "hours",
+    "min": "Min",
+    "mins": "Mins",
+    "every": "Every",
+    "unit": "Unit",
+    "from": "From",
+    "to": "To",
+    "base": "base"
+  },
+  "nav": {
+    "back": "Back",
+    "openSettings": "Open settings",
+    "pressBackAgain": "Press back again to exit"
+  },
+  "header": {
+    "baseCurrency": "Base currency:"
+  },
+  "footer": {
+    "savingsUpdated": "Savings updated:",
+    "noSavingsYet": "No savings yet"
+  },
+  "settings": {
+    "title": "Settings",
+    "baseCurrency": "Base Currency",
+    "baseCurrencyDesc": "All savings totals and exchange rates are displayed relative to this currency.",
+    "theme": "Theme",
+    "themeDesc": "Toggle between light and dark mode.",
+    "lightMode": "Light mode",
+    "darkMode": "Dark mode",
+    "toggleDarkMode": "Toggle dark mode",
+    "language": "Language",
+    "languageDesc": "Choose the app display language.",
+    "langEn": "English",
+    "langAr": "Arabic",
+    "syncInterval": "Exchange Rate Auto-Sync",
+    "syncIntervalDesc": "How often to refresh live exchange rates from the API while the app is open.",
+    "currentInterval": "Current interval",
+    "editSyncInterval": "Edit sync interval",
+    "editSyncIntervalHeader": "Edit Sync Interval",
+    "syncEvery": "Every {{value}} {{unit}}"
+  },
+  "dashboard": {
+    "editSavings": "Edit Savings Entry",
+    "addSavings": "Add Savings Entry",
+    "editRate": "Edit Exchange Rate",
+    "addRate": "Add Exchange Rate",
+    "editMetalPrice": "Edit Metal Price",
+    "addMetalPrice": "Add Metal Price"
+  },
+  "savings": {
+    "total": "Total Savings",
+    "totalEntries": "Across {{count}} {{entries}}",
+    "entry": "entry",
+    "entries": "entries",
+    "listTitle": "Savings Entries",
+    "addEntry": "Add savings entry",
+    "empty": "No savings entries yet. Add your first entry above.",
+    "toggleActive": "Toggle entry active",
+    "priceUnavailable": "Price unavailable",
+    "tagMoney": "Money",
+    "form": {
+      "type": "Type",
+      "name": "Name of the savings",
+      "namePlaceholder": "e.g., Emergency fund",
+      "currency": "Currency",
+      "amount": "Amount",
+      "metal": "Metal",
+      "selectMetal": "Select metal",
+      "purity": "Purity",
+      "selectPurity": "Select purity",
+      "grams": "Grams",
+      "toggleActive": "Toggle entry active",
+      "addSavings": "Add Savings",
+      "typeMoney": "Money",
+      "typeMetal": "Metal"
+    }
+  },
+  "exchange": {
+    "configuredRates": "Configured Rates",
+    "addRate": "Add exchange rate",
+    "emptyRates": "No custom rates configured. Default rate of 1 will be used.",
+    "toggleRateActive": "Toggle rate active",
+    "rateLine": "1 {{from}} = {{rate}} {{to}}",
+    "liveRates": "Live Exchange Rates",
+    "autoSync": "Auto sync:",
+    "syncedAt": "Synced {{date}}",
+    "notSyncedYet": "Not synced yet",
+    "emptyLive": "No live rates yet — click refresh to sync.",
+    "noMatch": "No currencies match \"{{query}}\".",
+    "yourOverride": "Your override",
+    "form": {
+      "from": "From",
+      "to": "To",
+      "rateLabel": "Rate (1 {{from}} = ? {{to}})",
+      "toggleActive": "Toggle rate active",
+      "addRate": "Add Rate"
+    },
+    "syncForm": {
+      "every": "Every",
+      "unit": "Unit",
+      "minutes": "Minutes",
+      "hours": "Hours",
+      "allowed": "Allowed: {{min}}–{{max}} {{unit}}"
+    }
+  },
+  "metals": {
+    "gold": "Gold",
+    "silver": "Silver",
+    "platinum": "Platinum",
+    "palladium": "Palladium",
+    "configuredPrices": "Configured Metal Prices",
+    "addPrice": "Add metal price",
+    "emptyPrices": "No custom metal prices configured. Live prices will be used.",
+    "togglePriceActive": "Toggle metal price active",
+    "perGram": "{{price}} {{currency}} / g",
+    "livePrices": "Live Metal Prices",
+    "emptyLive": "No live metal prices yet — click refresh to sync.",
+    "noMatch": "No metals match \"{{query}}\".",
+    "yourOverride": "Your override (pure-metal equivalent)",
+    "priceLine": "1 g {{metal}} → {{price}} {{currency}}",
+    "form": {
+      "metal": "Metal",
+      "selectMetal": "Select metal",
+      "purity": "Purity",
+      "selectPurity": "Select purity",
+      "pricePerGram": "Price per gram ({{currency}})",
+      "priceHint": "Enter the price you pay at this purity (e.g. jeweller's quoted price).",
+      "toggleActive": "Toggle price active",
+      "addPrice": "Add Price"
+    }
+  },
+  "currency": {
+    "selectCurrency": "Select currency"
+  },
+  "toast": {
+    "saved": "Saved",
+    "savingsAdded": "Savings entry added",
+    "savingsUpdated": "Savings entry updated",
+    "rateAdded": "Exchange rate added",
+    "rateUpdated": "Exchange rate updated",
+    "metalPriceAdded": "Metal price added",
+    "metalPriceUpdated": "Metal price updated",
+    "synced": "Synced",
+    "ratesUpdated": "Live exchange rates updated",
+    "metalPricesUpdated": "Live metal prices updated",
+    "syncFailed": "Sync failed",
+    "ratesSyncFailed": "Could not fetch live exchange rates",
+    "metalSyncFailed": "Could not fetch live metal prices",
+    "updated": "Updated",
+    "baseCurrencyChanged": "Base currency changed to {{code}}",
+    "syncIntervalChanged": "Sync interval changed",
+    "metalsCleared": "Custom metal prices cleared",
+    "metalsClearedDetail": "Their values were tied to the previous base currency."
+  },
+  "confirm": {
+    "deleteEntry": "Delete Entry",
+    "deleteEntryMessage": "Are you sure you want to delete this savings entry?",
+    "deleteRate": "Delete Custom Rate",
+    "deleteRateMessage": "Are you sure you want to delete the custom rate {{from}} → {{to}}?",
+    "deleteMetalPrice": "Delete Metal Price",
+    "deleteMetalPriceMessage": "Are you sure you want to delete {{metal}} · {{purity}}?"
+  },
+  "errors": {
+    "syncRatesFailed": "Failed to sync rates",
+    "syncMetalFailed": "Failed to sync metal prices"
+  }
+}

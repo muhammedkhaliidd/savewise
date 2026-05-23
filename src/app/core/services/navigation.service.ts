@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
 import { OverlayStackService } from './overlay-stack.service';
 import { ToastService } from './toast.service';
 
@@ -13,6 +14,7 @@ export class NavigationService {
   private readonly router = inject(Router);
   private readonly overlays = inject(OverlayStackService);
   private readonly toast = inject(ToastService);
+  private readonly translate = inject(TranslateService);
 
   private lastBackAtRoot = 0;
 
@@ -40,6 +42,6 @@ export class NavigationService {
       return;
     }
     this.lastBackAtRoot = now;
-    this.toast.info('Press back again to exit', '', DOUBLE_TAP_WINDOW_MS);
+    this.toast.info(this.translate.instant('nav.pressBackAgain'), '', DOUBLE_TAP_WINDOW_MS);
   }
 }

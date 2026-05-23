@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map, startWith } from 'rxjs/operators';
+import { TranslateModule } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { NavigationService } from '../../../core/services/navigation.service';
 
@@ -11,7 +12,7 @@ const ROOT_PATHS = new Set(['/', '/dashboard']);
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterLink, ButtonModule],
+  imports: [CommonModule, RouterLink, ButtonModule, TranslateModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <header
@@ -26,7 +27,7 @@ const ROOT_PATHS = new Set(['/', '/dashboard']);
               [text]="true"
               [rounded]="true"
               size="small"
-              ariaLabel="Back"
+              [ariaLabel]="'nav.back' | translate"
               (onClick)="onBack()"
             />
           }
@@ -35,7 +36,7 @@ const ROOT_PATHS = new Set(['/', '/dashboard']);
 
         <div class="flex items-center gap-2 sm:gap-3">
           <span class="text-xs sm:text-sm text-[var(--color-text-muted)] whitespace-nowrap">
-            Base currency:
+            {{ 'header.baseCurrency' | translate }}
             <span class="font-semibold text-[var(--color-text)]">{{ baseCurrency() }}</span>
           </span>
           @if (!showBack()) {
@@ -46,7 +47,7 @@ const ROOT_PATHS = new Set(['/', '/dashboard']);
               [rounded]="true"
               size="small"
               routerLink="/settings"
-              ariaLabel="Open settings"
+              [ariaLabel]="'nav.openSettings' | translate"
             />
           }
         </div>

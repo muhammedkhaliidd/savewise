@@ -8,6 +8,8 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CdkDragHandle } from '@angular/cdk/drag-drop';
 import { ButtonModule } from 'primeng/button';
 import { OrderListModule } from 'primeng/orderlist';
@@ -19,7 +21,7 @@ import { ConfirmService } from '../../../../core/services/confirm.service';
 import {
   lookupPurityFactor,
   metalIcon,
-  metalLabel,
+  metalLabelKey,
 } from '../../../metals/constants/metal-options';
 
 @Component({
@@ -28,6 +30,7 @@ import {
   imports: [
     CommonModule,
     FormsModule,
+    TranslateModule,
     CdkDragHandle,
     ButtonModule,
     OrderListModule,
@@ -39,6 +42,8 @@ import {
 })
 export class SavingsListComponent {
   private readonly confirmService = inject(ConfirmService);
+  private readonly translate = inject(TranslateService);
+  private readonly langTick = toSignal(this.translate.onLangChange, { initialValue: null });
 
   entries = input.required<SavingsEntry[]>();
   baseCurrency = input.required<string>();
@@ -50,7 +55,10 @@ export class SavingsListComponent {
   toggleActive = output<{ id: string; active: boolean }>();
   reorder = output<SavingsEntry[]>();
 
-  entriesView = computed(() => [...this.entries()]);
+  entriesView = computed(() => {
+    this.langTick();
+    return [...this.entries()];
+  });
 
   entryType(entry: SavingsEntry): 'money' | 'metal' {
     return entry.type ?? 'money';
@@ -69,7 +77,9 @@ export class SavingsListComponent {
   }
 
   tagLabel(entry: SavingsEntry): string {
-    return this.entryType(entry) === 'money' ? 'Money' : metalLabel(entry.metal);
+    return this.entryType(entry) === 'money'
+      ? this.translate.instant('savings.tagMoney')
+      : this.translate.instant(metalLabelKey(entry.metal));
   }
 
   tagIcon(entry: SavingsEntry): string {
@@ -96,10 +106,10 @@ export class SavingsListComponent {
 
   confirmDelete(id: string): void {
     this.confirmService.confirm({
-      header: 'Delete Entry',
-      message: 'Are you sure you want to delete this savings entry?',
+      header: this.translate.instant('confirm.deleteEntry'),
+      message: this.translate.instant('confirm.deleteEntryMessage'),
       icon: 'pi pi-trash',
-      actionText: 'Delete',
+      actionText: this.translate.instant('common.delete'),
       actionSeverity: 'danger',
       onConfirm: () => this.deleteEntry.emit(id),
     });

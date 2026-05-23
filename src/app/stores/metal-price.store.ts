@@ -156,7 +156,7 @@ export const MetalPriceStore = signalStore(
             });
             persist();
           } catch (err) {
-            const message = err instanceof Error ? err.message : 'Failed to sync metal prices';
+            const message = err instanceof Error ? err.message : 'errors.syncMetalFailed';
             patchState(store, { isSyncing: false, syncError: message });
             throw err;
           }

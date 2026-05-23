@@ -9,6 +9,7 @@ import {
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { interval, switchMap } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 import { App as CapApp } from '@capacitor/app';
 import { Capacitor, type PluginListenerHandle } from '@capacitor/core';
 import { HeaderComponent } from '../header/header.component';
@@ -43,6 +44,7 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
   readonly metalStore = inject(MetalPriceStore);
   readonly savingsStore = inject(SavingsStore);
   private readonly toast = inject(ToastService);
+  private readonly translate = inject(TranslateService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly nav = inject(NavigationService);
 
@@ -51,7 +53,6 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
   private backHandle?: PluginListenerHandle;
 
   constructor() {
-    // Eagerly instantiate so the dark class is applied on bootstrap regardless of route.
     inject(ThemeService);
   }
 
@@ -104,10 +105,16 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
       this.metalStore.syncFromApi(),
     ]);
     if (exRes.status === 'rejected') {
-      this.toast.error('Sync failed', 'Could not fetch live exchange rates');
+      this.toast.error(
+        this.translate.instant('toast.syncFailed'),
+        this.translate.instant('toast.ratesSyncFailed'),
+      );
     }
     if (meRes.status === 'rejected') {
-      this.toast.error('Sync failed', 'Could not fetch live metal prices');
+      this.toast.error(
+        this.translate.instant('toast.syncFailed'),
+        this.translate.instant('toast.metalSyncFailed'),
+      );
     }
   }
 }

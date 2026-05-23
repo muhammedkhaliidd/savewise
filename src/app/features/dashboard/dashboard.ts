@@ -1,4 +1,5 @@
 import { Component, inject, OnInit, signal, viewChild } from '@angular/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { RateConfigComponent } from '../exchange/components/rate-config/rate-config.component';
 import { RateListComponent } from '../exchange/components/rate-list/rate-list.component';
 import { ApiRateListComponent } from '../exchange/components/api-rate-list/api-rate-list.component';
@@ -21,6 +22,7 @@ import type { MetalCode, MetalPrice } from '../metals/models/metal-price.model';
 @Component({
   selector: 'app-dashboard',
   imports: [
+    TranslateModule,
     RateConfigComponent,
     RateListComponent,
     ApiRateListComponent,
@@ -41,13 +43,12 @@ export class Dashboard implements OnInit {
   readonly savingsStore = inject(SavingsStore);
   readonly overlayStack = inject(OverlayStackService);
   private readonly toast = inject(ToastService);
+  private readonly translate = inject(TranslateService);
 
-  // View children for setting edit values
   readonly editSavingsForm = viewChild<SavingsFormComponent>('editSavingsForm');
   readonly editRateForm = viewChild<RateConfigComponent>('editRateForm');
   readonly editMetalPriceForm = viewChild<MetalPriceConfigComponent>('editMetalPriceForm');
 
-  // Dialog visibility signals
   readonly editSavingsDialogVisible = signal(false);
   readonly editRateDialogVisible = signal(false);
   readonly editMetalPriceDialogVisible = signal(false);
@@ -55,7 +56,6 @@ export class Dashboard implements OnInit {
   readonly addRateDialogVisible = signal(false);
   readonly addMetalPriceDialogVisible = signal(false);
 
-  // Track what we're editing
   private editingSavingsId: string | null = null;
   private editingRateOriginal: { from: string; to: string } | null = null;
   private editingMetalPriceOriginal: { metal: MetalCode; purityLabel: string } | null = null;
@@ -68,17 +68,26 @@ export class Dashboard implements OnInit {
 
   onSavingsAdded(entry: Omit<SavingsEntry, 'id'>): void {
     this.savingsStore.addEntry(entry);
-    this.toast.success('Saved', 'Savings entry added');
+    this.toast.success(
+      this.translate.instant('toast.saved'),
+      this.translate.instant('toast.savingsAdded'),
+    );
   }
 
   onRateAdded(event: { from: string; to: string; rate: number }): void {
     this.exchangeStore.setRate(event.from, event.to, event.rate);
-    this.toast.success('Saved', 'Exchange rate added');
+    this.toast.success(
+      this.translate.instant('toast.saved'),
+      this.translate.instant('toast.rateAdded'),
+    );
   }
 
   onMetalPriceAdded(price: MetalPrice): void {
     this.metalStore.setPrice(price);
-    this.toast.success('Saved', 'Metal price added');
+    this.toast.success(
+      this.translate.instant('toast.saved'),
+      this.translate.instant('toast.metalPriceAdded'),
+    );
   }
 
   onAddSavingsClicked(): void {
@@ -131,18 +140,30 @@ export class Dashboard implements OnInit {
   async onSyncFromApi(): Promise<void> {
     try {
       await this.exchangeStore.syncFromApi();
-      this.toast.success('Synced', 'Live exchange rates updated');
+      this.toast.success(
+        this.translate.instant('toast.synced'),
+        this.translate.instant('toast.ratesUpdated'),
+      );
     } catch {
-      this.toast.error('Sync failed', 'Could not fetch live exchange rates');
+      this.toast.error(
+        this.translate.instant('toast.syncFailed'),
+        this.translate.instant('toast.ratesSyncFailed'),
+      );
     }
   }
 
   async onSyncMetalsFromApi(): Promise<void> {
     try {
       await this.metalStore.syncFromApi();
-      this.toast.success('Synced', 'Live metal prices updated');
+      this.toast.success(
+        this.translate.instant('toast.synced'),
+        this.translate.instant('toast.metalPricesUpdated'),
+      );
     } catch {
-      this.toast.error('Sync failed', 'Could not fetch live metal prices');
+      this.toast.error(
+        this.translate.instant('toast.syncFailed'),
+        this.translate.instant('toast.metalSyncFailed'),
+      );
     }
   }
 
@@ -163,7 +184,10 @@ export class Dashboard implements OnInit {
       this.savingsStore.updateEntry(this.editingSavingsId, cleared);
       this.editingSavingsId = null;
       this.editSavingsDialogVisible.set(false);
-      this.toast.success('Saved', 'Savings entry updated');
+      this.toast.success(
+        this.translate.instant('toast.saved'),
+        this.translate.instant('toast.savingsUpdated'),
+      );
     }
   }
 
@@ -190,7 +214,10 @@ export class Dashboard implements OnInit {
       );
       this.editingRateOriginal = null;
       this.editRateDialogVisible.set(false);
-      this.toast.success('Saved', 'Exchange rate updated');
+      this.toast.success(
+        this.translate.instant('toast.saved'),
+        this.translate.instant('toast.rateUpdated'),
+      );
     }
   }
 
@@ -216,7 +243,10 @@ export class Dashboard implements OnInit {
       );
       this.editingMetalPriceOriginal = null;
       this.editMetalPriceDialogVisible.set(false);
-      this.toast.success('Saved', 'Metal price updated');
+      this.toast.success(
+        this.translate.instant('toast.saved'),
+        this.translate.instant('toast.metalPriceUpdated'),
+      );
     }
   }
 }

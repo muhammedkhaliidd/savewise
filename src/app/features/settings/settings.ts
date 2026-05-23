@@ -1,9 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { SelectModule } from 'primeng/select';
+import { SelectButtonModule } from 'primeng/selectbutton';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { ExchangeRateStore } from '../../stores/exchange-rate.store';
 import { MetalPriceStore } from '../../stores/metal-price.store';
@@ -11,6 +14,7 @@ import { CurrencyService } from '../../core/services/currency.service';
 import { ThemeService } from '../../core/services/theme.service';
 import { ToastService } from '../../core/services/toast.service';
 import { OverlayStackService } from '../../core/services/overlay-stack.service';
+import { LocaleService, type AppLocale } from '../../core/services/locale.service';
 import { SyncIntervalFormComponent } from '../exchange/components/sync-interval-form/sync-interval-form.component';
 import type {
   SyncIntervalSetting,
@@ -23,9 +27,11 @@ import type {
   imports: [
     CommonModule,
     FormsModule,
+    TranslateModule,
     ButtonModule,
     DialogModule,
     SelectModule,
+    SelectButtonModule,
     ToggleSwitchModule,
     SyncIntervalFormComponent,
   ],
@@ -36,23 +42,46 @@ export class Settings {
   readonly exchangeStore = inject(ExchangeRateStore);
   readonly metalStore = inject(MetalPriceStore);
   readonly theme = inject(ThemeService);
+  readonly localeService = inject(LocaleService);
   readonly overlayStack = inject(OverlayStackService);
   private readonly currencyService = inject(CurrencyService);
   private readonly toast = inject(ToastService);
+  private readonly translate = inject(TranslateService);
+
+  private readonly langTick = toSignal(this.translate.onLangChange, { initialValue: null });
 
   readonly allCurrencies = computed(() => this.currencyService.getAllCurrencies());
 
   readonly syncIntervalDialogVisible = signal(false);
 
-  readonly syncIntervalLabel = computed(() => {
-    const { value, unit } = this.exchangeStore.syncInterval();
-    const unitLabel: Record<SyncIntervalUnit, [string, string]> = {
-      minutes: ['minute', 'minutes'],
-      hours: ['hour', 'hours'],
-    };
-    const [singular, plural] = unitLabel[unit];
-    return `Every ${value} ${value === 1 ? singular : plural}`;
+  readonly languageOptions = computed(() => {
+    this.langTick();
+    return this.localeService.languageOptions.map((o) => ({
+      code: o.code,
+      label: this.translate.instant(o.labelKey),
+    }));
   });
+
+  readonly syncIntervalLabel = computed(() => {
+    this.langTick();
+    const { value, unit } = this.exchangeStore.syncInterval();
+    const unitKey =
+      unit === 'minutes'
+        ? value === 1
+          ? 'common.minute'
+          : 'common.minutes'
+        : value === 1
+          ? 'common.hour'
+          : 'common.hours';
+    return this.translate.instant('settings.syncEvery', {
+      value,
+      unit: this.translate.instant(unitKey),
+    });
+  });
+
+  onLanguageChange(code: AppLocale): void {
+    void this.localeService.setLocale(code);
+  }
 
   openSyncIntervalDialog(): void {
     this.syncIntervalDialogVisible.set(true);
@@ -65,25 +94,34 @@ export class Settings {
     if (hadCustomMetals) {
       this.metalStore.clearCustomPrices();
       this.toast.warn(
-        'Custom metal prices cleared',
-        'Their values were tied to the previous base currency.',
+        this.translate.instant('toast.metalsCleared'),
+        this.translate.instant('toast.metalsClearedDetail'),
       );
     }
     void this.runSync();
-    this.toast.success('Updated', `Base currency changed to ${code}`);
+    this.toast.success(
+      this.translate.instant('toast.updated'),
+      this.translate.instant('toast.baseCurrencyChanged', { code }),
+    );
   }
 
   onIntervalChanged(setting: SyncIntervalSetting): void {
     this.exchangeStore.setSyncInterval(setting.value, setting.unit);
     this.syncIntervalDialogVisible.set(false);
-    this.toast.success('Updated', 'Sync interval changed');
+    this.toast.success(
+      this.translate.instant('toast.updated'),
+      this.translate.instant('toast.syncIntervalChanged'),
+    );
   }
 
   private async runSync(): Promise<void> {
     try {
       await this.exchangeStore.syncFromApi();
     } catch {
-      this.toast.error('Sync failed', 'Could not fetch live exchange rates');
+      this.toast.error(
+        this.translate.instant('toast.syncFailed'),
+        this.translate.instant('toast.ratesSyncFailed'),
+      );
     }
   }
 }
