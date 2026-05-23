@@ -9,23 +9,8 @@ import { CardModule } from 'primeng/card';
   standalone: true,
   imports: [CommonModule, CardModule, TranslateModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styles: [
-    `
-      :host ::ng-deep .brand-gradient-card .p-card,
-      :host ::ng-deep .brand-gradient-card.p-card {
-        background: linear-gradient(
-          135deg,
-          var(--color-primary) 0%,
-          var(--color-primary-dark) 55%,
-          var(--color-accent) 100%
-        );
-        color: #fff;
-        border: none;
-      }
-    `,
-  ],
   template: `
-    <p-card class="brand-gradient-card !text-white">
+    <p-card class="brand-gradient !text-white">
       <div class="text-center p-3 sm:p-4 md:p-6">
         <p class="flex items-center justify-center gap-2 text-sm mb-1 text-white">
           <i class="pi pi-money-bill"></i>

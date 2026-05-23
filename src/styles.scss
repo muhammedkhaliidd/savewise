@@ -2,7 +2,10 @@
 @use 'tailwindcss';
 
 @theme {
-  /* Brand */
+  /* Brand tokens (SaveWise signature — use consistently, do not replace neutrals)
+   * --color-primary: trust, money actions, key accents
+   * --color-accent: value, metals, hero gradient end
+   * Neutrals (--color-bg, --color-surface, …): UI shell only, not the brand mark */
   --color-primary: #059669;
   --color-primary-dark: #047857;
   --color-primary-light: #10b981;
@@ -85,6 +88,29 @@ html[dir='rtl'] .pi-arrow-left::before {
 app-root {
   display: block;
   height: 100%;
+}
+
+// SaveWise signature gradient — hero moments only (e.g. Total Savings card)
+.brand-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-primary-dark) 55%,
+    var(--color-accent) 100%
+  );
+  color: #fff;
+}
+
+app-savings-total p-card.brand-gradient,
+app-savings-total p-card.brand-gradient .p-card {
+  background: linear-gradient(
+    135deg,
+    var(--color-primary) 0%,
+    var(--color-primary-dark) 55%,
+    var(--color-accent) 100%
+  );
+  color: #fff;
+  border: none;
 }
 
 // Styles for PrimeNG OrderList

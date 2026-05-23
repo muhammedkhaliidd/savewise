@@ -13,13 +13,11 @@ import { CurrencyService } from '../../core/services/currency.service';
 import { ThemeService } from '../../core/services/theme.service';
 import { ToastService } from '../../core/services/toast.service';
 import { OverlayStackService } from '../../core/services/overlay-stack.service';
+import { LOCALE_FLAG_SRC } from '../../core/constants/locale-flags';
 import { LocaleService, type AppLocale } from '../../core/services/locale.service';
 import { CurrencySelectComponent } from '../currency/components/currency-select/currency-select.component';
 import { SyncIntervalFormComponent } from '../exchange/components/sync-interval-form/sync-interval-form.component';
-import type {
-  SyncIntervalSetting,
-  SyncIntervalUnit,
-} from '../exchange/models/exchange-rate.model';
+import type { SyncIntervalSetting } from '../exchange/models/exchange-rate.model';
 
 @Component({
   selector: 'app-settings',
@@ -56,11 +54,10 @@ export class Settings {
 
   readonly languageOptions = computed(() => {
     this.langTick();
-    const flags: Record<AppLocale, string> = { en: '🇺🇸', ar: '🇪🇬' };
     return this.localeService.languageOptions.map((o) => ({
       code: o.code,
       label: this.translate.instant(o.labelKey),
-      flag: flags[o.code],
+      flagSrc: LOCALE_FLAG_SRC[o.code],
     }));
   });
 
@@ -73,8 +70,8 @@ export class Settings {
           ? 'common.minute'
           : 'common.minutes'
         : value === 1
-          ? 'common.hour'
-          : 'common.hours';
+        ? 'common.hour'
+        : 'common.hours';
     return this.translate.instant('settings.syncEvery', {
       value,
       unit: this.translate.instant(unitKey),
@@ -97,13 +94,13 @@ export class Settings {
       this.metalStore.clearCustomPrices();
       this.toast.warn(
         this.translate.instant('toast.metalsCleared'),
-        this.translate.instant('toast.metalsClearedDetail'),
+        this.translate.instant('toast.metalsClearedDetail')
       );
     }
     void this.runSync();
     this.toast.success(
       this.translate.instant('toast.updated'),
-      this.translate.instant('toast.baseCurrencyChanged', { code }),
+      this.translate.instant('toast.baseCurrencyChanged', { code })
     );
   }
 
@@ -112,7 +109,7 @@ export class Settings {
     this.syncIntervalDialogVisible.set(false);
     this.toast.success(
       this.translate.instant('toast.updated'),
-      this.translate.instant('toast.syncIntervalChanged'),
+      this.translate.instant('toast.syncIntervalChanged')
     );
   }
 
@@ -122,7 +119,7 @@ export class Settings {
     } catch {
       this.toast.error(
         this.translate.instant('toast.syncFailed'),
-        this.translate.instant('toast.ratesSyncFailed'),
+        this.translate.instant('toast.ratesSyncFailed')
       );
     }
   }

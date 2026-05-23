@@ -4,6 +4,10 @@ type ThemeMode = 'light' | 'dark';
 
 const STORAGE_KEY = 'money-calc-theme';
 
+/** Matches --color-primary (light) and --color-bg (dark) in styles.scss */
+const THEME_COLOR_LIGHT = '#059669';
+const THEME_COLOR_DARK = '#1c1917';
+
 @Injectable({ providedIn: 'root' })
 export class ThemeService {
   private readonly _mode = signal<ThemeMode>(this.initialMode());
@@ -16,11 +20,19 @@ export class ThemeService {
       const root = document.documentElement;
       root.classList.toggle('dark', dark);
       localStorage.setItem(STORAGE_KEY, this._mode());
+      this.updateThemeColorMeta(dark);
     });
   }
 
   toggle(): void {
     this._mode.update((m) => (m === 'dark' ? 'light' : 'dark'));
+  }
+
+  private updateThemeColorMeta(dark: boolean): void {
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) {
+      meta.setAttribute('content', dark ? THEME_COLOR_DARK : THEME_COLOR_LIGHT);
+    }
   }
 
   private initialMode(): ThemeMode {

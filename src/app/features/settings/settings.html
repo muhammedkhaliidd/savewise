@@ -25,9 +25,16 @@
       (onChange)="onLanguageChange($event.value)"
       styleClass="w-full language-select"
     >
-      <ng-template let-option pTemplate="item">
+      <ng-template #item let-option>
         <span class="inline-flex items-center justify-center gap-2">
-          <span class="text-base leading-none" aria-hidden="true">{{ option.flag }}</span>
+          <img
+            [src]="option.flagSrc"
+            alt=""
+            width="24"
+            height="16"
+            class="h-4 w-6 shrink-0 rounded-xs object-cover border border-black/10"
+            aria-hidden="true"
+          />
           <span>{{ option.label }}</span>
         </span>
       </ng-template>
@@ -66,15 +73,20 @@
       <i class="pi pi-palette text-[var(--color-primary)]"></i>
       {{ 'settings.theme' | translate }}
     </h3>
-    <p class="text-xs text-[var(--color-text-muted)] mb-3">{{ 'settings.themeDesc' | translate }}</p>
+    <p class="text-xs text-[var(--color-text-muted)] mb-3">
+      {{ 'settings.themeDesc' | translate }}
+    </p>
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-2">
-        <i [class]="theme.isDark() ? 'pi pi-moon' : 'pi pi-sun'" class="text-[var(--color-primary)]"></i>
+        <i
+          [class]="theme.isDark() ? 'pi pi-moon' : 'pi pi-sun'"
+          class="text-[var(--color-primary)]"
+        ></i>
         <span class="text-sm text-[var(--color-text)]">
           @if (theme.isDark()) {
-            {{ 'settings.darkMode' | translate }}
+          {{ 'settings.darkMode' | translate }}
           } @else {
-            {{ 'settings.lightMode' | translate }}
+          {{ 'settings.lightMode' | translate }}
           }
         </span>
       </div>
@@ -102,7 +114,9 @@
     </p>
     <div class="flex items-center justify-between gap-3">
       <div class="min-w-0">
-        <p class="text-xs text-[var(--color-text-muted)]">{{ 'settings.currentInterval' | translate }}</p>
+        <p class="text-xs text-[var(--color-text-muted)]">
+          {{ 'settings.currentInterval' | translate }}
+        </p>
         <p class="text-sm font-semibold text-[var(--color-text)] truncate">
           {{ syncIntervalLabel() }}
         </p>

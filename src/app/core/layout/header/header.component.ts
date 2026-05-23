@@ -16,22 +16,29 @@ const ROOT_PATHS = new Set(['/', '/dashboard']);
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <header
-      class="sticky top-0 z-50 bg-[var(--color-surface)] text-[var(--color-text)] border-b border-[var(--color-border)] shadow-sm px-3 py-3 sm:px-4 sm:py-3"
+      class="sticky top-0 z-50 bg-[var(--color-surface)] text-[var(--color-text)] border-b border-[var(--color-primary)]/25 shadow-sm px-3 py-3 sm:px-4 sm:py-3"
     >
       <div class="mx-auto flex w-full max-w-5xl items-center justify-between gap-3">
         <div class="flex items-center gap-2 min-w-0">
           @if (showBack()) {
-            <p-button
-              icon="pi pi-arrow-left"
-              severity="secondary"
-              [text]="true"
-              [rounded]="true"
-              size="small"
-              [ariaLabel]="'nav.back' | translate"
-              (onClick)="onBack()"
-            />
+          <p-button
+            icon="pi pi-arrow-left"
+            severity="secondary"
+            [text]="true"
+            [rounded]="true"
+            size="small"
+            [ariaLabel]="'nav.back' | translate"
+            (onClick)="onBack()"
+          />
           }
-          <img src="assets/icons/web-transparent-logo.png" alt="SaveWise" class="w-20 h-8" />
+          <a routerLink="/dashboard" class="flex min-w-0 items-center gap-2 no-underline">
+            <img
+              src="assets/icons/web-transparent-logo.png"
+              alt=""
+              class="h-8 w-20 shrink-0"
+              aria-hidden="true"
+            />
+          </a>
         </div>
 
         <div class="flex items-center gap-2 sm:gap-3">
@@ -40,15 +47,15 @@ const ROOT_PATHS = new Set(['/', '/dashboard']);
             <span class="font-semibold text-[var(--color-text)]">{{ baseCurrency() }}</span>
           </span>
           @if (!showBack()) {
-            <p-button
-              icon="pi pi-cog"
-              severity="secondary"
-              [text]="true"
-              [rounded]="true"
-              size="small"
-              routerLink="/settings"
-              [ariaLabel]="'nav.openSettings' | translate"
-            />
+          <p-button
+            icon="pi pi-cog"
+            severity="secondary"
+            [text]="true"
+            [rounded]="true"
+            size="small"
+            routerLink="/settings"
+            [ariaLabel]="'nav.openSettings' | translate"
+          />
           }
         </div>
       </div>
@@ -65,9 +72,9 @@ export class HeaderComponent {
     this.router.events.pipe(
       filter((e): e is NavigationEnd => e instanceof NavigationEnd),
       map((e) => e.urlAfterRedirects),
-      startWith(this.router.url),
+      startWith(this.router.url)
     ),
-    { initialValue: this.router.url },
+    { initialValue: this.router.url }
   );
 
   readonly showBack = computed(() => {
