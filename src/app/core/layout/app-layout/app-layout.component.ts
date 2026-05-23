@@ -5,6 +5,7 @@ import { interval, switchMap } from 'rxjs';
 import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
 import { ExchangeRateStore } from '../../../stores/exchange-rate.store';
+import { MetalPriceStore } from '../../../stores/metal-price.store';
 import { SavingsStore } from '../../../stores/savings.store';
 import { ToastService } from '../../../core/services/toast.service';
 import { ThemeService } from '../../../core/services/theme.service';
@@ -29,6 +30,7 @@ import { ThemeService } from '../../../core/services/theme.service';
 })
 export class AppLayoutComponent implements OnInit {
   readonly exchangeStore = inject(ExchangeRateStore);
+  readonly metalStore = inject(MetalPriceStore);
   readonly savingsStore = inject(SavingsStore);
   private readonly toast = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
@@ -42,6 +44,7 @@ export class AppLayoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.exchangeStore.loadFromStorage();
+    this.metalStore.loadFromStorage();
     this.savingsStore.loadFromStorage();
     this.maybeInitialSync();
     this.listenToSyncInterval();
@@ -51,24 +54,31 @@ export class AppLayoutComponent implements OnInit {
     this.syncIntervalObservable
       .pipe(
         switchMap((ms) => interval(ms)),
-        takeUntilDestroyed(this.destroyRef)
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(() => void this.runSync());
   }
 
   private maybeInitialSync(): void {
-    const last = this.exchangeStore.lastSyncedAt();
     const intervalMs = this.exchangeStore.syncIntervalMs();
-    if (last === null || Date.now() - last >= intervalMs) {
+    const lastEx = this.exchangeStore.lastSyncedAt();
+    const lastMe = this.metalStore.lastSyncedAt();
+    const stale = (t: number | null) => t === null || Date.now() - t >= intervalMs;
+    if (stale(lastEx) || stale(lastMe)) {
       void this.runSync();
     }
   }
 
   private async runSync(): Promise<void> {
-    try {
-      await this.exchangeStore.syncFromApi();
-    } catch {
+    const [exRes, meRes] = await Promise.allSettled([
+      this.exchangeStore.syncFromApi(),
+      this.metalStore.syncFromApi(),
+    ]);
+    if (exRes.status === 'rejected') {
       this.toast.error('Sync failed', 'Could not fetch live exchange rates');
+    }
+    if (meRes.status === 'rejected') {
+      this.toast.error('Sync failed', 'Could not fetch live metal prices');
     }
   }
 }

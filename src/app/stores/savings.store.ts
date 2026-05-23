@@ -3,6 +3,8 @@ import { patchState, signalStore, withComputed, withMethods, withState } from '@
 import { StorageService } from '../core/services/storage.service';
 import type { SavingsEntry, SavingsState } from '../features/savings/models/savings-entry.model';
 import { ExchangeRateStore } from './exchange-rate.store';
+import { MetalPriceStore } from './metal-price.store';
+import { lookupPurityFactor } from '../features/metals/constants/metal-options';
 
 const initialState: SavingsState = {
   entries: [],
@@ -10,27 +12,50 @@ const initialState: SavingsState = {
 };
 
 function generateId(): string {
-  return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 11)}`;
+}
+
+function migrateEntry(entry: SavingsEntry): SavingsEntry {
+  return entry.type ? entry : { ...entry, type: 'money' };
 }
 
 export const SavingsStore = signalStore(
   withState(initialState),
-  withComputed((state, exchangeStore = inject(ExchangeRateStore)) => ({
-    allEntries: computed(() => state.entries()),
-    entryCount: computed(() => state.entries().filter((e) => e.active !== false).length),
-    hasEntries: computed(() => state.entries().length > 0),
-    totalInBase: computed(() => {
-      const rateToBase = exchangeStore.getRateToBase();
-      return state
-        .entries()
-        .filter((entry) => entry.active !== false)
-        .reduce((sum, entry) => sum + entry.amount * rateToBase(entry.currency), 0);
+  withComputed(
+    (
+      state,
+      exchangeStore = inject(ExchangeRateStore),
+      metalStore = inject(MetalPriceStore),
+    ) => ({
+      allEntries: computed(() => state.entries()),
+      entryCount: computed(() => state.entries().filter((e) => e.active !== false).length),
+      hasEntries: computed(() => state.entries().length > 0),
+      totalInBase: computed(() => {
+        const rateToBase = exchangeStore.getRateToBase();
+        const metalPure = metalStore.getMetalPricePerGramInBase();
+        return state
+          .entries()
+          .filter((entry) => entry.active !== false)
+          .reduce((sum, entry) => {
+            const type = entry.type ?? 'money';
+            if (type === 'money') {
+              const amount = entry.amount ?? 0;
+              const currency = entry.currency ?? '';
+              return sum + amount * rateToBase(currency);
+            }
+            if (!entry.metal || !entry.purityLabel || !entry.grams) return sum;
+            const pure = metalPure(entry.metal);
+            if (pure == null) return sum;
+            return sum + entry.grams * lookupPurityFactor(entry.metal, entry.purityLabel) * pure;
+          }, 0);
+      }),
     }),
-  })),
+  ),
   withMethods((store, storage = inject(StorageService)) => ({
     addEntry(entry: Omit<SavingsEntry, 'id'>): void {
       const newEntry: SavingsEntry = {
         ...entry,
+        type: entry.type ?? 'money',
         id: generateId(),
       };
       const newDate = new Date().toISOString();
@@ -71,8 +96,9 @@ export const SavingsStore = signalStore(
     loadFromStorage(): void {
       const saved = storage.loadSavings();
       if (saved) {
+        const migrated = saved.entries.map(migrateEntry);
         patchState(store, {
-          entries: saved.entries,
+          entries: migrated,
           lastInputDate: saved.lastInputDate,
         });
       }
@@ -88,7 +114,6 @@ export const SavingsStore = signalStore(
       });
     },
     reorderEntries(newEntries: SavingsEntry[]): void {
-      console.log('reorderEntries', newEntries);
       const newDate = new Date().toISOString();
       patchState(store, {
         entries: newEntries,

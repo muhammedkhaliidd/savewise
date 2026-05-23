@@ -1,7 +1,15 @@
+import type { MetalCode } from '../../metals/models/metal-price.model';
+
+export type SavingsEntryType = 'money' | 'metal';
+
 export interface SavingsEntry {
   id: string;
-  currency: string;
-  amount: number;
+  type?: SavingsEntryType;
+  currency?: string;
+  amount?: number;
+  metal?: MetalCode;
+  purityLabel?: string;
+  grams?: number;
   label?: string;
   order?: number;
   active?: boolean;

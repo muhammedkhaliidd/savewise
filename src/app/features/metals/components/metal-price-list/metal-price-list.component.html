@@ -1,0 +1,76 @@
+<div
+  class="bg-[var(--color-surface)] rounded-[var(--radius)] shadow-sm border border-[var(--color-border)] p-3 sm:p-4"
+>
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="flex items-center gap-2 text-base font-semibold text-[var(--color-text)] sm:text-lg">
+      <i class="pi pi-bookmark text-[var(--color-primary)]"></i>
+      Configured Metal Prices
+    </h3>
+    <p-button
+      icon="pi pi-plus"
+      severity="primary"
+      [rounded]="true"
+      size="small"
+      aria-label="Add metal price"
+      (onClick)="addPrice.emit()"
+    />
+  </div>
+
+  @if (prices().length === 0) {
+  <p class="text-[var(--color-text-muted)] text-center py-4">
+    No custom metal prices configured. Live prices will be used.
+  </p>
+  } @else {
+  <p-orderList
+    [value]="prices()"
+    [dragdrop]="true"
+    [responsive]="true"
+    (onReorder)="onReorder()"
+    dataKey="id"
+    class="w-full"
+    scrollHeight="320px"
+  >
+    <ng-template let-price pTemplate="item">
+      <div
+        class="flex w-full items-center justify-between gap-3 p-2 border-b border-[var(--color-border)]"
+        [class.opacity-50]="price.active === false"
+      >
+        <i class="pi pi-bars cursor-grab text-[var(--color-text-muted)]" cdkDragHandle></i>
+        <div class="flex-1 min-w-0">
+          <p class="font-semibold text-[var(--color-text)]">
+            {{ metalLabel(price.metal) }} · {{ price.purityLabel }}
+          </p>
+          <p class="text-xs text-[var(--color-text-muted)]">
+            {{ price.pricePerGram | number : '1.2-6' }} {{ baseCurrency() }} / g
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <p-toggleSwitch
+            [ngModel]="price.active !== false"
+            (ngModelChange)="
+              toggleActive.emit({ metal: price.metal, purityLabel: price.purityLabel, active: $event })
+            "
+            ariaLabel="Toggle metal price active"
+          />
+          <p-button
+            icon="pi pi-pencil"
+            severity="secondary"
+            [outlined]="true"
+            [rounded]="true"
+            size="small"
+            (onClick)="editPrice.emit(price); $event.stopPropagation()"
+          />
+          <p-button
+            icon="pi pi-trash"
+            severity="danger"
+            [outlined]="true"
+            [rounded]="true"
+            size="small"
+            (onClick)="confirmDelete(price); $event.stopPropagation()"
+          />
+        </div>
+      </div>
+    </ng-template>
+  </p-orderList>
+  }
+</div>

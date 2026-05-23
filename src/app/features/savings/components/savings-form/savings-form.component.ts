@@ -12,11 +12,15 @@ import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { SelectModule } from 'primeng/select';
+import { SelectButtonModule } from 'primeng/selectbutton';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { FormsModule } from '@angular/forms';
 import { CurrencySelectComponent } from '../../../currency/components/currency-select/currency-select.component';
 import { CurrencyService } from '../../../../core/services/currency.service';
-import type { SavingsEntry } from '../../models/savings-entry.model';
+import type { SavingsEntry, SavingsEntryType } from '../../models/savings-entry.model';
+import type { MetalCode } from '../../../metals/models/metal-price.model';
+import { METAL_OPTIONS, PURITY_OPTIONS } from '../../../metals/constants/metal-options';
 
 @Component({
   selector: 'app-savings-form',
@@ -26,76 +30,14 @@ import type { SavingsEntry } from '../../models/savings-entry.model';
     ButtonModule,
     InputTextModule,
     InputNumberModule,
+    SelectModule,
+    SelectButtonModule,
     ToggleSwitchModule,
     FormsModule,
     CurrencySelectComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <div
-      class="bg-[var(--color-surface)] rounded-[var(--radius)] shadow-sm border border-[var(--color-border)] p-3 sm:p-4"
-    >
-      @if (!editMode()) {
-        <h3 class="flex items-center gap-2 text-base font-semibold mb-4 text-[var(--color-text)] sm:text-lg">
-          <i class="pi pi-plus-circle text-[var(--color-primary)]"></i>
-          Add Savings
-        </h3>
-      }
-
-      <div class="grid gap-4">
-        <div>
-          <label class="block text-sm font-medium text-[var(--color-text-muted)] mb-1">
-            Name of the savings <span class="text-red-500">*</span>
-          </label>
-          <input
-            pInputText
-            [(ngModel)]="labelValue"
-            placeholder="e.g., Emergency fund"
-            class="w-full"
-          />
-        </div>
-
-        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
-          <div>
-            <label class="block text-sm font-medium text-[var(--color-text-muted)] mb-1">
-              Currency <span class="text-red-500">*</span>
-            </label>
-            <app-currency-select
-              [currencies]="allCurrencies()"
-              [selectedCode]="currency()"
-              (selectionChange)="currency.set($event)"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-[var(--color-text-muted)] mb-1">
-              Amount <span class="text-red-500">*</span>
-            </label>
-            <p-inputNumber
-              [(ngModel)]="amountValue"
-              mode="decimal"
-              [minFractionDigits]="2"
-              [maxFractionDigits]="4"
-              placeholder="0.00"
-              styleClass="w-full"
-            />
-          </div>
-        </div>
-
-        <div class="flex items-center justify-between">
-          <label class="text-sm font-medium text-[var(--color-text-muted)]">Active</label>
-          <p-toggleSwitch [(ngModel)]="activeValue" ariaLabel="Toggle entry active" />
-        </div>
-
-        <p-button
-          [label]="editMode() ? 'Save' : 'Add Savings'"
-          (onClick)="addEntry()"
-          [disabled]="!canAdd()"
-          styleClass="w-full"
-        />
-      </div>
-    </div>
-  `,
+  templateUrl: './savings-form.component.html',
 })
 export class SavingsFormComponent {
   private readonly currencyService = inject(CurrencyService);
@@ -105,44 +47,126 @@ export class SavingsFormComponent {
   entryAdded = output<Omit<SavingsEntry, 'id'>>();
 
   readonly allCurrencies = computed(() => this.currencyService.getAllCurrencies());
+  readonly metalOptions = METAL_OPTIONS;
+  readonly typeOptions = [
+    { label: 'Money', value: 'money' as SavingsEntryType, icon: 'pi pi-money-bill text-emerald-500' },
+    { label: 'Metal', value: 'metal' as SavingsEntryType, icon: 'pi pi-star-fill text-amber-500' },
+  ];
+
+  type = signal<SavingsEntryType>('money');
 
   labelValue = signal('');
+
   currency = signal('');
   amountValue = signal<number | null>(null);
+
+  metal = signal<MetalCode | ''>('');
+  purityLabel = signal('');
+  gramsValue = signal<number | null>(null);
+
   activeValue = signal(true);
+
+  readonly purityOptions = computed(() => {
+    const m = this.metal();
+    return m ? PURITY_OPTIONS[m] : [];
+  });
+
+  private suppressPurityReset = false;
+  private suppressCurrencyDefault = false;
 
   constructor() {
     effect(() => {
       const base = this.baseCurrency();
+      if (this.suppressCurrencyDefault) return;
       if (base && !this.currency()) {
         this.currency.set(base);
+      }
+    });
+
+    effect(() => {
+      const m = this.metal();
+      if (this.suppressPurityReset) return;
+      if (!m) {
+        this.purityLabel.set('');
+        return;
+      }
+      const opts = PURITY_OPTIONS[m];
+      const current = this.purityLabel();
+      if (!opts.some((o) => o.label === current)) {
+        this.purityLabel.set(opts[0]?.label ?? '');
       }
     });
   }
 
   canAdd = computed(() => {
-    const curr = this.currency();
-    const amount = this.amountValue();
-    return curr && amount !== null && amount > 0 && this.labelValue().trim() !== '';
+    if (this.labelValue().trim() === '') return false;
+    if (this.type() === 'money') {
+      const amount = this.amountValue();
+      return !!this.currency() && amount !== null && amount > 0;
+    }
+    const grams = this.gramsValue();
+    return !!this.metal() && !!this.purityLabel() && grams !== null && grams > 0;
   });
 
   addEntry(): void {
-    if (this.canAdd()) {
-      const amount = this.amountValue();
+    if (!this.canAdd()) return;
+    const label = this.labelValue() || undefined;
+    const active = this.activeValue();
+    if (this.type() === 'money') {
       this.entryAdded.emit({
-        label: this.labelValue() || undefined,
+        type: 'money',
+        label,
         currency: this.currency(),
-        amount: amount!,
-        active: this.activeValue(),
+        amount: this.amountValue() ?? 0,
+        active,
       });
-      this.reset();
+    } else {
+      this.entryAdded.emit({
+        type: 'metal',
+        label,
+        metal: this.metal() as MetalCode,
+        purityLabel: this.purityLabel(),
+        grams: this.gramsValue() ?? 0,
+        active,
+      });
     }
+    this.reset();
   }
 
   reset(): void {
+    this.type.set('money');
     this.labelValue.set('');
     this.currency.set(this.baseCurrency());
     this.amountValue.set(null);
+    this.metal.set('');
+    this.purityLabel.set('');
+    this.gramsValue.set(null);
     this.activeValue.set(true);
+  }
+
+  setValues(entry: SavingsEntry): void {
+    this.suppressCurrencyDefault = true;
+    this.suppressPurityReset = true;
+    const entryType = entry.type ?? 'money';
+    this.type.set(entryType);
+    this.labelValue.set(entry.label ?? '');
+    this.activeValue.set(entry.active !== false);
+    if (entryType === 'money') {
+      this.currency.set(entry.currency ?? '');
+      this.amountValue.set(entry.amount ?? null);
+      this.metal.set('');
+      this.purityLabel.set('');
+      this.gramsValue.set(null);
+    } else {
+      this.metal.set(entry.metal ?? '');
+      this.purityLabel.set(entry.purityLabel ?? '');
+      this.gramsValue.set(entry.grams ?? null);
+      this.currency.set('');
+      this.amountValue.set(null);
+    }
+    queueMicrotask(() => {
+      this.suppressCurrencyDefault = false;
+      this.suppressPurityReset = false;
+    });
   }
 }

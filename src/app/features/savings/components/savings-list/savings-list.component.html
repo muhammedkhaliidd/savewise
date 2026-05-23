@@ -37,20 +37,41 @@
       >
         <i class="pi pi-bars cursor-grab text-[var(--color-text-muted)]" cdkDragHandle></i>
         <div class="flex-1 min-w-0">
-          <p class="truncate font-semibold text-[var(--color-text)]">
-            {{ entry.label || 'Untitled' }}
-          </p>
+          <div class="flex items-center gap-2 min-w-0">
+            <p class="truncate font-semibold text-[var(--color-text)]">
+              {{ entry.label || 'Untitled' }}
+            </p>
+            <span
+              class="inline-flex items-center gap-1 rounded-full px-2 py-1 text-[10px] font-semibold leading-none whitespace-nowrap"
+              [class]="tagClass(entry)"
+            >
+              <i [class]="tagIcon(entry)" style="font-size: 10px"></i>
+              {{ tagLabel(entry) }}
+            </span>
+          </div>
           <p class="text-xs text-[var(--color-text-muted)]">
-            @if (entry.currency === baseCurrency()) {
-            <span class="text-[var(--color-primary)] font-semibold">
-              {{ entry.amount | number : '1.2-2' }} {{ entry.currency }}
-            </span>
+            @if (entryType(entry) === 'money') {
+              @if (entry.currency === baseCurrency()) {
+                <span class="text-[var(--color-primary)] font-semibold">
+                  {{ entry.amount | number : '1.2-2' }} {{ entry.currency }}
+                </span>
+              } @else {
+                {{ entry.amount | number : '1.2-4' }} {{ entry.currency }}
+                =
+                <span class="text-[var(--color-primary)] font-semibold">
+                  {{ convertedAmount(entry) | number : '1.2-2' }} {{ baseCurrency() }}
+                </span>
+              }
             } @else {
-            {{ entry.amount | number : '1.2-4' }} {{ entry.currency }}
-            =
-            <span class="text-[var(--color-primary)] font-semibold">
-              {{ convertedAmount(entry) | number : '1.2-2' }} {{ baseCurrency() }}
-            </span>
+              {{ entry.grams | number : '1.2-4' }}g · {{ entry.purityLabel }}
+              =
+              @if (convertedAmount(entry) === null) {
+                <span class="text-[var(--color-text-muted)] italic">Price unavailable</span>
+              } @else {
+                <span class="text-[var(--color-primary)] font-semibold">
+                  {{ convertedAmount(entry) | number : '1.2-2' }} {{ baseCurrency() }}
+                </span>
+              }
             }
           </p>
         </div>

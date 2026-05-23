@@ -5,6 +5,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialog } from 'primeng/confirmdialog';
 import { Toast } from 'primeng/toast';
 import { ExchangeRateStore } from './stores/exchange-rate.store';
+import { MetalPriceStore } from './stores/metal-price.store';
 import { SavingsStore } from './stores/savings.store';
 import { RouterOutlet } from '@angular/router';
 import { AppLayoutComponent } from './core/layout/app-layout/app-layout.component';
@@ -21,7 +22,7 @@ import { AppLayoutComponent } from './core/layout/app-layout/app-layout.componen
     RouterOutlet,
     AppLayoutComponent,
   ],
-  providers: [ExchangeRateStore, SavingsStore],
+  providers: [ExchangeRateStore, MetalPriceStore, SavingsStore],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.html',
 })
