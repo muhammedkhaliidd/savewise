@@ -12,8 +12,8 @@ export interface MetalOption {
 
 export const METAL_OPTIONS: MetalOption[] = [
   { code: 'gold', label: 'Gold', icon: 'pi pi-star-fill text-amber-500' },
-  { code: 'silver', label: 'Silver', icon: 'pi pi-star text-slate-400' },
-  { code: 'platinum', label: 'Platinum', icon: 'pi pi-circle-fill text-zinc-400' },
+  { code: 'silver', label: 'Silver', icon: 'pi pi-star text-stone-400' },
+  { code: 'platinum', label: 'Platinum', icon: 'pi pi-circle-fill text-stone-300' },
   { code: 'palladium', label: 'Palladium', icon: 'pi pi-circle text-stone-500' },
 ];
 

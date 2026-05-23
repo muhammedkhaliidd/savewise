@@ -78,19 +78,19 @@ export class SavingsListComponent {
 
   tagClass(entry: SavingsEntry): string {
     if (this.entryType(entry) === 'money') {
-      return 'bg-sky-100 text-sky-700 dark:bg-sky-500/15 dark:text-sky-300';
+      return 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300';
     }
     switch (entry.metal) {
       case 'gold':
         return 'bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300';
       case 'silver':
-        return 'bg-slate-200 text-slate-700 dark:bg-slate-400/20 dark:text-slate-200';
-      case 'platinum':
-        return 'bg-zinc-200 text-zinc-700 dark:bg-zinc-400/20 dark:text-zinc-200';
-      case 'palladium':
         return 'bg-stone-200 text-stone-700 dark:bg-stone-400/20 dark:text-stone-200';
+      case 'platinum':
+        return 'bg-stone-100 text-stone-700 dark:bg-stone-300/20 dark:text-stone-100';
+      case 'palladium':
+        return 'bg-stone-200 text-stone-700 dark:bg-stone-500/20 dark:text-stone-200';
       default:
-        return 'bg-slate-100 text-slate-700 dark:bg-slate-500/15 dark:text-slate-300';
+        return 'bg-stone-100 text-stone-700 dark:bg-stone-500/15 dark:text-stone-300';
     }
   }
 
