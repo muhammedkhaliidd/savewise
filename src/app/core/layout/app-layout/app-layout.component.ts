@@ -31,7 +31,7 @@ import { NavigationService } from '../../../core/services/navigation.service';
       <app-header [baseCurrency]="exchangeStore.currentBase()" />
 
       <section class="flex-1 min-h-0 overflow-auto flex flex-col gap-1 justify-between">
-        <main class="min-w-0 overflow-x-hidden p-3 sm:p-4 md:p-6 lg:p-8">
+        <main class="min-w-0  p-3 sm:p-4 md:p-6 lg:p-8">
           <ng-content></ng-content>
         </main>
         <app-footer [lastInputDate]="savingsStore.lastInputDate()" />
@@ -84,7 +84,7 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
     this.syncIntervalObservable
       .pipe(
         switchMap((ms) => interval(ms)),
-        takeUntilDestroyed(this.destroyRef),
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(() => void this.runSync());
   }
@@ -107,13 +107,13 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
     if (exRes.status === 'rejected') {
       this.toast.error(
         this.translate.instant('toast.syncFailed'),
-        this.translate.instant('toast.ratesSyncFailed'),
+        this.translate.instant('toast.ratesSyncFailed')
       );
     }
     if (meRes.status === 'rejected') {
       this.toast.error(
         this.translate.instant('toast.syncFailed'),
-        this.translate.instant('toast.metalSyncFailed'),
+        this.translate.instant('toast.metalSyncFailed')
       );
     }
   }

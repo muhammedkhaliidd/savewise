@@ -60,7 +60,7 @@
     >
       <p class="font-semibold text-[var(--color-text)] min-w-0 break-words">
         1 g {{ metalLabel(row.metal) }} → {{ row.apiPerGramInBase | number : '1.2-2' }}
-        {{ baseCurrency() }}
+        {{ baseCurrency() | displayCode | translate }}
       </p>
       @if (row.customPerGramInBase !== null) {
       <span
@@ -68,7 +68,7 @@
         [title]="'metals.yourOverride' | translate"
       >
         <i class="pi pi-bookmark" style="font-size: 0.65rem" aria-hidden="true"></i>
-        {{ row.customPerGramInBase | number : '1.2-2' }} {{ baseCurrency() }}
+        {{ row.customPerGramInBase | number : '1.2-2' }} {{ baseCurrency() | displayCode | translate }}
       </span>
       }
     </li>

@@ -53,13 +53,14 @@
             @if (entryType(entry) === 'money') {
               @if (entry.currency === baseCurrency()) {
                 <span class="text-[var(--color-primary)] font-semibold">
-                  {{ entry.amount | number : '1.2-2' }} {{ entry.currency }}
+                  {{ entry.amount | number : '1.2-2' }} {{ entry.currency! | displayCode | translate }}
                 </span>
               } @else {
-                {{ entry.amount | number : '1.2-4' }} {{ entry.currency }}
+                {{ entry.amount | number : '1.2-4' }} {{ entry.currency! | displayCode | translate }}
                 =
                 <span class="text-[var(--color-primary)] font-semibold">
-                  {{ convertedAmount(entry) | number : '1.2-2' }} {{ baseCurrency() }}
+                  {{ convertedAmount(entry) | number : '1.2-2' }}
+                  {{ baseCurrency() | displayCode | translate }}
                 </span>
               }
             } @else {
@@ -71,7 +72,8 @@
                 }}</span>
               } @else {
                 <span class="text-[var(--color-primary)] font-semibold">
-                  {{ convertedAmount(entry) | number : '1.2-2' }} {{ baseCurrency() }}
+                  {{ convertedAmount(entry) | number : '1.2-2' }}
+                  {{ baseCurrency() | displayCode | translate }}
                 </span>
               }
             }

@@ -6,13 +6,14 @@ import { filter, map, startWith } from 'rxjs/operators';
 import { TranslateModule } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { NavigationService } from '../../../core/services/navigation.service';
+import { DisplayCodePipe } from '../../../core/pipes/display-code.pipe';
 
 const ROOT_PATHS = new Set(['/', '/dashboard']);
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterLink, ButtonModule, TranslateModule],
+  imports: [CommonModule, RouterLink, ButtonModule, TranslateModule, DisplayCodePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <header
@@ -44,7 +45,9 @@ const ROOT_PATHS = new Set(['/', '/dashboard']);
         <div class="flex items-center gap-2 sm:gap-3">
           <span class="text-xs sm:text-sm text-[var(--color-text-muted)] whitespace-nowrap">
             {{ 'header.baseCurrency' | translate }}
-            <span class="font-semibold text-[var(--color-text)]">{{ baseCurrency() }}</span>
+            <span class="font-semibold text-[var(--color-text)]">{{
+              baseCurrency() | displayCode | translate
+            }}</span>
           </span>
           @if (!showBack()) {
           <p-button
@@ -65,7 +68,6 @@ const ROOT_PATHS = new Set(['/', '/dashboard']);
 export class HeaderComponent {
   private readonly router = inject(Router);
   private readonly nav = inject(NavigationService);
-
   baseCurrency = input.required<string>();
 
   private readonly currentUrl = toSignal(

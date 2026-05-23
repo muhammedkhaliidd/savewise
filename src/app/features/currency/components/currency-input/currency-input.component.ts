@@ -7,13 +7,15 @@ import {
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FormsModule } from '@angular/forms';
+import { DisplayCodePipe } from '../../../../core/pipes/display-code.pipe';
 
 @Component({
   selector: 'app-currency-input',
   standalone: true,
-  imports: [CommonModule, InputNumberModule, FormsModule],
+  imports: [CommonModule, InputNumberModule, FormsModule, TranslateModule, DisplayCodePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="flex items-center gap-2">
@@ -27,7 +29,9 @@ import { FormsModule } from '@angular/forms';
         [placeholder]="placeholder()"
         [styleClass]="'w-full ' + styleClass()"
       />
-      <span class="text-[var(--color-text-muted)] font-medium">{{ currencyCode() }}</span>
+      <span class="text-[var(--color-text-muted)] font-medium">{{
+        currencyCode() | displayCode | translate
+      }}</span>
     </div>
   `,
 })

@@ -3,25 +3,28 @@ import { CommonModule } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CardModule } from 'primeng/card';
+import { DisplayCodePipe } from '../../../../core/pipes/display-code.pipe';
 
 @Component({
   selector: 'app-savings-total',
   standalone: true,
-  imports: [CommonModule, CardModule, TranslateModule],
+  imports: [CommonModule, CardModule, TranslateModule, DisplayCodePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <p-card class="brand-gradient !text-white">
-      <div class="text-center p-3 sm:p-4 md:p-6">
-        <p class="flex items-center justify-center gap-2 text-sm mb-1 text-white">
-          <i class="pi pi-money-bill"></i>
+    <p-card class="brand-gradient savings-hero !text-white">
+      <div class="savings-hero__texture" aria-hidden="true"></div>
+      <div class="savings-hero__content">
+        <span class="savings-hero__badge">
+          <i class="pi pi-wallet" aria-hidden="true"></i>
           {{ 'savings.total' | translate }}
+        </span>
+        <p class="savings-hero__amount">
+          <span class="savings-hero__value">{{ total() | number : '1.2-2' }}</span>
+          <span class="savings-hero__currency">{{
+            baseCurrency() | displayCode | translate
+          }}</span>
         </p>
-        <p class="text-2xl font-bold sm:text-3xl md:text-4xl">
-          {{ total() | number : '1.2-2' }} {{ baseCurrency() }}
-        </p>
-        <p class="text-white/70 text-[11px] mt-2 sm:text-xs">
-          {{ entriesLabel() }}
-        </p>
+        <p class="savings-hero__meta">{{ entriesLabel() }}</p>
       </div>
     </p-card>
   `,

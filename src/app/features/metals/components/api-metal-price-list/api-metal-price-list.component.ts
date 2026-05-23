@@ -23,6 +23,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import type { MetalApiRow } from '../../models/metal-price.model';
 import type { SyncIntervalSetting } from '../../../exchange/models/exchange-rate.model';
 import { metalLabelKey } from '../../constants/metal-options';
+import { DisplayCodePipe } from '../../../../core/pipes/display-code.pipe';
 
 @Component({
   selector: 'app-api-metal-price-list',
@@ -30,6 +31,7 @@ import { metalLabelKey } from '../../constants/metal-options';
   imports: [
     CommonModule,
     TranslateModule,
+    DisplayCodePipe,
     ButtonModule,
     InputTextModule,
     IconFieldModule,

@@ -9,6 +9,7 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import type { MetalPrice } from '../../models/metal-price.model';
 import { metalLabelKey } from '../../constants/metal-options';
 import { ConfirmService } from '../../../../core/services/confirm.service';
+import { DisplayCodePipe } from '../../../../core/pipes/display-code.pipe';
 
 @Component({
   selector: 'app-metal-price-list',
@@ -17,6 +18,7 @@ import { ConfirmService } from '../../../../core/services/confirm.service';
     CommonModule,
     FormsModule,
     TranslateModule,
+    DisplayCodePipe,
     CdkDragHandle,
     ButtonModule,
     OrderListModule,
@@ -29,7 +31,6 @@ import { ConfirmService } from '../../../../core/services/confirm.service';
 export class MetalPriceListComponent {
   private readonly confirmService = inject(ConfirmService);
   private readonly translate = inject(TranslateService);
-
   prices = input.required<MetalPrice[]>();
   baseCurrency = input.required<string>();
   deletePrice = output<MetalPrice>();

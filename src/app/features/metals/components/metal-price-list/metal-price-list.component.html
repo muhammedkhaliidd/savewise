@@ -41,7 +41,7 @@
             {{ metalLabel(price.metal) }} · {{ price.purityLabel }}
           </p>
           <p class="text-xs text-[var(--color-text-muted)]">
-            {{ price.pricePerGram | number : '1.2-6' }} {{ baseCurrency() }} / g
+            {{ price.pricePerGram | number : '1.2-6' }} {{ baseCurrency() | displayCode | translate }} / g
           </p>
         </div>
         <div class="flex items-center gap-2">

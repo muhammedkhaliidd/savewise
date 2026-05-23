@@ -18,6 +18,7 @@ import type { SavingsEntry } from '../../models/savings-entry.model';
 import { ExchangeRateStore } from '../../../../stores/exchange-rate.store';
 import { MetalPriceStore } from '../../../../stores/metal-price.store';
 import { ConfirmService } from '../../../../core/services/confirm.service';
+import { DisplayCodePipe } from '../../../../core/pipes/display-code.pipe';
 import {
   lookupPurityFactor,
   metalIcon,
@@ -31,6 +32,7 @@ import {
     CommonModule,
     FormsModule,
     TranslateModule,
+    DisplayCodePipe,
     CdkDragHandle,
     ButtonModule,
     OrderListModule,

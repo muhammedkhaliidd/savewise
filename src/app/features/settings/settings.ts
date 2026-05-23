@@ -10,6 +10,7 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { ExchangeRateStore } from '../../stores/exchange-rate.store';
 import { MetalPriceStore } from '../../stores/metal-price.store';
 import { CurrencyService } from '../../core/services/currency.service';
+import { currencyDisplayKey } from '../../core/pipes/display-code.pipe';
 import { ThemeService } from '../../core/services/theme.service';
 import { ToastService } from '../../core/services/toast.service';
 import { OverlayStackService } from '../../core/services/overlay-stack.service';
@@ -100,7 +101,9 @@ export class Settings {
     void this.runSync();
     this.toast.success(
       this.translate.instant('toast.updated'),
-      this.translate.instant('toast.baseCurrencyChanged', { code })
+      this.translate.instant('toast.baseCurrencyChanged', {
+        code: this.translate.instant(currencyDisplayKey(code)),
+      })
     );
   }
 

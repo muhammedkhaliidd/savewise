@@ -21,7 +21,6 @@ import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import type { ApiRateRow, SyncIntervalSetting } from '../../models/exchange-rate.model';
-
 @Component({
   selector: 'app-api-rate-list',
   standalone: true,
