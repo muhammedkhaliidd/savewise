@@ -1,7 +1,16 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { interval, switchMap } from 'rxjs';
+import { App as CapApp } from '@capacitor/app';
+import { Capacitor, type PluginListenerHandle } from '@capacitor/core';
 import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
 import { ExchangeRateStore } from '../../../stores/exchange-rate.store';
@@ -9,6 +18,7 @@ import { MetalPriceStore } from '../../../stores/metal-price.store';
 import { SavingsStore } from '../../../stores/savings.store';
 import { ToastService } from '../../../core/services/toast.service';
 import { ThemeService } from '../../../core/services/theme.service';
+import { NavigationService } from '../../../core/services/navigation.service';
 
 @Component({
   selector: 'app-layout',
@@ -28,14 +38,17 @@ import { ThemeService } from '../../../core/services/theme.service';
     </article>
   `,
 })
-export class AppLayoutComponent implements OnInit {
+export class AppLayoutComponent implements OnInit, OnDestroy {
   readonly exchangeStore = inject(ExchangeRateStore);
   readonly metalStore = inject(MetalPriceStore);
   readonly savingsStore = inject(SavingsStore);
   private readonly toast = inject(ToastService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly nav = inject(NavigationService);
 
   syncIntervalObservable = toObservable(this.exchangeStore.syncIntervalMs);
+
+  private backHandle?: PluginListenerHandle;
 
   constructor() {
     // Eagerly instantiate so the dark class is applied on bootstrap regardless of route.
@@ -48,6 +61,22 @@ export class AppLayoutComponent implements OnInit {
     this.savingsStore.loadFromStorage();
     this.maybeInitialSync();
     this.listenToSyncInterval();
+
+    if (Capacitor.getPlatform() === 'android') {
+      void this.registerBackButton();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.backHandle?.remove().catch(() => {
+      // Ignore: plugin may already be torn down.
+    });
+  }
+
+  private async registerBackButton(): Promise<void> {
+    this.backHandle = await CapApp.addListener('backButton', () => {
+      void this.nav.goBack({ allowExit: true });
+    });
   }
 
   private listenToSyncInterval(): void {

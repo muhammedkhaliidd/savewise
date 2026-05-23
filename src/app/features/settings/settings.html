@@ -1,19 +1,8 @@
 <div class="mx-auto grid w-full max-w-2xl gap-4 md:gap-6">
-  <div class="flex items-center gap-2">
-    <p-button
-      icon="pi pi-arrow-left"
-      severity="secondary"
-      [text]="true"
-      [rounded]="true"
-      size="small"
-      routerLink="/dashboard"
-      ariaLabel="Back to dashboard"
-    />
-    <h2 class="flex items-center gap-2 text-lg font-semibold text-[var(--color-text)] sm:text-xl">
-      <i class="pi pi-cog text-[var(--color-primary)]"></i>
-      Settings
-    </h2>
-  </div>
+  <h2 class="flex items-center gap-2 text-lg font-semibold text-[var(--color-text)] sm:text-xl">
+    <i class="pi pi-cog text-[var(--color-primary)]"></i>
+    Settings
+  </h2>
 
   <!-- Base currency -->
   <div
@@ -91,9 +80,36 @@
     <p class="text-xs text-[var(--color-text-muted)] mb-3">
       How often to refresh live exchange rates from the API while the app is open.
     </p>
-    <app-sync-interval-form
-      [initial]="exchangeStore.syncInterval()"
-      (intervalChanged)="onIntervalChanged($event)"
-    />
+    <div class="flex items-center justify-between gap-3">
+      <div class="min-w-0">
+        <p class="text-xs text-[var(--color-text-muted)]">Current interval</p>
+        <p class="text-sm font-semibold text-[var(--color-text)] truncate">
+          {{ syncIntervalLabel() }}
+        </p>
+      </div>
+      <p-button
+        icon="pi pi-pencil"
+        severity="secondary"
+        [outlined]="true"
+        [rounded]="true"
+        size="small"
+        ariaLabel="Edit sync interval"
+        (onClick)="openSyncIntervalDialog()"
+      />
+    </div>
   </div>
 </div>
+
+<p-dialog
+  [(visible)]="syncIntervalDialogVisible"
+  [modal]="true"
+  header="Edit Sync Interval"
+  [style]="{ width: '90vw', maxWidth: '30rem' }"
+  (onShow)="overlayStack.register('sync-interval', () => syncIntervalDialogVisible.set(false))"
+  (onHide)="overlayStack.release('sync-interval')"
+>
+  <app-sync-interval-form
+    [initial]="exchangeStore.syncInterval()"
+    (intervalChanged)="onIntervalChanged($event)"
+  />
+</p-dialog>

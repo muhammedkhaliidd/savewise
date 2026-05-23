@@ -29,17 +29,7 @@ import type { ExchangeRate } from '../../models/exchange-rate.model';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div
-      class="bg-[var(--color-surface)] rounded-[var(--radius)] shadow-sm border border-[var(--color-border)] p-3 sm:p-4"
-    >
-      @if (!editMode()) {
-        <h3 class="flex items-center gap-2 text-base font-semibold mb-4 text-[var(--color-text)] sm:text-lg">
-          <i class="pi pi-sliders-h text-[var(--color-primary)]"></i>
-          Configure Exchange Rate
-        </h3>
-      }
-
-      <div class="grid gap-4">
+    <div class="grid gap-4">
         <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
           <div>
             <label class="block text-sm font-medium text-[var(--color-text-muted)] mb-1">
@@ -83,13 +73,13 @@ import type { ExchangeRate } from '../../models/exchange-rate.model';
           <p-toggleSwitch [(ngModel)]="activeValue" ariaLabel="Toggle rate active" />
         </div>
 
-        <p-button
-          [label]="editMode() ? 'Save' : 'Add Rate'"
-          (onClick)="addRate()"
-          [disabled]="!canAdd()"
-          styleClass="w-full"
-        />
-      </div>
+      <p-button
+        [label]="editMode() ? 'Save' : 'Add Rate'"
+        [icon]="editMode() ? 'pi pi-check' : 'pi pi-plus'"
+        (onClick)="addRate()"
+        [disabled]="!canAdd()"
+        styleClass="w-full"
+      />
     </div>
   `,
 })

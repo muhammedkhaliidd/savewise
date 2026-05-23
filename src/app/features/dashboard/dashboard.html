@@ -61,6 +61,8 @@
   [modal]="true"
   header="Edit Savings Entry"
   [style]="{ width: '90vw', maxWidth: '30rem' }"
+  (onShow)="overlayStack.register('edit-savings', () => editSavingsDialogVisible.set(false))"
+  (onHide)="overlayStack.release('edit-savings')"
 >
   <app-savings-form
     #editSavingsForm
@@ -76,6 +78,8 @@
   [modal]="true"
   header="Edit Exchange Rate"
   [style]="{ width: '90vw', maxWidth: '30rem' }"
+  (onShow)="overlayStack.register('edit-rate', () => editRateDialogVisible.set(false))"
+  (onHide)="overlayStack.release('edit-rate')"
 >
   <app-rate-config
     #editRateForm
@@ -91,6 +95,8 @@
   [modal]="true"
   header="Edit Metal Price"
   [style]="{ width: '90vw', maxWidth: '30rem' }"
+  (onShow)="overlayStack.register('edit-metal-price', () => editMetalPriceDialogVisible.set(false))"
+  (onHide)="overlayStack.release('edit-metal-price')"
 >
   <app-metal-price-config
     #editMetalPriceForm
@@ -106,6 +112,8 @@
   [modal]="true"
   header="Add Savings Entry"
   [style]="{ width: '90vw', maxWidth: '30rem' }"
+  (onShow)="overlayStack.register('add-savings', () => addSavingsDialogVisible.set(false))"
+  (onHide)="overlayStack.release('add-savings')"
 >
   <app-savings-form
     [baseCurrency]="exchangeStore.currentBase()"
@@ -119,6 +127,8 @@
   [modal]="true"
   header="Add Exchange Rate"
   [style]="{ width: '90vw', maxWidth: '30rem' }"
+  (onShow)="overlayStack.register('add-rate', () => addRateDialogVisible.set(false))"
+  (onHide)="overlayStack.release('add-rate')"
 >
   <app-rate-config
     [existingRates]="exchangeStore.allRates()"
@@ -132,6 +142,8 @@
   [modal]="true"
   header="Add Metal Price"
   [style]="{ width: '90vw', maxWidth: '30rem' }"
+  (onShow)="overlayStack.register('add-metal-price', () => addMetalPriceDialogVisible.set(false))"
+  (onHide)="overlayStack.release('add-metal-price')"
 >
   <app-metal-price-config
     [baseCurrency]="exchangeStore.currentBase()"

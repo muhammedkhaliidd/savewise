@@ -14,6 +14,7 @@ import { ExchangeRateStore } from '../../stores/exchange-rate.store';
 import { MetalPriceStore } from '../../stores/metal-price.store';
 import { ExchangeRate } from '../exchange/models/exchange-rate.model';
 import { ToastService } from '../../core/services/toast.service';
+import { OverlayStackService } from '../../core/services/overlay-stack.service';
 import { SavingsEntry } from '../savings/models/savings-entry.model';
 import type { MetalCode, MetalPrice } from '../metals/models/metal-price.model';
 
@@ -38,6 +39,7 @@ export class Dashboard implements OnInit {
   readonly exchangeStore = inject(ExchangeRateStore);
   readonly metalStore = inject(MetalPriceStore);
   readonly savingsStore = inject(SavingsStore);
+  readonly overlayStack = inject(OverlayStackService);
   private readonly toast = inject(ToastService);
 
   // View children for setting edit values

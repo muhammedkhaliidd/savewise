@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { ConfirmationService } from 'primeng/api';
+import { OverlayStackService } from './overlay-stack.service';
 
 export interface ConfirmOptions {
   message: string;
@@ -16,6 +17,8 @@ export interface ConfirmOptions {
 @Injectable({ providedIn: 'root' })
 export class ConfirmService {
   private readonly confirmationService = inject(ConfirmationService);
+  private readonly overlayStack = inject(OverlayStackService);
+  private counter = 0;
 
   confirm(options: ConfirmOptions): void {
     const {
@@ -30,6 +33,13 @@ export class ConfirmService {
       onReject,
     } = options;
 
+    const id = `confirm-${++this.counter}`;
+
+    this.overlayStack.register(id, () => {
+      this.confirmationService.close();
+      onReject?.();
+    });
+
     this.confirmationService.confirm({
       message,
       header,
@@ -38,8 +48,14 @@ export class ConfirmService {
       rejectLabel: cancelText,
       acceptButtonProps: { severity: actionSeverity },
       rejectButtonProps: { severity: cancelSeverity, outlined: true },
-      accept: onConfirm,
-      reject: onReject,
+      accept: () => {
+        this.overlayStack.release(id);
+        onConfirm();
+      },
+      reject: () => {
+        this.overlayStack.release(id);
+        onReject?.();
+      },
     });
   }
 }

@@ -1,7 +1,12 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { filter, map, startWith } from 'rxjs/operators';
 import { ButtonModule } from 'primeng/button';
+import { NavigationService } from '../../../core/services/navigation.service';
+
+const ROOT_PATHS = new Set(['/', '/dashboard']);
 
 @Component({
   selector: 'app-header',
@@ -14,6 +19,17 @@ import { ButtonModule } from 'primeng/button';
     >
       <div class="mx-auto flex w-full max-w-5xl items-center justify-between gap-3">
         <div class="flex items-center gap-2 min-w-0">
+          @if (showBack()) {
+            <p-button
+              icon="pi pi-arrow-left"
+              severity="secondary"
+              [text]="true"
+              [rounded]="true"
+              size="small"
+              ariaLabel="Back"
+              (onClick)="onBack()"
+            />
+          }
           <img src="assets/icons/web-transparent-logo.png" alt="SaveWise" class="w-20 h-8" />
         </div>
 
@@ -22,20 +38,43 @@ import { ButtonModule } from 'primeng/button';
             Base currency:
             <span class="font-semibold text-[var(--color-text)]">{{ baseCurrency() }}</span>
           </span>
-          <p-button
-            icon="pi pi-cog"
-            severity="secondary"
-            [text]="true"
-            [rounded]="true"
-            size="small"
-            routerLink="/settings"
-            ariaLabel="Open settings"
-          />
+          @if (!showBack()) {
+            <p-button
+              icon="pi pi-cog"
+              severity="secondary"
+              [text]="true"
+              [rounded]="true"
+              size="small"
+              routerLink="/settings"
+              ariaLabel="Open settings"
+            />
+          }
         </div>
       </div>
     </header>
   `,
 })
 export class HeaderComponent {
+  private readonly router = inject(Router);
+  private readonly nav = inject(NavigationService);
+
   baseCurrency = input.required<string>();
+
+  private readonly currentUrl = toSignal(
+    this.router.events.pipe(
+      filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+      map((e) => e.urlAfterRedirects),
+      startWith(this.router.url),
+    ),
+    { initialValue: this.router.url },
+  );
+
+  readonly showBack = computed(() => {
+    const path = (this.currentUrl() ?? '/').split('?')[0].split('#')[0];
+    return !ROOT_PATHS.has(path);
+  });
+
+  onBack(): void {
+    void this.nav.goBack();
+  }
 }

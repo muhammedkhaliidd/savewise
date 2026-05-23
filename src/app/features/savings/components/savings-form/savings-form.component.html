@@ -1,16 +1,4 @@
-<div
-  class="bg-[var(--color-surface)] rounded-[var(--radius)] shadow-sm border border-[var(--color-border)] p-3 sm:p-4"
->
-  @if (!editMode()) {
-  <h3
-    class="flex items-center gap-2 text-base font-semibold mb-4 text-[var(--color-text)] sm:text-lg"
-  >
-    <i class="pi pi-plus-circle text-[var(--color-primary)]"></i>
-    Add Savings
-  </h3>
-  }
-
-  <div class="grid gap-4">
+<div class="grid gap-4">
     <div>
       <label for="type" class="flex items-center gap-2 text-sm font-medium text-[var(--color-text-muted)] mb-1">
         <i class="pi pi-tag text-[var(--color-primary)] !text-xs"></i>
@@ -155,12 +143,11 @@
       <p-toggleSwitch id="active" [(ngModel)]="activeValue" ariaLabel="Toggle entry active" />
     </div>
 
-    <p-button
-      [label]="editMode() ? 'Save' : 'Add Savings'"
-      [icon]="editMode() ? 'pi pi-check' : 'pi pi-plus'"
-      (onClick)="addEntry()"
-      [disabled]="!canAdd()"
-      styleClass="w-full"
-    />
-  </div>
+  <p-button
+    [label]="editMode() ? 'Save' : 'Add Savings'"
+    [icon]="editMode() ? 'pi pi-check' : 'pi pi-plus'"
+    (onClick)="addEntry()"
+    [disabled]="!canAdd()"
+    styleClass="w-full"
+  />
 </div>
