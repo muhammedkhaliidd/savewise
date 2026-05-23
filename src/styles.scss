@@ -106,3 +106,32 @@ app-root {
   max-width: 94%;
   --p-confirmdialog-icon-size: 1.5rem;
 }
+
+// p-select overlay: stay within viewport on mobile (used with appendTo body)
+.p-select-overlay.select-overlay-panel {
+  max-width: min(22rem, calc(100vw - 1.5rem)) !important;
+  width: min(22rem, calc(100vw - 1.5rem)) !important;
+  box-sizing: border-box;
+}
+
+.p-select-overlay.select-overlay-panel .p-select-list-container,
+.p-select-overlay.select-overlay-panel .p-select-list {
+  max-width: 100%;
+}
+
+.p-select-overlay.select-overlay-panel .p-select-option-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Language segment: equal-width options with flags
+.language-select.p-selectbutton {
+  display: flex;
+  width: 100%;
+
+  .p-togglebutton {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+}

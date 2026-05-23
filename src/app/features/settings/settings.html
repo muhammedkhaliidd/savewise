@@ -1,4 +1,4 @@
-<div class="mx-auto grid w-full max-w-2xl gap-4 md:gap-6">
+<div class="mx-auto grid w-full max-w-2xl min-w-0 gap-4 overflow-x-hidden md:gap-6">
   <h2 class="flex items-center gap-2 text-lg font-semibold text-[var(--color-text)] sm:text-xl">
     <i class="pi pi-cog text-[var(--color-primary)]"></i>
     {{ 'settings.title' | translate }}
@@ -23,8 +23,15 @@
       optionLabel="label"
       optionValue="code"
       (onChange)="onLanguageChange($event.value)"
-      styleClass="w-full"
-    />
+      styleClass="w-full language-select"
+    >
+      <ng-template let-option pTemplate="item">
+        <span class="inline-flex items-center justify-center gap-2">
+          <span class="text-base leading-none" aria-hidden="true">{{ option.flag }}</span>
+          <span>{{ option.label }}</span>
+        </span>
+      </ng-template>
+    </p-selectButton>
   </div>
 
   <!-- Base currency -->
@@ -40,27 +47,13 @@
     <p class="text-xs text-[var(--color-text-muted)] mb-3">
       {{ 'settings.baseCurrencyDesc' | translate }}
     </p>
-    <p-select
-      [options]="allCurrencies()"
-      [ngModel]="exchangeStore.currentBase()"
-      optionLabel="code"
-      optionValue="code"
-      [filter]="true"
-      filterBy="code,name"
-      [placeholder]="'common.select' | translate"
-      (onChange)="onBaseCurrencyChange($event.value)"
-      styleClass="w-full"
-      [style]="{ width: '100%' }"
-    >
-      <ng-template let-currency pTemplate="item">
-        <div class="flex min-w-0 items-center gap-2">
-          <span class="font-semibold">{{ currency.code }}</span>
-          <span class="min-w-0 flex-1 truncate text-[var(--color-text-muted)] text-sm">
-            {{ currency.name }}
-          </span>
-        </div>
-      </ng-template>
-    </p-select>
+    <div class="min-w-0 w-full max-w-full">
+      <app-currency-select
+        [currencies]="allCurrencies()"
+        [selectedCode]="exchangeStore.currentBase()"
+        (selectionChange)="onBaseCurrencyChange($event)"
+      />
+    </div>
   </div>
 
   <!-- Theme -->

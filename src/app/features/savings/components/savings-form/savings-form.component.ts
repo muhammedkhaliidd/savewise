@@ -23,6 +23,11 @@ import { CurrencyService } from '../../../../core/services/currency.service';
 import type { SavingsEntry, SavingsEntryType } from '../../models/savings-entry.model';
 import type { MetalCode } from '../../../metals/models/metal-price.model';
 import { METAL_OPTIONS, PURITY_OPTIONS } from '../../../metals/constants/metal-options';
+import {
+  SELECT_OVERLAY_OPTIONS,
+  SELECT_PANEL_STYLE,
+  SELECT_PANEL_STYLE_CLASS,
+} from '../../../../core/constants/select-overlay';
 
 @Component({
   selector: 'app-savings-form',
@@ -46,6 +51,10 @@ export class SavingsFormComponent {
   private readonly currencyService = inject(CurrencyService);
   private readonly translate = inject(TranslateService);
   private readonly langTick = toSignal(this.translate.onLangChange, { initialValue: null });
+
+  readonly selectOverlayOptions = SELECT_OVERLAY_OPTIONS;
+  readonly selectPanelStyle = SELECT_PANEL_STYLE;
+  readonly selectPanelStyleClass = SELECT_PANEL_STYLE_CLASS;
 
   baseCurrency = input.required<string>();
   editMode = input(false);

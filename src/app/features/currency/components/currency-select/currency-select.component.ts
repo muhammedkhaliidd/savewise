@@ -5,6 +5,11 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SelectModule } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
 import type { Currency } from '../../models/currency.model';
+import {
+  SELECT_OVERLAY_OPTIONS,
+  SELECT_PANEL_STYLE,
+  SELECT_PANEL_STYLE_CLASS,
+} from '../../../../core/constants/select-overlay';
 
 @Component({
   selector: 'app-currency-select',
@@ -12,35 +17,44 @@ import type { Currency } from '../../models/currency.model';
   imports: [CommonModule, SelectModule, FormsModule, TranslateModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <p-select
-      [options]="currencies()"
-      [ngModel]="selectedValue()"
-      optionLabel="code"
-      optionValue="code"
-      [filter]="true"
-      filterBy="code,name"
-      [placeholder]="resolvedPlaceholder()"
-      (onChange)="selectionChange.emit($event.value)"
-      [styleClass]="styleClass()"
-      [panelStyle]="{
-        width: 'min(22rem, calc(100vw - 1rem))',
-        'max-width': 'calc(100vw - 1rem)',
-      }"
-    >
-      <ng-template let-currency pTemplate="item">
-        <div class="flex min-w-0 items-center gap-2">
-          <span class="font-semibold">{{ currency.code }}</span>
-          <span class="min-w-0 flex-1 truncate text-[var(--color-text-muted)] text-sm">{{
-            currency.name
-          }}</span>
-        </div>
-      </ng-template>
-    </p-select>
+    <div class="min-w-0 w-full max-w-full">
+      <p-select
+        [options]="currencies()"
+        [ngModel]="selectedValue()"
+        optionLabel="code"
+        optionValue="code"
+        [filter]="true"
+        filterBy="code,name"
+        [placeholder]="resolvedPlaceholder()"
+        (onChange)="selectionChange.emit($event.value)"
+        [styleClass]="styleClass()"
+        [panelStyle]="panelStyle"
+        [panelStyleClass]="panelStyleClass"
+        [overlayOptions]="overlayOptions"
+        scrollHeight="240px"
+      >
+        <ng-template let-currency pTemplate="item">
+          <div class="flex min-w-0 max-w-full items-center gap-2">
+            <span class="shrink-0 font-semibold">{{ currency.code }}</span>
+            <span class="min-w-0 flex-1 truncate text-[var(--color-text-muted)] text-sm">
+              {{ currency.name }}
+            </span>
+          </div>
+        </ng-template>
+        <ng-template let-currency pTemplate="selectedItem">
+          <span class="truncate">{{ currency.code }}</span>
+        </ng-template>
+      </p-select>
+    </div>
   `,
 })
 export class CurrencySelectComponent {
   private readonly translate = inject(TranslateService);
   private readonly langTick = toSignal(this.translate.onLangChange, { initialValue: null });
+
+  readonly panelStyle = SELECT_PANEL_STYLE;
+  readonly panelStyleClass = SELECT_PANEL_STYLE_CLASS;
+  readonly overlayOptions = SELECT_OVERLAY_OPTIONS;
 
   currencies = input.required<Currency[]>();
   selectedCode = input<string>('');

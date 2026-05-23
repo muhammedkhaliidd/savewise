@@ -82,6 +82,9 @@
           optionValue="code"
           [placeholder]="'savings.form.selectMetal' | translate"
           styleClass="w-full"
+          [panelStyle]="selectPanelStyle"
+          [panelStyleClass]="selectPanelStyleClass"
+          [overlayOptions]="selectOverlayOptions"
           (onChange)="metal.set($event.value)"
         >
           <ng-template let-option pTemplate="item">
@@ -112,6 +115,9 @@
           optionValue="label"
           [placeholder]="'savings.form.selectPurity' | translate"
           styleClass="w-full"
+          [panelStyle]="selectPanelStyle"
+          [panelStyleClass]="selectPanelStyleClass"
+          [overlayOptions]="selectOverlayOptions"
           [disabled]="!metal()"
           (onChange)="purityLabel.set($event.value)"
         />

@@ -19,6 +19,11 @@ import type {
   SyncIntervalSetting,
   SyncIntervalUnit,
 } from '../../models/exchange-rate.model';
+import {
+  SELECT_OVERLAY_OPTIONS,
+  SELECT_PANEL_STYLE,
+  SELECT_PANEL_STYLE_CLASS,
+} from '../../../../core/constants/select-overlay';
 
 @Component({
   selector: 'app-sync-interval-form',
@@ -59,6 +64,9 @@ import type {
             optionLabel="label"
             optionValue="value"
             styleClass="w-full"
+            [panelStyle]="selectPanelStyle"
+            [panelStyleClass]="selectPanelStyleClass"
+            [overlayOptions]="selectOverlayOptions"
           />
         </div>
       </div>
@@ -79,6 +87,10 @@ import type {
 export class SyncIntervalFormComponent {
   private readonly translate = inject(TranslateService);
   private readonly langTick = toSignal(this.translate.onLangChange, { initialValue: null });
+
+  readonly selectOverlayOptions = SELECT_OVERLAY_OPTIONS;
+  readonly selectPanelStyle = SELECT_PANEL_STYLE;
+  readonly selectPanelStyleClass = SELECT_PANEL_STYLE_CLASS;
 
   initial = input.required<SyncIntervalSetting>();
   intervalChanged = output<SyncIntervalSetting>();

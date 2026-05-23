@@ -18,6 +18,11 @@ import { SelectModule } from 'primeng/select';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import type { MetalCode, MetalPrice } from '../../models/metal-price.model';
 import { METAL_OPTIONS, PURITY_OPTIONS } from '../../constants/metal-options';
+import {
+  SELECT_OVERLAY_OPTIONS,
+  SELECT_PANEL_STYLE,
+  SELECT_PANEL_STYLE_CLASS,
+} from '../../../../core/constants/select-overlay';
 
 @Component({
   selector: 'app-metal-price-config',
@@ -46,6 +51,9 @@ import { METAL_OPTIONS, PURITY_OPTIONS } from '../../constants/metal-options';
               optionValue="code"
               [placeholder]="'metals.form.selectMetal' | translate"
               styleClass="w-full"
+              [panelStyle]="selectPanelStyle"
+              [panelStyleClass]="selectPanelStyleClass"
+              [overlayOptions]="selectOverlayOptions"
               (onChange)="metal.set($event.value)"
             />
           </div>
@@ -61,6 +69,9 @@ import { METAL_OPTIONS, PURITY_OPTIONS } from '../../constants/metal-options';
               optionValue="label"
               [placeholder]="'metals.form.selectPurity' | translate"
               styleClass="w-full"
+              [panelStyle]="selectPanelStyle"
+              [panelStyleClass]="selectPanelStyleClass"
+              [overlayOptions]="selectOverlayOptions"
               [disabled]="!metal()"
               (onChange)="purityLabel.set($event.value)"
             />
@@ -107,6 +118,10 @@ import { METAL_OPTIONS, PURITY_OPTIONS } from '../../constants/metal-options';
 export class MetalPriceConfigComponent {
   private readonly translate = inject(TranslateService);
   private readonly langTick = toSignal(this.translate.onLangChange, { initialValue: null });
+
+  readonly selectOverlayOptions = SELECT_OVERLAY_OPTIONS;
+  readonly selectPanelStyle = SELECT_PANEL_STYLE;
+  readonly selectPanelStyleClass = SELECT_PANEL_STYLE_CLASS;
 
   editMode = input(false);
   baseCurrency = input<string>('');

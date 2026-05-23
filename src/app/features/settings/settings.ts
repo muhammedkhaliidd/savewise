@@ -5,7 +5,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
-import { SelectModule } from 'primeng/select';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { ExchangeRateStore } from '../../stores/exchange-rate.store';
@@ -15,6 +14,7 @@ import { ThemeService } from '../../core/services/theme.service';
 import { ToastService } from '../../core/services/toast.service';
 import { OverlayStackService } from '../../core/services/overlay-stack.service';
 import { LocaleService, type AppLocale } from '../../core/services/locale.service';
+import { CurrencySelectComponent } from '../currency/components/currency-select/currency-select.component';
 import { SyncIntervalFormComponent } from '../exchange/components/sync-interval-form/sync-interval-form.component';
 import type {
   SyncIntervalSetting,
@@ -30,9 +30,9 @@ import type {
     TranslateModule,
     ButtonModule,
     DialogModule,
-    SelectModule,
     SelectButtonModule,
     ToggleSwitchModule,
+    CurrencySelectComponent,
     SyncIntervalFormComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -56,9 +56,11 @@ export class Settings {
 
   readonly languageOptions = computed(() => {
     this.langTick();
+    const flags: Record<AppLocale, string> = { en: '🇺🇸', ar: '🇪🇬' };
     return this.localeService.languageOptions.map((o) => ({
       code: o.code,
       label: this.translate.instant(o.labelKey),
+      flag: flags[o.code],
     }));
   });
 

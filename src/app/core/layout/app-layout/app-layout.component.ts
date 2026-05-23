@@ -31,7 +31,7 @@ import { NavigationService } from '../../../core/services/navigation.service';
       <app-header [baseCurrency]="exchangeStore.currentBase()" />
 
       <section class="flex-1 min-h-0 overflow-auto flex flex-col gap-1 justify-between">
-        <main class="p-3 sm:p-4 md:p-6 lg:p-8 ">
+        <main class="min-w-0 overflow-x-hidden p-3 sm:p-4 md:p-6 lg:p-8">
           <ng-content></ng-content>
         </main>
         <app-footer [lastInputDate]="savingsStore.lastInputDate()" />
