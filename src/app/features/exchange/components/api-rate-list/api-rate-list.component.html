@@ -54,7 +54,7 @@
   </p>
   } @else {
   <ul class="max-h-64 overflow-y-auto">
-    @for (row of filteredRates(); track row.currency) {
+    @for (row of filteredRates() | prioritizeCurrencies; track row.currency) {
     <li
       class="flex w-full flex-wrap items-center justify-between gap-x-3 gap-y-1 p-2 border-b border-[var(--color-border)]"
     >

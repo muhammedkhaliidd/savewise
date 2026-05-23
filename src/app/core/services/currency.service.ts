@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import currencyCodes from 'currency-codes';
 import { TranslateService } from '@ngx-translate/core';
-import { currencyDisplayKey } from '../pipes/display-code.pipe';
+import { currencyNameKey } from '../pipes/display-code.pipe';
 import type { Currency } from '../../features/currency/models/currency.model';
 
 @Injectable({
@@ -24,13 +24,14 @@ export class CurrencyService {
   searchCurrencies(query: string): Currency[] {
     const lowerQuery = query.toLowerCase();
     return this.currencies.filter((c) => {
-      const key = currencyDisplayKey(c.code);
-      const translated = this.translate.instant(key);
-      const display = (translated !== key ? translated : c.code).toLowerCase();
+      const nameKey = currencyNameKey(c.code);
+      const localizedName = this.translate.instant(nameKey);
+      const name =
+        localizedName !== nameKey ? localizedName.toLowerCase() : c.name.toLowerCase();
       return (
         c.code.toLowerCase().includes(lowerQuery) ||
         c.name.toLowerCase().includes(lowerQuery) ||
-        display.includes(lowerQuery)
+        name.includes(lowerQuery)
       );
     });
   }

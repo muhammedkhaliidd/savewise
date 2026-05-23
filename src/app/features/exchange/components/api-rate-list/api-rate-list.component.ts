@@ -21,6 +21,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
 import type { ApiRateRow, SyncIntervalSetting } from '../../models/exchange-rate.model';
+import { PrioritizeCurrenciesPipe } from '../../pipes/prioritize-currencies.pipe';
+
 @Component({
   selector: 'app-api-rate-list',
   standalone: true,
@@ -31,6 +33,7 @@ import type { ApiRateRow, SyncIntervalSetting } from '../../models/exchange-rate
     InputTextModule,
     IconFieldModule,
     InputIconModule,
+    PrioritizeCurrenciesPipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './api-rate-list.component.html',

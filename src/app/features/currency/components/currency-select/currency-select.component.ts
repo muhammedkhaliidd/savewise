@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   effect,
   inject,
   input,
@@ -14,25 +15,31 @@ import { SelectModule } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
 import type { Currency } from '../../models/currency.model';
 import {
+  CurrencyNamePipe,
+  currencyNameKey,
+} from '../../../../core/pipes/display-code.pipe';
+import {
   SELECT_OVERLAY_OPTIONS,
   SELECT_PANEL_STYLE,
   SELECT_PANEL_STYLE_CLASS,
 } from '../../../../core/constants/select-overlay';
 
+type CurrencyOption = Currency & { localizedName: string };
+
 @Component({
   selector: 'app-currency-select',
   standalone: true,
-  imports: [CommonModule, SelectModule, FormsModule, TranslateModule],
+  imports: [CommonModule, SelectModule, FormsModule, TranslateModule, CurrencyNamePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="min-w-0 w-full max-w-full">
       <p-select
-        [options]="currencies()"
+        [options]="selectOptions()"
         [ngModel]="selectedValue()"
         optionLabel="code"
         optionValue="code"
         [filter]="true"
-        filterBy="code,name"
+        filterBy="code,name,localizedName"
         [placeholder]="resolvedPlaceholder()"
         (onChange)="selectionChange.emit($event.value)"
         [styleClass]="styleClass()"
@@ -45,12 +52,12 @@ import {
           <div class="flex min-w-0 max-w-full items-center gap-2">
             <span class="shrink-0 font-semibold">{{ currency.code }}</span>
             <span class="min-w-0 flex-1 truncate text-[var(--color-text-muted)] text-sm">
-              {{ currency.name }}
+              {{ currency.code | currencyName | translate }}
             </span>
           </div>
         </ng-template>
-        <ng-template let-currency pTemplate="selectedItem">
-          <span class="truncate">{{ currency.code }}</span>
+        <ng-template pTemplate="selectedItem">
+          <span class="truncate">{{ selectedLabel() }}</span>
         </ng-template>
       </p-select>
     </div>
@@ -71,6 +78,30 @@ export class CurrencySelectComponent {
   selectionChange = output<string>();
 
   selectedValue = signal('');
+
+  readonly selectOptions = computed((): CurrencyOption[] => {
+    this.langTick();
+    return this.currencies().map((c) => {
+      const key = currencyNameKey(c.code);
+      const translated = this.translate.instant(key);
+      return {
+        ...c,
+        localizedName: translated !== key ? translated : c.name,
+      };
+    });
+  });
+
+  readonly selectedLabel = computed(() => {
+    this.langTick();
+    const code = this.selectedValue();
+    if (!code) {
+      return '';
+    }
+    const key = currencyNameKey(code);
+    const name = this.translate.instant(key);
+    const label = name !== key ? name : this.currencies().find((c) => c.code === code)?.name ?? '';
+    return `${code} — ${label}`;
+  });
 
   resolvedPlaceholder(): string {
     this.langTick();
