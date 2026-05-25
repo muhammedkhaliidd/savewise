@@ -31,7 +31,13 @@
   "nav": {
     "back": "Back",
     "openSettings": "Open settings",
-    "pressBackAgain": "Press back again to exit"
+    "pressBackAgain": "Press back again to exit",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "dashboard": "Dashboard",
+    "liveRates": "Live Rates",
+    "configurations": "Configurations",
+    "settings": "Settings"
   },
   "header": {
     "baseCurrency": "Base currency:"
