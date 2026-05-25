@@ -1,21 +1,20 @@
+<div class="flex items-center justify-between mb-4">
+  <h3 class="flex items-center gap-2 text-base font-semibold text-[var(--color-text)] sm:text-lg">
+    <i class="pi pi-bookmark text-[var(--color-primary)]"></i>
+    {{ 'exchange.configuredRates' | translate }}
+  </h3>
+  <p-button
+    icon="pi pi-plus"
+    severity="primary"
+    [rounded]="true"
+    size="small"
+    [ariaLabel]="'exchange.addRate' | translate"
+    (onClick)="addRate.emit()"
+  />
+</div>
 <div
   class="bg-[var(--color-surface)] rounded-[var(--radius)] shadow-sm border border-[var(--color-border)] p-3 sm:p-4"
 >
-  <div class="flex items-center justify-between mb-4">
-    <h3 class="flex items-center gap-2 text-base font-semibold text-[var(--color-text)] sm:text-lg">
-      <i class="pi pi-bookmark text-[var(--color-primary)]"></i>
-      {{ 'exchange.configuredRates' | translate }}
-    </h3>
-    <p-button
-      icon="pi pi-plus"
-      severity="primary"
-      [rounded]="true"
-      size="small"
-      [ariaLabel]="'exchange.addRate' | translate"
-      (onClick)="addRate.emit()"
-    />
-  </div>
-
   @if (rates().length === 0) {
   <p class="text-[var(--color-text-muted)] text-center py-4">
     {{ 'exchange.emptyRates' | translate }}

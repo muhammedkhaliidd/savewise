@@ -21,15 +21,16 @@
     {{ 'savings.empty' | translate }}
   </p>
   } @else {
-  <p-orderList
-    [value]="entriesView()"
-    [dragdrop]="true"
-    [responsive]="true"
-    (onReorder)="onReorder()"
-    dataKey="id"
-    class="w-full"
-    scrollHeight="320px"
-  >
+  <div class="min-h-[400px] max-h-[70vh] overflow-hidden flex flex-col">
+    <p-orderList
+      [value]="entriesView()"
+      [dragdrop]="true"
+      [responsive]="true"
+      (onReorder)="onReorder()"
+      dataKey="id"
+      class="w-full flex-1"
+      scrollHeight="100%"
+    >
     <ng-template let-entry pTemplate="item">
       <div
         class="flex w-full items-center justify-between gap-3 p-2 border-b border-[var(--color-border)]"
@@ -104,6 +105,7 @@
         </div>
       </div>
     </ng-template>
-  </p-orderList>
+    </p-orderList>
+  </div>
   }
 </div>

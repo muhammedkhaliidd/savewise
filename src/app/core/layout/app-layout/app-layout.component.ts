@@ -5,15 +5,19 @@ import {
   inject,
   OnDestroy,
   OnInit,
+  signal,
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { interval, switchMap } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { App as CapApp } from '@capacitor/app';
 import { Capacitor, type PluginListenerHandle } from '@capacitor/core';
+import { DrawerModule } from 'primeng/drawer';
 import { HeaderComponent } from '../header/header.component';
 import { FooterComponent } from '../footer/footer.component';
+import { SideNavComponent } from '../side-nav/side-nav.component';
 import { ExchangeRateStore } from '../../../stores/exchange-rate.store';
 import { MetalPriceStore } from '../../../stores/metal-price.store';
 import { SavingsStore } from '../../../stores/savings.store';
@@ -24,20 +28,17 @@ import { NavigationService } from '../../../core/services/navigation.service';
 @Component({
   selector: 'app-layout',
   standalone: true,
-  imports: [CommonModule, HeaderComponent, FooterComponent],
+  imports: [
+    CommonModule,
+    RouterLink,
+    HeaderComponent,
+    FooterComponent,
+    SideNavComponent,
+    DrawerModule,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <article class="flex flex-col h-screen overflow-hidden">
-      <app-header [baseCurrency]="exchangeStore.currentBase()" />
-
-      <section class="flex-1 min-h-0 overflow-auto flex flex-col gap-1 justify-between">
-        <main class="min-w-0  p-3 sm:p-4 md:p-6 lg:p-8">
-          <ng-content></ng-content>
-        </main>
-        <app-footer [lastInputDate]="savingsStore.lastInputDate()" />
-      </section>
-    </article>
-  `,
+  styleUrls: ['./app-layout.component.scss'],
+  templateUrl: './app-layout.component.html',
 })
 export class AppLayoutComponent implements OnInit, OnDestroy {
   readonly exchangeStore = inject(ExchangeRateStore);
@@ -48,6 +49,7 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
   private readonly nav = inject(NavigationService);
 
+  readonly drawerVisible = signal(false);
   syncIntervalObservable = toObservable(this.exchangeStore.syncIntervalMs);
 
   private backHandle?: PluginListenerHandle;

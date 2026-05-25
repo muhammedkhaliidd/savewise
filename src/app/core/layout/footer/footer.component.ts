@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -9,20 +9,36 @@ import { TranslateModule } from '@ngx-translate/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <footer
-      class="flex items-center justify-between gap-1 px-3 py-2 bg-[var(--color-surface)] border-t border-[var(--color-border)] text-xs sm:flex-row sm:items-center sm:justify-between sm:px-4 sm:py-3 sm:text-sm"
+      class="flex flex-col justify-center items-center gap-2 px-1 py-3 bg-[var(--color-surface)] border-t border-[var(--color-border)] text-xs"
     >
-      <img src="assets/icons/web-transparent-logo.png" alt="SaveWise" class="w-16 h-6" />
+      <div class="flex items-center gap-1 text-xs text-[var(--color-text-muted)]">
+        <!-- updated icon with main color -->
+        <i class="pi pi-clock text-[var(--color-primary)] !text-[10px]"></i>
 
-      <span class="text-[var(--color-text-muted)]">
-        @if (lastInputDate()) {
-          {{ 'footer.savingsUpdated' | translate }} {{ lastInputDate() | date : 'medium' }}
-        } @else {
+        <span>
+          @if (lastInputDate()) {
+          {{ 'footer.savingsUpdated' | translate }}
+          <span class="text-[var(--color-text)]">
+            {{ lastInputDate() | date : 'short' }}
+          </span>
+          } @else {
           {{ 'footer.noSavingsYet' | translate }}
-        }
-      </span>
+          }
+        </span>
+      </div>
+      <div class="flex items-center gap-1 text-[10px] text-[var(--color-text-muted)]">
+        <span>Powered by</span>
+        <a
+          href="https://muhammedkhaliidd.github.io/"
+          target="_blank"
+          class="text-[var(--color-text)]"
+          >Muhammed Khalid @{{ currentYear() }}</a
+        >
+      </div>
     </footer>
   `,
 })
 export class FooterComponent {
   lastInputDate = input<string | null>(null);
+  currentYear = computed(() => new Date().getFullYear());
 }

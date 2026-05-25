@@ -16,43 +16,6 @@
     (toggleActive)="onToggleSavingsActive($event)"
     (reorder)="savingsStore.reorderEntries($event)"
   />
-
-  <app-rate-list
-    [rates]="exchangeStore.allRates()"
-    (deleteRate)="onRateDeleted($event)"
-    (editRate)="onEditRate($event)"
-    (addRate)="onAddRateClicked()"
-    (toggleActive)="onToggleRateActive($event)"
-    (reorder)="exchangeStore.reorderRates($event)"
-  />
-
-  <app-api-rate-list
-    [rates]="exchangeStore.apiRateRows()"
-    [baseCurrency]="exchangeStore.currentBase()"
-    [lastSyncedAt]="exchangeStore.lastSyncedAt()"
-    [isSyncing]="exchangeStore.isSyncing()"
-    [syncInterval]="exchangeStore.syncInterval()"
-    (sync)="onSyncFromApi()"
-  />
-
-  <app-metal-price-list
-    [prices]="metalStore.allCustomPrices()"
-    [baseCurrency]="exchangeStore.currentBase()"
-    (deletePrice)="onMetalPriceDeleted($event)"
-    (editPrice)="onEditMetalPrice($event)"
-    (addPrice)="onAddMetalPriceClicked()"
-    (toggleActive)="onToggleMetalPriceActive($event)"
-    (reorder)="metalStore.reorderPrices($event)"
-  />
-
-  <app-api-metal-price-list
-    [rows]="metalStore.apiMetalRows()"
-    [baseCurrency]="exchangeStore.currentBase()"
-    [lastSyncedAt]="metalStore.lastSyncedAt()"
-    [isSyncing]="metalStore.isSyncing()"
-    [syncInterval]="exchangeStore.syncInterval()"
-    (sync)="onSyncMetalsFromApi()"
-  />
 </div>
 
 <!-- Edit Savings Dialog -->
@@ -72,40 +35,6 @@
   />
 </p-dialog>
 
-<!-- Edit Rate Dialog -->
-<p-dialog
-  [(visible)]="editRateDialogVisible"
-  [modal]="true"
-  [header]="'dashboard.editRate' | translate"
-  [style]="{ width: '90vw', maxWidth: '30rem' }"
-  (onShow)="overlayStack.register('edit-rate', () => editRateDialogVisible.set(false))"
-  (onHide)="overlayStack.release('edit-rate')"
->
-  <app-rate-config
-    #editRateForm
-    [editMode]="true"
-    [existingRates]="exchangeStore.allRates()"
-    (rateAdded)="onSaveRateEdit($event)"
-  />
-</p-dialog>
-
-<!-- Edit Metal Price Dialog -->
-<p-dialog
-  [(visible)]="editMetalPriceDialogVisible"
-  [modal]="true"
-  [header]="'dashboard.editMetalPrice' | translate"
-  [style]="{ width: '90vw', maxWidth: '30rem' }"
-  (onShow)="overlayStack.register('edit-metal-price', () => editMetalPriceDialogVisible.set(false))"
-  (onHide)="overlayStack.release('edit-metal-price')"
->
-  <app-metal-price-config
-    #editMetalPriceForm
-    [editMode]="true"
-    [baseCurrency]="exchangeStore.currentBase()"
-    (priceAdded)="onSaveMetalPriceEdit($event)"
-  />
-</p-dialog>
-
 <!-- Add Savings Dialog -->
 <p-dialog
   [(visible)]="addSavingsDialogVisible"
@@ -118,35 +47,5 @@
   <app-savings-form
     [baseCurrency]="exchangeStore.currentBase()"
     (entryAdded)="onSavingsAddedFromDialog($event)"
-  />
-</p-dialog>
-
-<!-- Add Rate Dialog -->
-<p-dialog
-  [(visible)]="addRateDialogVisible"
-  [modal]="true"
-  [header]="'dashboard.addRate' | translate"
-  [style]="{ width: '90vw', maxWidth: '30rem' }"
-  (onShow)="overlayStack.register('add-rate', () => addRateDialogVisible.set(false))"
-  (onHide)="overlayStack.release('add-rate')"
->
-  <app-rate-config
-    [existingRates]="exchangeStore.allRates()"
-    (rateAdded)="onRateAddedFromDialog($event)"
-  />
-</p-dialog>
-
-<!-- Add Metal Price Dialog -->
-<p-dialog
-  [(visible)]="addMetalPriceDialogVisible"
-  [modal]="true"
-  [header]="'dashboard.addMetalPrice' | translate"
-  [style]="{ width: '90vw', maxWidth: '30rem' }"
-  (onShow)="overlayStack.register('add-metal-price', () => addMetalPriceDialogVisible.set(false))"
-  (onHide)="overlayStack.release('add-metal-price')"
->
-  <app-metal-price-config
-    [baseCurrency]="exchangeStore.currentBase()"
-    (priceAdded)="onMetalPriceAddedFromDialog($event)"
   />
 </p-dialog>

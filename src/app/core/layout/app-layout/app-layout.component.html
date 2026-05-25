@@ -1,0 +1,66 @@
+<div class="flex h-screen overflow-hidden bg-[var(--color-bg)]">
+  <!-- Desktop persistent sidebar (hidden on mobile/tablet) -->
+  <aside
+    class="hidden lg:flex flex-col justify-between w-64 shrink-0 bg-[var(--color-surface)] border-r border-[var(--color-border)] shadow-sm overflow-hidden"
+  >
+    <div
+      class="flex items-center px-4 py-3 h-[62px] border-b-2 border-[var(--color-primary)]/10 flex-shrink-0"
+    >
+      <a
+        routerLink="/dashboard"
+        class="flex items-center gap-2 no-underline hover:opacity-80 transition-opacity"
+      >
+        <img src="assets/icons/web-transparent-logo.png" alt="SaveWise" class="h-8 w-20 shrink-0" />
+      </a>
+    </div>
+    <div class="p-4 flex-1 overflow-y-auto">
+      <app-side-nav />
+    </div>
+
+    <app-footer [lastInputDate]="savingsStore.lastInputDate()" />
+  </aside>
+
+  <!-- Mobile drawer overlay (hidden on desktop) -->
+  <p-drawer
+    [(visible)]="drawerVisible"
+    position="left"
+    [modal]="true"
+    [showCloseIcon]="true"
+    class="mobile-side-drawer"
+    styleClass="lg:hidden w-[16rem] max-w-[16rem]"
+  >
+    <ng-template pTemplate="header">
+      <div class="flex items-center gap-2">
+        <img
+          src="assets/icons/web-transparent-logo.png"
+          alt="SaveWise"
+          class="h-6 w-16 object-contain"
+        />
+      </div>
+    </ng-template>
+
+    <div class="flex flex-col h-full">
+      <app-side-nav class="flex-1 overflow-y-auto" (itemClick)="drawerVisible.set(false)" />
+    </div>
+    <ng-template pTemplate="footer">
+      <app-footer [lastInputDate]="savingsStore.lastInputDate()" />
+    </ng-template>
+  </p-drawer>
+
+  <!-- Main content column -->
+  <div class="flex flex-col flex-1 min-w-0 overflow-hidden">
+    <!-- Header -->
+    <app-header
+      [baseCurrency]="exchangeStore.currentBase()"
+      (menuToggle)="drawerVisible.set(true)"
+    />
+
+    <!-- Main scrollable area -->
+    <main class="flex-1 overflow-auto p-3 sm:p-4 md:p-6 lg:p-8 pb-20 lg:pb-8">
+      <ng-content></ng-content>
+    </main>
+
+    <!-- Bottom tab bar (mobile/tablet only) -->
+    <app-side-nav class="lg:hidden fixed bottom-0 left-0 right-0 z-40" [bottomBar]="true" />
+  </div>
+</div>
