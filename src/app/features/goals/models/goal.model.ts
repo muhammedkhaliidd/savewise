@@ -12,6 +12,8 @@ export interface Goal {
   targetAmount: number;
   /** Currency of the target amount (any currency). Editable. */
   targetCurrency: string;
+  /** Optional ISO date the user wants to reach the target by. Editable. */
+  targetDate?: string;
   order?: number;
 }
 

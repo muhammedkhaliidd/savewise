@@ -1,9 +1,30 @@
 <div class="mx-auto grid grid-cols-1 w-full max-w-5xl gap-4 md:gap-6">
+
   <app-savings-total
     [total]="savingsStore.totalInBase()"
     [entryCount]="savingsStore.entryCount()"
     [baseCurrency]="exchangeStore.currentBase()"
   />
 
-  <app-goals-chart [goals]="goalsStore.goalsWithProgress()" />
+  <app-dashboard-stats
+    [entryCount]="savingsStore.entryCount()"
+    [goalsCount]="goalsStore.goalsWithProgress().length"
+    [nearestTarget]="nearestTarget()"
+    [lastInputDate]="savingsStore.lastInputDate()"
+  />
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+    <app-savings-breakdown
+      [entries]="savingsStore.allEntries()"
+      [rateToBase]="exchangeStore.getRateToBase()"
+      [metalPure]="metalStore.getMetalPricePerGramInBase()"
+    />
+    <app-goals-chart [goals]="goalsStore.goalsWithProgress()" />
+  </div>
+
+  <app-goal-cards
+    [goals]="goalsStore.goalsWithProgress()"
+    [baseCurrency]="exchangeStore.currentBase()"
+  />
+
 </div>

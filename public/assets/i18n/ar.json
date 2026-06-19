@@ -75,7 +75,28 @@
     "editRate": "تعديل سعر صرف",
     "addRate": "إضافة سعر صرف",
     "editMetalPrice": "تعديل سعر معدن",
-    "addMetalPrice": "إضافة سعر معدن"
+    "addMetalPrice": "إضافة سعر معدن",
+    "stats": {
+      "activeEntries": "المدخرات النشطة",
+      "goals": "الأهداف",
+      "nearestTarget": "أقرب هدف",
+      "noTarget": "لا توجد أهداف",
+      "lastUpdated": "آخر تحديث",
+      "never": "لم يتم",
+      "today": "اليوم",
+      "yesterday": "أمس",
+      "daysAgo": "منذ {{days}} أيام"
+    },
+    "breakdown": {
+      "title": "توزيع المدخرات",
+      "other": "أخرى",
+      "noData": "لا توجد مدخرات"
+    },
+    "goalCards": {
+      "title": "تقدم الأهداف",
+      "empty": "لا توجد أهداف بعد. أضف أهدافاً لتتبع التقدم.",
+      "by": "بحلول"
+    }
   },
   "savings": {
     "total": "إجمالي المدخرات",
@@ -125,7 +146,8 @@
       "currentSavings": "المدخرات الحالية",
       "target": "الهدف المطلوب",
       "targetAmount": "المبلغ المستهدف",
-      "addGoal": "إضافة هدف"
+      "addGoal": "إضافة هدف",
+      "targetDate": "تاريخ الهدف"
     }
   },
   "savingsCalc": {

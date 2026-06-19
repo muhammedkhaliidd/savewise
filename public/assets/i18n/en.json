@@ -75,7 +75,28 @@
     "editRate": "Edit Exchange Rate",
     "addRate": "Add Exchange Rate",
     "editMetalPrice": "Edit Metal Price",
-    "addMetalPrice": "Add Metal Price"
+    "addMetalPrice": "Add Metal Price",
+    "stats": {
+      "activeEntries": "Active Entries",
+      "goals": "Goals",
+      "nearestTarget": "Nearest Target",
+      "noTarget": "No targets set",
+      "lastUpdated": "Last Updated",
+      "never": "Never",
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "daysAgo": "{{days}} days ago"
+    },
+    "breakdown": {
+      "title": "Savings Breakdown",
+      "other": "Other",
+      "noData": "No savings to display"
+    },
+    "goalCards": {
+      "title": "Goal Progress",
+      "empty": "No goals yet. Add goals to start tracking.",
+      "by": "by"
+    }
   },
   "savings": {
     "total": "Total Savings",
@@ -125,7 +146,8 @@
       "currentSavings": "Current savings",
       "target": "Target savings",
       "targetAmount": "Target amount",
-      "addGoal": "Add Goal"
+      "addGoal": "Add Goal",
+      "targetDate": "Target date"
     }
   },
   "savingsCalc": {

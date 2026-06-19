@@ -16,6 +16,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { DatePickerModule } from 'primeng/datepicker';
 import { CurrencySelectComponent } from '../../../currency/components/currency-select/currency-select.component';
 import { CurrencyService } from '../../../../core/services/currency.service';
 import { currencyDisplayKey, DisplayCodePipe } from '../../../../core/pipes/display-code.pipe';
@@ -36,6 +37,7 @@ export interface GoalFormValue {
   addedSavingsIds: string[];
   targetAmount: number;
   targetCurrency: string;
+  targetDate?: string;
 }
 
 interface SavingsOption {
@@ -53,6 +55,7 @@ interface SavingsOption {
     InputTextModule,
     InputNumberModule,
     MultiSelectModule,
+    DatePickerModule,
     CurrencySelectComponent,
     DisplayCodePipe,
   ],
@@ -83,6 +86,7 @@ export class GoalsFormComponent {
   addedIds = signal<string[]>([]);
   targetAmountValue = signal<number | null>(null);
   targetCurrency = signal('');
+  targetDateValue = signal<Date | null>(null);
 
   private suppressCurrencyDefault = false;
 
@@ -140,6 +144,7 @@ export class GoalsFormComponent {
       addedSavingsIds: this.addedIds(),
       targetAmount: this.targetAmountValue() ?? 0,
       targetCurrency: this.targetCurrency(),
+      targetDate: this.targetDateValue()?.toISOString(),
     });
     if (!this.editMode()) this.reset();
   }
@@ -151,6 +156,7 @@ export class GoalsFormComponent {
     this.addedIds.set([]);
     this.targetAmountValue.set(null);
     this.targetCurrency.set(this.baseCurrency());
+    this.targetDateValue.set(null);
   }
 
   setValues(goal: Goal): void {
@@ -161,6 +167,7 @@ export class GoalsFormComponent {
     this.addedIds.set([...goal.addedSavingsIds]);
     this.targetAmountValue.set(goal.targetAmount);
     this.targetCurrency.set(goal.targetCurrency);
+    this.targetDateValue.set(goal.targetDate ? new Date(goal.targetDate) : null);
     queueMicrotask(() => {
       this.suppressCurrencyDefault = false;
     });
