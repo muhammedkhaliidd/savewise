@@ -1,0 +1,42 @@
+<div class="mx-auto grid grid-cols-1 w-full max-w-5xl gap-4 md:gap-6">
+  <app-savings-calc-list
+    [items]="calcStore.itemsWithProjection()"
+    [baseCurrency]="exchangeStore.currentBase()"
+    (addItem)="onAddCalcClicked()"
+    (editItem)="onEditCalc($event)"
+    (deleteItem)="calcStore.deleteItem($event)"
+    (reorder)="calcStore.reorderItems($event)"
+  />
+</div>
+
+<!-- Add Calc Dialog -->
+<p-dialog
+  [(visible)]="addCalcDialogVisible"
+  [modal]="true"
+  [header]="'savingsCalc.addItem' | translate"
+  [style]="{ width: '90vw', maxWidth: '40rem' }"
+  (onShow)="overlayStack.register('add-calc', () => addCalcDialogVisible.set(false))"
+  (onHide)="overlayStack.release('add-calc')"
+>
+  <app-savings-calc-form
+    [baseCurrency]="exchangeStore.currentBase()"
+    (calcSubmit)="onCalcAdded($event)"
+  />
+</p-dialog>
+
+<!-- Edit Calc Dialog -->
+<p-dialog
+  [(visible)]="editCalcDialogVisible"
+  [modal]="true"
+  [header]="'savingsCalc.editItem' | translate"
+  [style]="{ width: '90vw', maxWidth: '40rem' }"
+  (onShow)="overlayStack.register('edit-calc', () => editCalcDialogVisible.set(false))"
+  (onHide)="overlayStack.release('edit-calc')"
+>
+  <app-savings-calc-form
+    #editCalcForm
+    [editMode]="true"
+    [baseCurrency]="exchangeStore.currentBase()"
+    (calcSubmit)="onCalcEdited($event)"
+  />
+</p-dialog>

@@ -19,11 +19,8 @@ import { ExchangeRateStore } from '../../../../stores/exchange-rate.store';
 import { MetalPriceStore } from '../../../../stores/metal-price.store';
 import { ConfirmService } from '../../../../core/services/confirm.service';
 import { DisplayCodePipe } from '../../../../core/pipes/display-code.pipe';
-import {
-  lookupPurityFactor,
-  metalIcon,
-  metalLabelKey,
-} from '../../../metals/constants/metal-options';
+import { metalIcon, metalLabelKey } from '../../../metals/constants/metal-options';
+import { valueEntryInBase } from '../../savings-value.util';
 
 @Component({
   selector: 'app-savings-list',
@@ -67,15 +64,11 @@ export class SavingsListComponent {
   }
 
   convertedAmount(entry: SavingsEntry): number | null {
-    if (this.entryType(entry) === 'money') {
-      const amount = entry.amount ?? 0;
-      const currency = entry.currency ?? '';
-      return amount * this.exchangeStore().getRateToBase()(currency);
-    }
-    if (!entry.metal || !entry.purityLabel || !entry.grams) return null;
-    const pure = this.metalStore().getMetalPricePerGramInBase()(entry.metal);
-    if (pure == null) return null;
-    return entry.grams * lookupPurityFactor(entry.metal, entry.purityLabel) * pure;
+    return valueEntryInBase(
+      entry,
+      this.exchangeStore().getRateToBase(),
+      this.metalStore().getMetalPricePerGramInBase(),
+    );
   }
 
   tagLabel(entry: SavingsEntry): string {

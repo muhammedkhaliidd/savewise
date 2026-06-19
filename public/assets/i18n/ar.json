@@ -35,6 +35,9 @@
     "openMenu": "فتح القائمة",
     "closeMenu": "إغلاق القائمة",
     "dashboard": "لوحة التحكم",
+    "savings": "المدخرات",
+    "goals": "الأهداف",
+    "savingsCalc": "حاسبة المدخرات",
     "liveRates": "أسعار مباشرة",
     "configurations": "التكوينات",
     "settings": "الإعدادات"
@@ -100,6 +103,53 @@
       "addSavings": "إضافة مدخرة",
       "typeMoney": "نقد",
       "typeMetal": "معدن"
+    }
+  },
+  "goals": {
+    "listTitle": "الأهداف",
+    "addGoal": "إضافة هدف",
+    "editGoal": "تعديل الهدف",
+    "empty": "لا توجد أهداف بعد. أضف أول هدف لتتبع تقدمك.",
+    "chartTitle": "تقدم الأهداف",
+    "chartEmpty": "أضف هدفاً لعرض تقدمه هنا.",
+    "confirmDelete": "حذف الهدف",
+    "confirmDeleteMessage": "هل أنت متأكد من حذف هذا الهدف؟",
+    "form": {
+      "name": "اسم الهدف",
+      "namePlaceholder": "مثال: سيارة جديدة",
+      "startDate": "تاريخ البدء",
+      "initialSavings": "المدخرات الأولية",
+      "initialLocked": "لا يمكن تغيير المدخرات الأولية بعد الإنشاء.",
+      "addedSavings": "مدخرات مُضافة",
+      "selectSavings": "اختر المدخرات",
+      "currentSavings": "المدخرات الحالية",
+      "target": "الهدف المطلوب",
+      "targetAmount": "المبلغ المستهدف",
+      "addGoal": "إضافة هدف"
+    }
+  },
+  "savingsCalc": {
+    "listTitle": "حسابات المدخرات",
+    "addItem": "حساب جديد",
+    "editItem": "تعديل الحساب",
+    "empty": "لا توجد حسابات بعد. أنشئ واحداً لتوقع مدخراتك المستقبلية.",
+    "targetOn": "الهدف",
+    "confirmDelete": "حذف الحساب",
+    "confirmDeleteMessage": "هل أنت متأكد من حذف هذا الحساب؟",
+    "form": {
+      "name": "اسم الحساب",
+      "namePlaceholder": "مثال: خطة الدفعة المقدمة",
+      "savings": "المدخرات الحالية",
+      "selectSavings": "اختر المدخرات",
+      "recurring": "المساهمات المتوقعة",
+      "addRecurring": "إضافة مساهمة",
+      "noRecurring": "لم تتم إضافة مساهمات متكررة بعد.",
+      "amount": "المبلغ",
+      "monthly": "شهري",
+      "yearly": "سنوي",
+      "targetDate": "التاريخ المستهدف",
+      "projectedTotal": "الإجمالي المتوقع",
+      "addItem": "إضافة حساب"
     }
   },
   "exchange": {
@@ -525,6 +575,10 @@
     "saved": "تم الحفظ",
     "savingsAdded": "تمت إضافة المدخرة",
     "savingsUpdated": "تم تحديث المدخرة",
+    "goalAdded": "تمت إضافة الهدف",
+    "goalUpdated": "تم تحديث الهدف",
+    "calcAdded": "تمت إضافة الحساب",
+    "calcUpdated": "تم تحديث الحساب",
     "rateAdded": "تمت إضافة سعر الصرف",
     "rateUpdated": "تم تحديث سعر الصرف",
     "metalPriceAdded": "تمت إضافة سعر المعدن",

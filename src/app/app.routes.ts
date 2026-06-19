@@ -10,6 +10,19 @@ export const routes: Routes = [
         loadComponent: () => import('./features/dashboard/dashboard').then((m) => m.Dashboard),
       },
       {
+        path: 'savings',
+        loadComponent: () => import('./features/savings/savings').then((m) => m.Savings),
+      },
+      {
+        path: 'goals',
+        loadComponent: () => import('./features/goals/goals').then((m) => m.Goals),
+      },
+      {
+        path: 'savings-calc',
+        loadComponent: () =>
+          import('./features/savings-calc/savings-calc').then((m) => m.SavingsCalc),
+      },
+      {
         path: 'live-rates',
         loadComponent: () => import('./features/live-rates/live-rates').then((m) => m.LiveRates),
       },

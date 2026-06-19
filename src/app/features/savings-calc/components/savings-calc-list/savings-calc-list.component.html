@@ -1,0 +1,73 @@
+<div
+  class="bg-[var(--color-surface)] rounded-[var(--radius)] shadow-sm border border-[var(--color-border)] p-3 sm:p-4"
+>
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="flex items-center gap-2 text-base font-semibold text-[var(--color-text)] sm:text-lg">
+      <i class="pi pi-calculator text-[var(--color-primary)]"></i>
+      {{ 'savingsCalc.listTitle' | translate }}
+    </h3>
+    <p-button
+      icon="pi pi-plus"
+      severity="primary"
+      [rounded]="true"
+      size="small"
+      [ariaLabel]="'savingsCalc.addItem' | translate"
+      (onClick)="addItem.emit()"
+    />
+  </div>
+
+  @if (items().length === 0) {
+  <p class="text-[var(--color-text-muted)] text-center py-4">
+    {{ 'savingsCalc.empty' | translate }}
+  </p>
+  } @else {
+  <div class="min-h-[300px] max-h-[70vh] overflow-hidden flex flex-col">
+    <p-orderList
+      [value]="itemsView()"
+      [dragdrop]="true"
+      [responsive]="true"
+      (onReorder)="onReorder()"
+      dataKey="item.id"
+      class="w-full flex-1"
+      scrollHeight="100%"
+    >
+      <ng-template let-view pTemplate="item">
+        <div class="flex w-full items-center justify-between gap-3 p-2 border-b border-[var(--color-border)]">
+          <i class="pi pi-bars cursor-grab text-[var(--color-text-muted)]" cdkDragHandle></i>
+          <div class="flex-1 min-w-0">
+            <p class="truncate font-semibold text-[var(--color-text)]">
+              {{ view.item.name || ('common.untitled' | translate) }}
+            </p>
+            <p class="text-xs text-[var(--color-text-muted)]">
+              {{ 'savingsCalc.targetOn' | translate }}
+              {{ view.item.targetDate | date : 'mediumDate' }} ·
+              <span class="text-[var(--color-primary)] font-semibold">
+                {{ view.projectedInBase | number : '1.2-2' }}
+                {{ baseCurrency() | displayCode | translate }}
+              </span>
+            </p>
+          </div>
+          <div class="flex items-center gap-2">
+            <p-button
+              icon="pi pi-pencil"
+              severity="secondary"
+              [outlined]="true"
+              [rounded]="true"
+              size="small"
+              (onClick)="editItem.emit(view.item); $event.stopPropagation()"
+            />
+            <p-button
+              icon="pi pi-trash"
+              severity="danger"
+              [outlined]="true"
+              [rounded]="true"
+              size="small"
+              (onClick)="confirmDelete(view.item.id); $event.stopPropagation()"
+            />
+          </div>
+        </div>
+      </ng-template>
+    </p-orderList>
+  </div>
+  }
+</div>

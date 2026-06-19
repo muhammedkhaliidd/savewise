@@ -4,7 +4,7 @@ import { StorageService } from '../core/services/storage.service';
 import type { SavingsEntry, SavingsState } from '../features/savings/models/savings-entry.model';
 import { ExchangeRateStore } from './exchange-rate.store';
 import { MetalPriceStore } from './metal-price.store';
-import { lookupPurityFactor } from '../features/metals/constants/metal-options';
+import { valueEntryInBase } from '../features/savings/savings-value.util';
 
 const initialState: SavingsState = {
   entries: [],
@@ -36,18 +36,7 @@ export const SavingsStore = signalStore(
         return state
           .entries()
           .filter((entry) => entry.active !== false)
-          .reduce((sum, entry) => {
-            const type = entry.type ?? 'money';
-            if (type === 'money') {
-              const amount = entry.amount ?? 0;
-              const currency = entry.currency ?? '';
-              return sum + amount * rateToBase(currency);
-            }
-            if (!entry.metal || !entry.purityLabel || !entry.grams) return sum;
-            const pure = metalPure(entry.metal);
-            if (pure == null) return sum;
-            return sum + entry.grams * lookupPurityFactor(entry.metal, entry.purityLabel) * pure;
-          }, 0);
+          .reduce((sum, entry) => sum + (valueEntryInBase(entry, rateToBase, metalPure) ?? 0), 0);
       }),
     }),
   ),

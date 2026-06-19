@@ -1,26 +1,15 @@
-import { Component, inject, OnInit, signal, viewChild } from '@angular/core';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { SavingsFormComponent } from '../savings/components/savings-form/savings-form.component';
+import { Component, inject, OnInit } from '@angular/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { SavingsTotalComponent } from '../savings/components/savings-total/savings-total.component';
-import { SavingsListComponent } from '../savings/components/savings-list/savings-list.component';
-import { DialogModule } from 'primeng/dialog';
+import { GoalsChartComponent } from '../goals/components/goals-chart/goals-chart.component';
 import { SavingsStore } from '../../stores/savings.store';
 import { ExchangeRateStore } from '../../stores/exchange-rate.store';
 import { MetalPriceStore } from '../../stores/metal-price.store';
-import { ToastService } from '../../core/services/toast.service';
-import { OverlayStackService } from '../../core/services/overlay-stack.service';
-import { SavingsEntry } from '../savings/models/savings-entry.model';
+import { GoalsStore } from '../../stores/goals.store';
 
 @Component({
   selector: 'app-dashboard',
-  standalone: true,
-  imports: [
-    TranslateModule,
-    SavingsFormComponent,
-    SavingsListComponent,
-    SavingsTotalComponent,
-    DialogModule,
-  ],
+  imports: [TranslateModule, SavingsTotalComponent, GoalsChartComponent],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
@@ -28,61 +17,12 @@ export class Dashboard implements OnInit {
   readonly exchangeStore = inject(ExchangeRateStore);
   readonly metalStore = inject(MetalPriceStore);
   readonly savingsStore = inject(SavingsStore);
-  readonly overlayStack = inject(OverlayStackService);
-  private readonly toast = inject(ToastService);
-  private readonly translate = inject(TranslateService);
-
-  readonly editSavingsForm = viewChild<SavingsFormComponent>('editSavingsForm');
-
-  readonly editSavingsDialogVisible = signal(false);
-  readonly addSavingsDialogVisible = signal(false);
-
-  private editingSavingsId: string | null = null;
+  readonly goalsStore = inject(GoalsStore);
 
   ngOnInit(): void {
     this.exchangeStore.loadFromStorage();
     this.metalStore.loadFromStorage();
     this.savingsStore.loadFromStorage();
-  }
-
-  onAddSavingsClicked(): void {
-    this.addSavingsDialogVisible.set(true);
-  }
-
-  onSavingsAddedFromDialog(entry: Omit<SavingsEntry, 'id'>): void {
-    this.savingsStore.addEntry(entry);
-    this.addSavingsDialogVisible.set(false);
-    this.toast.success(
-      this.translate.instant('toast.saved'),
-      this.translate.instant('toast.savingsAdded'),
-    );
-  }
-
-  onToggleSavingsActive(event: { id: string; active: boolean }): void {
-    this.savingsStore.updateEntry(event.id, { active: event.active });
-  }
-
-  onEditSavingsEntry(entry: SavingsEntry): void {
-    this.editingSavingsId = entry.id;
-    this.editSavingsDialogVisible.set(true);
-    setTimeout(() => {
-      this.editSavingsForm()?.setValues(entry);
-    }, 0);
-  }
-
-  onSaveSavingsEdit(entry: Omit<SavingsEntry, 'id'>): void {
-    if (this.editingSavingsId) {
-      const cleared: Partial<SavingsEntry> =
-        entry.type === 'metal'
-          ? { ...entry, currency: undefined, amount: undefined }
-          : { ...entry, metal: undefined, purityLabel: undefined, grams: undefined };
-      this.savingsStore.updateEntry(this.editingSavingsId, cleared);
-      this.editingSavingsId = null;
-      this.editSavingsDialogVisible.set(false);
-      this.toast.success(
-        this.translate.instant('toast.saved'),
-        this.translate.instant('toast.savingsUpdated'),
-      );
-    }
+    this.goalsStore.loadFromStorage();
   }
 }

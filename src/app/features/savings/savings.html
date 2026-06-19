@@ -1,0 +1,45 @@
+<div class="mx-auto grid grid-cols-1 w-full max-w-5xl gap-4 md:gap-6">
+  <app-savings-list
+    [entries]="savingsStore.allEntries()"
+    [baseCurrency]="exchangeStore.currentBase()"
+    [exchangeStore]="exchangeStore"
+    [metalStore]="metalStore"
+    (deleteEntry)="savingsStore.deleteEntry($event)"
+    (editEntry)="onEditSavingsEntry($event)"
+    (addEntry)="onAddSavingsClicked()"
+    (toggleActive)="onToggleSavingsActive($event)"
+    (reorder)="savingsStore.reorderEntries($event)"
+  />
+</div>
+
+<!-- Edit Savings Dialog -->
+<p-dialog
+  [(visible)]="editSavingsDialogVisible"
+  [modal]="true"
+  [header]="'dashboard.editSavings' | translate"
+  [style]="{ width: '90vw', maxWidth: '30rem' }"
+  (onShow)="overlayStack.register('edit-savings', () => editSavingsDialogVisible.set(false))"
+  (onHide)="overlayStack.release('edit-savings')"
+>
+  <app-savings-form
+    #editSavingsForm
+    [editMode]="true"
+    [baseCurrency]="exchangeStore.currentBase()"
+    (entryAdded)="onSaveSavingsEdit($event)"
+  />
+</p-dialog>
+
+<!-- Add Savings Dialog -->
+<p-dialog
+  [(visible)]="addSavingsDialogVisible"
+  [modal]="true"
+  [header]="'dashboard.addSavings' | translate"
+  [style]="{ width: '90vw', maxWidth: '30rem' }"
+  (onShow)="overlayStack.register('add-savings', () => addSavingsDialogVisible.set(false))"
+  (onHide)="overlayStack.release('add-savings')"
+>
+  <app-savings-form
+    [baseCurrency]="exchangeStore.currentBase()"
+    (entryAdded)="onSavingsAddedFromDialog($event)"
+  />
+</p-dialog>

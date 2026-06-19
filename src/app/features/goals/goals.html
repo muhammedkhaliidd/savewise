@@ -1,0 +1,42 @@
+<div class="mx-auto grid grid-cols-1 w-full max-w-5xl gap-4 md:gap-6">
+  <app-goals-list
+    [goals]="goalsStore.goalsWithProgress()"
+    [baseCurrency]="exchangeStore.currentBase()"
+    (addGoal)="onAddGoalClicked()"
+    (editGoal)="onEditGoal($event)"
+    (deleteGoal)="goalsStore.deleteGoal($event)"
+    (reorder)="goalsStore.reorderGoals($event)"
+  />
+</div>
+
+<!-- Add Goal Dialog -->
+<p-dialog
+  [(visible)]="addGoalDialogVisible"
+  [modal]="true"
+  [header]="'goals.addGoal' | translate"
+  [style]="{ width: '90vw', maxWidth: '32rem' }"
+  (onShow)="overlayStack.register('add-goal', () => addGoalDialogVisible.set(false))"
+  (onHide)="overlayStack.release('add-goal')"
+>
+  <app-goals-form
+    [baseCurrency]="exchangeStore.currentBase()"
+    (goalSubmit)="onGoalAdded($event)"
+  />
+</p-dialog>
+
+<!-- Edit Goal Dialog -->
+<p-dialog
+  [(visible)]="editGoalDialogVisible"
+  [modal]="true"
+  [header]="'goals.editGoal' | translate"
+  [style]="{ width: '90vw', maxWidth: '32rem' }"
+  (onShow)="overlayStack.register('edit-goal', () => editGoalDialogVisible.set(false))"
+  (onHide)="overlayStack.release('edit-goal')"
+>
+  <app-goals-form
+    #editGoalForm
+    [editMode]="true"
+    [baseCurrency]="exchangeStore.currentBase()"
+    (goalSubmit)="onGoalEdited($event)"
+  />
+</p-dialog>

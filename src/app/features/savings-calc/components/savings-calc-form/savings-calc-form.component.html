@@ -1,0 +1,142 @@
+<div class="flex flex-col gap-4">
+  <!-- Name -->
+  <div class="flex flex-col gap-1">
+    <label for="calc-name" class="text-sm font-medium text-[var(--color-text)]">
+      {{ 'savingsCalc.form.name' | translate }}
+    </label>
+    <input
+      id="calc-name"
+      pInputText
+      [(ngModel)]="nameValue"
+      [placeholder]="'savingsCalc.form.namePlaceholder' | translate"
+      class="w-full"
+    />
+  </div>
+
+  <!-- Savings (lump sum) -->
+  <div class="flex flex-col gap-1">
+    <label for="calc-savings" class="text-sm font-medium text-[var(--color-text)]">
+      {{ 'savingsCalc.form.savings' | translate }}
+    </label>
+    <p-multiSelect
+      inputId="calc-savings"
+      [options]="savingsOptions()"
+      [ngModel]="savingsIds()"
+      (ngModelChange)="savingsIds.set($event)"
+      optionLabel="label"
+      optionValue="id"
+      [filter]="true"
+      filterBy="label"
+      [placeholder]="'savingsCalc.form.selectSavings' | translate"
+      [panelStyle]="selectPanelStyle"
+      [panelStyleClass]="selectPanelStyleClass"
+      [overlayOptions]="selectOverlayOptions"
+      styleClass="w-full"
+      scrollHeight="220px"
+    />
+  </div>
+
+  <!-- Recurring entries -->
+  <div class="flex flex-col gap-2">
+    <div class="flex items-center justify-between">
+      <span class="text-sm font-medium text-[var(--color-text)]">
+        {{ 'savingsCalc.form.recurring' | translate }}
+      </span>
+      <p-button
+        icon="pi pi-plus"
+        severity="secondary"
+        [outlined]="true"
+        [rounded]="true"
+        size="small"
+        [ariaLabel]="'savingsCalc.form.addRecurring' | translate"
+        (onClick)="addRecurring()"
+      />
+    </div>
+
+    @if (recurringEntries().length === 0) {
+    <p class="text-xs text-[var(--color-text-muted)]">
+      {{ 'savingsCalc.form.noRecurring' | translate }}
+    </p>
+    }
+
+    @for (row of recurringEntries(); track row.id) {
+    <div
+      class="flex flex-col gap-2 rounded-[var(--radius)] border border-[var(--color-border)] p-2 sm:flex-row sm:items-center"
+    >
+      <p-inputNumber
+        [ngModel]="row.amount"
+        (ngModelChange)="updateRecurring(row.id, { amount: $event ?? 0 })"
+        [min]="0"
+        mode="decimal"
+        [minFractionDigits]="0"
+        [maxFractionDigits]="2"
+        styleClass="flex-1"
+        inputStyleClass="w-full"
+        [placeholder]="'savingsCalc.form.amount' | translate"
+      />
+      <div class="w-full sm:w-32 shrink-0">
+        <app-currency-select
+          [currencies]="allCurrencies()"
+          [selectedCode]="row.currency"
+          (selectionChange)="updateRecurring(row.id, { currency: $event })"
+        />
+      </div>
+      <p-selectButton
+        [options]="frequencyOptions()"
+        [ngModel]="row.frequency"
+        (ngModelChange)="updateRecurring(row.id, { frequency: $event })"
+        optionLabel="label"
+        optionValue="value"
+        [allowEmpty]="false"
+        styleClass="shrink-0"
+      />
+      <p-button
+        icon="pi pi-trash"
+        severity="danger"
+        [text]="true"
+        [rounded]="true"
+        size="small"
+        [ariaLabel]="'common.delete' | translate"
+        (onClick)="removeRecurring(row.id)"
+      />
+    </div>
+    }
+  </div>
+
+  <!-- Target date -->
+  <div class="flex flex-col gap-1">
+    <label for="calc-date" class="text-sm font-medium text-[var(--color-text)]">
+      {{ 'savingsCalc.form.targetDate' | translate }}
+    </label>
+    <p-datepicker
+      inputId="calc-date"
+      [ngModel]="targetDate()"
+      (ngModelChange)="targetDate.set($event)"
+      dateFormat="yy-mm-dd"
+      [showIcon]="true"
+      [appendTo]="'body'"
+      styleClass="w-full"
+      inputStyleClass="w-full"
+    />
+  </div>
+
+  <!-- Projected total -->
+  <div
+    class="flex items-center justify-between rounded-[var(--radius)] bg-[var(--color-bg)] px-3 py-2 border border-[var(--color-border)]"
+  >
+    <span class="text-sm font-medium text-[var(--color-text)]">
+      {{ 'savingsCalc.form.projectedTotal' | translate }}
+    </span>
+    <span class="text-sm font-semibold text-[var(--color-primary)]">
+      {{ projectedInBase() | number : '1.2-2' }} {{ baseCurrency() | displayCode | translate }}
+    </span>
+  </div>
+
+  <p-button
+    [label]="(editMode() ? 'common.save' : 'savingsCalc.form.addItem') | translate"
+    icon="pi pi-check"
+    [disabled]="!canSubmit()"
+    (onClick)="submit()"
+    styleClass="w-full"
+  />
+</div>

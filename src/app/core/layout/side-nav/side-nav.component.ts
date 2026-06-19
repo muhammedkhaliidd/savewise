@@ -1,9 +1,9 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
-import { NAV_ITEMS } from '../../constants/nav-items';
+import { SIDE_NAV_ITEMS, TAB_ITEMS } from '../../constants/nav-items';
 
 @Component({
   selector: 'app-side-nav',
@@ -17,7 +17,7 @@ import { NAV_ITEMS } from '../../constants/nav-items';
       class="flex items-center justify-around gap-1 bg-[var(--color-surface)] border-t border-[var(--color-border)] px-1 py-2"
       [attr.aria-label]="'nav.openMenu' | translate"
     >
-      @for (item of navItems; track item.route) {
+      @for (item of navItems(); track item.route) {
       <a
         [routerLink]="item.route"
         routerLinkActive="bg-[var(--color-primary)]/15 !text-[var(--color-primary)]"
@@ -34,7 +34,7 @@ import { NAV_ITEMS } from '../../constants/nav-items';
     } @else {
     <!-- Vertical sidebar (desktop) -->
     <nav class="flex flex-col gap-1" [attr.aria-label]="'nav.openMenu' | translate">
-      @for (item of navItems; track item.route) {
+      @for (item of navItems(); track item.route) {
       <a
         [routerLink]="item.route"
         routerLinkActive="bg-[var(--color-primary)]/10 text-[var(--color-primary)] border-r-2 border-[var(--color-primary)]"
@@ -55,7 +55,7 @@ export class SideNavComponent {
   readonly bottomBar = input(false);
   readonly itemClick = output<void>();
 
-  readonly navItems = NAV_ITEMS;
+  readonly navItems = computed(() => (this.bottomBar() ? TAB_ITEMS : SIDE_NAV_ITEMS));
 
   isActive(route: string): boolean {
     // Will be handled by routerLinkActive directive

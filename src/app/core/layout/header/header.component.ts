@@ -4,7 +4,7 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { ButtonModule } from 'primeng/button';
 import { DisplayCodePipe } from '../../pipes/display-code.pipe';
-import { NAV_ITEMS } from '../../constants/nav-items';
+import { TAB_ITEMS } from '../../constants/nav-items';
 
 @Component({
   selector: 'app-header',
@@ -79,5 +79,5 @@ export class HeaderComponent {
   baseCurrency = input.required<string>();
   readonly menuToggle = output<void>();
 
-  readonly navItems = NAV_ITEMS;
+  readonly navItems = TAB_ITEMS;
 }
