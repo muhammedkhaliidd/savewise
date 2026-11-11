@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { SelectModule } from 'primeng/select';
+import { SelectBackCloseDirective } from '../../../../core/directives/select-back-close.directive';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import type { MetalCode, MetalPrice } from '../../models/metal-price.model';
 import { METAL_OPTIONS, PURITY_OPTIONS } from '../../constants/metal-options';
@@ -34,6 +35,7 @@ import {
     ButtonModule,
     InputNumberModule,
     SelectModule,
+    SelectBackCloseDirective,
     ToggleSwitchModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,

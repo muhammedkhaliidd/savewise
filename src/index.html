@@ -4,10 +4,9 @@
     <meta charset="utf-8" />
     <title>SaveWise</title>
     <base href="/" />
-    <meta
-      content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover"
-    />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- viewport-fit=cover enables env(safe-area-inset-*) (notch / home indicator). Zoom stays
+         enabled on purpose: blocking it fails WCAG 1.4.4 and the axe "meta-viewport" check. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <!-- SaveWise brand primary (--color-primary); updated on theme toggle in ThemeService -->
     <meta name="theme-color" content="#059669" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />

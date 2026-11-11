@@ -12,6 +12,7 @@ import { CommonModule } from '@angular/common';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { SelectModule } from 'primeng/select';
+import { SelectBackCloseDirective } from '../../../../core/directives/select-back-close.directive';
 import { FormsModule } from '@angular/forms';
 import type { Currency } from '../../models/currency.model';
 import {
@@ -19,7 +20,7 @@ import {
   currencyNameKey,
 } from '../../../../core/pipes/display-code.pipe';
 import {
-  SELECT_OVERLAY_OPTIONS,
+  SEARCHABLE_SELECT_OVERLAY_OPTIONS,
   SELECT_PANEL_STYLE,
   SELECT_PANEL_STYLE_CLASS,
 } from '../../../../core/constants/select-overlay';
@@ -29,7 +30,14 @@ type CurrencyOption = Currency & { localizedName: string };
 @Component({
   selector: 'app-currency-select',
   standalone: true,
-  imports: [CommonModule, SelectModule, FormsModule, TranslateModule, CurrencyNamePipe],
+  imports: [
+    CommonModule,
+    SelectModule,
+    SelectBackCloseDirective,
+    FormsModule,
+    TranslateModule,
+    CurrencyNamePipe,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="min-w-0 w-full max-w-full">
@@ -69,7 +77,7 @@ export class CurrencySelectComponent {
 
   readonly panelStyle = SELECT_PANEL_STYLE;
   readonly panelStyleClass = SELECT_PANEL_STYLE_CLASS;
-  readonly overlayOptions = SELECT_OVERLAY_OPTIONS;
+  readonly overlayOptions = SEARCHABLE_SELECT_OVERLAY_OPTIONS;
 
   currencies = input.required<Currency[]>();
   selectedCode = input<string>('');

@@ -15,6 +15,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { SelectModule } from 'primeng/select';
+import { SelectBackCloseDirective } from '../../../../core/directives/select-back-close.directive';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import { FormsModule } from '@angular/forms';
@@ -39,6 +40,7 @@ import {
     InputTextModule,
     InputNumberModule,
     SelectModule,
+    SelectBackCloseDirective,
     SelectButtonModule,
     ToggleSwitchModule,
     FormsModule,

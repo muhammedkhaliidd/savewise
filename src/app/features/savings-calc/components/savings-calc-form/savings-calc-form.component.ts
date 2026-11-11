@@ -15,6 +15,7 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { SelectBackCloseDirective } from '../../../../core/directives/select-back-close.directive';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { DatePickerModule } from 'primeng/datepicker';
 import { CurrencySelectComponent } from '../../../currency/components/currency-select/currency-select.component';
@@ -25,7 +26,7 @@ import { SavingsStore } from '../../../../stores/savings.store';
 import { valueEntryInBase } from '../../../savings/savings-value.util';
 import { currencyDisplayKey, DisplayCodePipe } from '../../../../core/pipes/display-code.pipe';
 import {
-  SELECT_OVERLAY_OPTIONS,
+  SEARCHABLE_SELECT_OVERLAY_OPTIONS,
   SELECT_PANEL_STYLE,
   SELECT_PANEL_STYLE_CLASS,
 } from '../../../../core/constants/select-overlay';
@@ -62,6 +63,7 @@ function generateId(): string {
     InputTextModule,
     InputNumberModule,
     MultiSelectModule,
+    SelectBackCloseDirective,
     SelectButtonModule,
     DatePickerModule,
     CurrencySelectComponent,
@@ -78,7 +80,7 @@ export class SavingsCalcFormComponent {
   private readonly savingsStore = inject(SavingsStore);
   private readonly langTick = toSignal(this.translate.onLangChange, { initialValue: null });
 
-  readonly selectOverlayOptions = SELECT_OVERLAY_OPTIONS;
+  readonly selectOverlayOptions = SEARCHABLE_SELECT_OVERLAY_OPTIONS;
   readonly selectPanelStyle = SELECT_PANEL_STYLE;
   readonly selectPanelStyleClass = SELECT_PANEL_STYLE_CLASS;
 

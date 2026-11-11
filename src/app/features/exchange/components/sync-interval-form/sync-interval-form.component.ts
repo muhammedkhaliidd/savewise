@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { SelectModule } from 'primeng/select';
+import { SelectBackCloseDirective } from '../../../../core/directives/select-back-close.directive';
 import type {
   SyncIntervalSetting,
   SyncIntervalUnit,
@@ -35,6 +36,7 @@ import {
     ButtonModule,
     InputNumberModule,
     SelectModule,
+    SelectBackCloseDirective,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `

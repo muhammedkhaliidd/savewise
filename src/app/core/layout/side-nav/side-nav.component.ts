@@ -14,7 +14,7 @@ import { SIDE_NAV_ITEMS, TAB_ITEMS } from '../../constants/nav-items';
     @if (bottomBar()) {
     <!-- Bottom tab bar (mobile/tablet) -->
     <nav
-      class="flex items-center justify-around gap-1 bg-[var(--color-surface)] border-t border-[var(--color-border)] px-1 py-2"
+      class="flex items-center justify-around gap-1 bg-[var(--color-surface)] border-t border-[var(--color-border)] pl-[max(0.25rem,env(safe-area-inset-left))] pr-[max(0.25rem,env(safe-area-inset-right))] pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))]"
       [attr.aria-label]="'nav.openMenu' | translate"
     >
       @for (item of navItems(); track item.route) {

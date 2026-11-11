@@ -20,7 +20,7 @@ import { TAB_ITEMS } from '../../constants/nav-items';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <header
-      class="sticky top-0 z-50 bg-[var(--color-surface)] text-[var(--color-text)] border-b border-[var(--color-primary)]/25 shadow-sm px-3 py-3 sm:px-4 sm:py-3"
+      class="sticky top-0 z-50 bg-[var(--color-surface)] text-[var(--color-text)] border-b border-[var(--color-primary)]/25 shadow-sm px-3 pb-3 pt-[calc(0.75rem+env(safe-area-inset-top))] sm:px-4"
     >
       <div class="mx-auto flex w-full max-w-7xl items-center justify-between gap-3">
         <!-- Left: Hamburger + Logo -->
@@ -60,16 +60,24 @@ import { TAB_ITEMS } from '../../constants/nav-items';
           }
         </nav>
 
-        <!-- Right: Base Currency Badge -->
+        <!-- Right: Total Savings + Base Currency Badge -->
         <a
           routerLink="/settings"
           class="flex items-center gap-2 px-3 py-2 rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] hover:bg-[var(--color-primary)]/15 transition-colors shrink-0"
-          [attr.aria-label]="'header.baseCurrency' | translate"
+          [attr.aria-label]="
+            ('savings.total' | translate) +
+            ': ' +
+            (total() | number : '1.2-2') +
+            ' ' +
+            (baseCurrency() | displayCode | translate)
+          "
+          [title]="'header.baseCurrency' | translate"
         >
-          <i class="pi pi-wallet"></i>
-          <span class="text-xs sm:text-sm font-semibold">{{
-            baseCurrency() | displayCode | translate
-          }}</span>
+          <i class="pi pi-wallet" aria-hidden="true"></i>
+          <span class="text-xs sm:text-sm font-semibold whitespace-nowrap tabular-nums">
+            {{ total() | number : '1.2-2' }}
+            {{ baseCurrency() | displayCode | translate }}
+          </span>
         </a>
       </div>
     </header>
@@ -77,6 +85,7 @@ import { TAB_ITEMS } from '../../constants/nav-items';
 })
 export class HeaderComponent {
   baseCurrency = input.required<string>();
+  total = input.required<number>();
   readonly menuToggle = output<void>();
 
   readonly navItems = TAB_ITEMS;

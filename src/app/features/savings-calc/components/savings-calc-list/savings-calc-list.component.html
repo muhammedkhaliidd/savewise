@@ -21,7 +21,7 @@
     {{ 'savingsCalc.empty' | translate }}
   </p>
   } @else {
-  <div class="min-h-[300px] max-h-[70vh] overflow-hidden flex flex-col">
+  <div class="min-h-[300px] flex flex-col">
     <p-orderList
       [value]="itemsView()"
       [dragdrop]="true"
@@ -29,7 +29,7 @@
       (onReorder)="onReorder()"
       dataKey="item.id"
       class="w-full flex-1"
-      scrollHeight="100%"
+      scrollHeight="70vh"
     >
       <ng-template let-view pTemplate="item">
         <div class="flex w-full items-center justify-between gap-3 p-2 border-b border-[var(--color-border)]">

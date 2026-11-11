@@ -1,7 +1,9 @@
-<div class="flex h-screen overflow-hidden bg-[var(--color-bg)]">
+<div
+  class="flex h-screen overflow-hidden bg-[var(--color-bg)] pl-[env(safe-area-inset-left)] pr-[env(safe-area-inset-right)]"
+>
   <!-- Desktop persistent sidebar (hidden on mobile/tablet) -->
   <aside
-    class="hidden lg:flex flex-col justify-between w-64 shrink-0 bg-[var(--color-surface)] border-r border-[var(--color-border)] shadow-sm overflow-hidden"
+    class="hidden lg:flex flex-col justify-between w-64 shrink-0 bg-[var(--color-surface)] border-r border-[var(--color-border)] shadow-sm overflow-hidden pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]"
   >
     <div
       class="flex items-center px-4 py-3 h-[62px] border-b-2 border-[var(--color-primary)]/10 flex-shrink-0"
@@ -27,7 +29,7 @@
     [modal]="true"
     [showCloseIcon]="true"
     class="mobile-side-drawer"
-    styleClass="lg:hidden w-[16rem] max-w-[16rem]"
+    styleClass="lg:hidden w-[16rem] max-w-[16rem] pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]"
   >
     <ng-template pTemplate="header">
       <div class="flex items-center gap-2">
@@ -52,11 +54,12 @@
     <!-- Header -->
     <app-header
       [baseCurrency]="exchangeStore.currentBase()"
+      [total]="savingsStore.totalInBase()"
       (menuToggle)="drawerVisible.set(true)"
     />
 
     <!-- Main scrollable area -->
-    <main class="flex-1 overflow-auto p-3 sm:p-4 md:p-6 lg:p-8 pb-20 lg:pb-8">
+    <main class="flex-1 overflow-auto p-3 sm:p-4 md:p-6 lg:p-8 pb-[calc(5rem+env(safe-area-inset-bottom))] lg:pb-8">
       <ng-content></ng-content>
     </main>
 

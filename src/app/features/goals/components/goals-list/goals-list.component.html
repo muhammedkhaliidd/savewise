@@ -21,7 +21,7 @@
     {{ 'goals.empty' | translate }}
   </p>
   } @else {
-  <div class="min-h-[300px] max-h-[70vh] overflow-hidden flex flex-col">
+  <div class="min-h-[300px] flex flex-col">
     <p-orderList
       [value]="goalsView()"
       [dragdrop]="true"
@@ -29,7 +29,7 @@
       (onReorder)="onReorder()"
       dataKey="goal.id"
       class="w-full flex-1"
-      scrollHeight="100%"
+      scrollHeight="70vh"
     >
       <ng-template let-item pTemplate="item">
         <div class="flex w-full flex-col gap-2 p-2 border-b border-[var(--color-border)]">

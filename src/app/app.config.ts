@@ -1,4 +1,10 @@
-import { APP_INITIALIZER, ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
+import {
+  APP_INITIALIZER,
+  ApplicationConfig,
+  inject,
+  provideAppInitializer,
+  provideBrowserGlobalErrorListeners,
+} from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { provideTranslateService } from '@ngx-translate/core';
@@ -10,6 +16,7 @@ import { definePreset } from '@primeng/themes';
 
 import { routes } from './app.routes';
 import { initLocale } from './core/i18n/translate-init';
+import { VisualViewportService } from './core/services/visual-viewport.service';
 
 const appPreset = definePreset(Aura, {
   semantic: {
@@ -65,7 +72,11 @@ export const appConfig: ApplicationConfig = {
       useFactory: initLocale,
       multi: true,
     },
+    provideAppInitializer(() => inject(VisualViewportService).start()),
     providePrimeNG({
+      // Render dropdown/date-picker panels on top of the page instead of inside their container,
+      // so they are never clipped by (or scroll inside) dialogs and scrollable cards.
+      overlayAppendTo: 'body',
       theme: {
         preset: appPreset,
         options: {

@@ -278,6 +278,11 @@ app-savings-total .savings-hero__meta {
   }
 }
 
+// Keep top-positioned toasts below the status bar / notch (viewport-fit=cover).
+.p-toast[class*='p-toast-top'] {
+  margin-top: env(safe-area-inset-top);
+}
+
 // Styles for PrimeNG ConfirmDialog
 .p-confirmdialog {
   max-width: 94%;
@@ -290,8 +295,53 @@ app-savings-total .savings-hero__meta {
   width: min(19rem, calc(100vw - 3rem)) !important;
   box-sizing: border-box;
   margin-bottom: 1rem;
+
+  // Stop scroll chaining: reaching the end of the options list must not scroll the
+  // page/dialog behind it, because any ancestor scroll makes PrimeNG close the overlay.
+  .p-select-list-container {
+    overscroll-behavior: contain;
+  }
 }
 
+.select-overlay-panel .p-multiselect-list-container {
+  overscroll-behavior: contain;
+}
+
+// Searchable p-select / p-multiSelect on phones: bottom sheet
+// (modal mode, see SEARCHABLE_SELECT_OVERLAY_OPTIONS.responsive).
+// Sits 32px above the bottom safe area and above the on-screen keyboard (--keyboard-inset is set
+// by VisualViewportService); at most 50vh tall and never taller than the visible area.
+.p-overlay-modal.select-overlay-sheet {
+  --select-sheet-bottom: calc(32px + env(safe-area-inset-bottom, 0px) + var(--keyboard-inset, 0px));
+  --select-sheet-max-height: min(
+    50vh,
+    calc(var(--visual-viewport-height, 100vh) - 32px - env(safe-area-inset-bottom, 0px) - 1rem)
+  );
+
+  padding-bottom: var(--select-sheet-bottom);
+
+  // Covers both p-select and p-multiSelect panels.
+  .select-overlay-panel.select-overlay-panel {
+    width: calc(100vw - 2rem) !important;
+    max-width: 32rem !important;
+    max-height: var(--select-sheet-max-height);
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+
+    // Searchable lists keep a fixed height so the search input doesn't move while filtering.
+    &:has(.p-select-header, .p-multiselect-header) {
+      height: var(--select-sheet-max-height);
+    }
+  }
+
+  .p-select-list-container,
+  .p-multiselect-list-container {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-height: none !important;
+  }
+}
 .p-select-overlay.select-overlay-panel .p-select-list-container,
 .p-select-overlay.select-overlay-panel .p-select-list {
   max-width: 100%;
