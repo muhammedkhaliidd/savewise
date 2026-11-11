@@ -118,6 +118,7 @@
     </label>
     <p-datepicker
       inputId="goal-target-date"
+      [readonlyInput]="dateInputReadonly"
       [ngModel]="targetDateValue()"
       (ngModelChange)="targetDateValue.set($event)"
       [showClear]="true"

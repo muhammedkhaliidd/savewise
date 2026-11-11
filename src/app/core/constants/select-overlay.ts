@@ -1,11 +1,8 @@
 import type { OverlayListenerOptions, OverlayOptions } from 'primeng/api';
+import { isTouchDevice } from '../utils/is-touch-device';
 
 // Note: `appendTo` is not set here because p-select ignores `overlayOptions.appendTo` in
 // PrimeNG 21; overlays are appended to <body> app-wide via `overlayAppendTo` in app.config.ts.
-
-function isTouchDevice(): boolean {
-  return typeof window !== 'undefined' && ('ontouchstart' in window || navigator.maxTouchPoints > 0);
-}
 
 /**
  * Short, non-searchable dropdowns (metal, purity, sync unit…): the panel stays anchored to the

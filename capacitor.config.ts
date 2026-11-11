@@ -6,7 +6,7 @@ const config: CapacitorConfig = {
   webDir: 'dist/money-calculator/browser',
   server: {
     androidScheme: 'https',
-    // url: 'http://192.168.1.40:4200',
+    // url: 'http://192.168.1.2:4200',
     // cleartext: true,
   },
   plugins: {

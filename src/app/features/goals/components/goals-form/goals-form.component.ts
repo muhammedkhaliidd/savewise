@@ -17,6 +17,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { SelectBackCloseDirective } from '../../../../core/directives/select-back-close.directive';
+import { isTouchDevice } from '../../../../core/utils/is-touch-device';
 import { DatePickerModule } from 'primeng/datepicker';
 import { CurrencySelectComponent } from '../../../currency/components/currency-select/currency-select.component';
 import { CurrencyService } from '../../../../core/services/currency.service';
@@ -75,6 +76,9 @@ export class GoalsFormComponent {
   readonly selectOverlayOptions = SEARCHABLE_SELECT_OVERLAY_OPTIONS;
   readonly selectPanelStyle = SELECT_PANEL_STYLE;
   readonly selectPanelStyleClass = SELECT_PANEL_STYLE_CLASS;
+  /** Touch devices pick dates from the calendar only: no on-screen keyboard, which would shift
+   *  the dialog and make the date picker close itself (it closes on any ancestor scroll). */
+  readonly dateInputReadonly = isTouchDevice();
 
   baseCurrency = input.required<string>();
   editMode = input(false);

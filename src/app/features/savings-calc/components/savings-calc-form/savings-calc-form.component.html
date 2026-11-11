@@ -110,6 +110,7 @@
     </label>
     <p-datepicker
       inputId="calc-date"
+      [readonlyInput]="dateInputReadonly"
       [ngModel]="targetDate()"
       (ngModelChange)="targetDate.set($event)"
       dateFormat="yy-mm-dd"
