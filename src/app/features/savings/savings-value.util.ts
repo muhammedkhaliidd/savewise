@@ -27,3 +27,13 @@ export function valueEntryInBase(
   if (pure == null) return null;
   return entry.grams * lookupPurityFactor(entry.metal, entry.purityLabel) * pure;
 }
+
+/**
+ * Returns the entry changes with the fields of the other entry type cleared, so switching an
+ * entry between money and metal on edit doesn't leave stale values behind.
+ */
+export function clearUnusedFields<T extends Partial<SavingsEntry>>(entry: T): T {
+  return entry.type === 'metal'
+    ? { ...entry, currency: undefined, amount: undefined }
+    : { ...entry, metal: undefined, purityLabel: undefined, grams: undefined };
+}

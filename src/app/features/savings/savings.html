@@ -10,6 +10,19 @@
     (toggleActive)="onToggleSavingsActive($event)"
     (reorder)="savingsStore.reorderEntries($event)"
   />
+
+  <app-savings-list
+    variant="debt"
+    [entries]="debtsStore.allEntries()"
+    [baseCurrency]="exchangeStore.currentBase()"
+    [exchangeStore]="exchangeStore"
+    [metalStore]="metalStore"
+    (deleteEntry)="debtsStore.deleteEntry($event)"
+    (editEntry)="onEditDebtEntry($event)"
+    (addEntry)="onAddDebtClicked()"
+    (toggleActive)="onToggleDebtActive($event)"
+    (reorder)="onReorderDebts($event)"
+  />
 </div>
 
 <!-- Edit Savings Dialog -->
@@ -41,5 +54,39 @@
   <app-savings-form
     [baseCurrency]="exchangeStore.currentBase()"
     (entryAdded)="onSavingsAddedFromDialog($event)"
+  />
+</p-dialog>
+
+<!-- Edit Debt Dialog -->
+<p-dialog
+  [(visible)]="editDebtDialogVisible"
+  [modal]="true"
+  [header]="'debts.editDebt' | translate"
+  [style]="{ width: '90vw', maxWidth: '30rem' }"
+  (onShow)="overlayStack.register('edit-debt', () => editDebtDialogVisible.set(false))"
+  (onHide)="overlayStack.release('edit-debt')"
+>
+  <app-savings-form
+    #editDebtForm
+    variant="debt"
+    [editMode]="true"
+    [baseCurrency]="exchangeStore.currentBase()"
+    (entryAdded)="onSaveDebtEdit($event)"
+  />
+</p-dialog>
+
+<!-- Add Debt Dialog -->
+<p-dialog
+  [(visible)]="addDebtDialogVisible"
+  [modal]="true"
+  [header]="'debts.addDebt' | translate"
+  [style]="{ width: '90vw', maxWidth: '30rem' }"
+  (onShow)="overlayStack.register('add-debt', () => addDebtDialogVisible.set(false))"
+  (onHide)="overlayStack.release('add-debt')"
+>
+  <app-savings-form
+    variant="debt"
+    [baseCurrency]="exchangeStore.currentBase()"
+    (entryAdded)="onDebtAddedFromDialog($event)"
   />
 </p-dialog>

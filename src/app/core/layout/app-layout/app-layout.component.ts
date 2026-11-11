@@ -5,6 +5,7 @@ import {
   inject,
   OnDestroy,
   OnInit,
+  computed,
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
@@ -21,6 +22,7 @@ import { SideNavComponent } from '../side-nav/side-nav.component';
 import { ExchangeRateStore } from '../../../stores/exchange-rate.store';
 import { MetalPriceStore } from '../../../stores/metal-price.store';
 import { SavingsStore } from '../../../stores/savings.store';
+import { DebtsStore } from '../../../stores/debts.store';
 import { ToastService } from '../../../core/services/toast.service';
 import { ThemeService } from '../../../core/services/theme.service';
 import { NavigationService } from '../../../core/services/navigation.service';
@@ -44,6 +46,12 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
   readonly exchangeStore = inject(ExchangeRateStore);
   readonly metalStore = inject(MetalPriceStore);
   readonly savingsStore = inject(SavingsStore);
+  readonly debtsStore = inject(DebtsStore);
+
+  /** Header total: savings minus what I owe plus what is owed to me. */
+  readonly netTotal = computed(
+    () => this.savingsStore.totalInBase() + this.debtsStore.balanceInBase(),
+  );
   private readonly toast = inject(ToastService);
   private readonly translate = inject(TranslateService);
   private readonly destroyRef = inject(DestroyRef);
@@ -62,6 +70,7 @@ export class AppLayoutComponent implements OnInit, OnDestroy {
     this.exchangeStore.loadFromStorage();
     this.metalStore.loadFromStorage();
     this.savingsStore.loadFromStorage();
+    this.debtsStore.loadFromStorage();
     this.maybeInitialSync();
     this.listenToSyncInterval();
 

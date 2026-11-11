@@ -15,6 +15,7 @@ import { ButtonModule } from 'primeng/button';
 import { OrderListModule } from 'primeng/orderlist';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
 import type { SavingsEntry } from '../../models/savings-entry.model';
+import type { DebtDirection, DebtEntry } from '../../../debts/models/debt-entry.model';
 import { ExchangeRateStore } from '../../../../stores/exchange-rate.store';
 import { MetalPriceStore } from '../../../../stores/metal-price.store';
 import { ConfirmService } from '../../../../core/services/confirm.service';
@@ -48,6 +49,8 @@ export class SavingsListComponent {
   baseCurrency = input.required<string>();
   exchangeStore = input.required<InstanceType<typeof ExchangeRateStore>>();
   metalStore = input.required<InstanceType<typeof MetalPriceStore>>();
+  /** `debt` shows debt wording, a direction tag, and signed (−/+) values. */
+  variant = input<'savings' | 'debt'>('savings');
   deleteEntry = output<string>();
   editEntry = output<SavingsEntry>();
   addEntry = output<void>();
@@ -58,6 +61,65 @@ export class SavingsListComponent {
     this.langTick();
     return [...this.entries()];
   });
+
+  readonly isDebt = computed(() => this.variant() === 'debt');
+
+  /** i18n keys / icon that differ between the savings and debt variants. */
+  readonly text = computed(() =>
+    this.isDebt()
+      ? {
+          icon: 'pi pi-credit-card',
+          title: 'debts.listTitle',
+          add: 'debts.addEntry',
+          empty: 'debts.empty',
+          toggleActive: 'debts.toggleActive',
+          deleteHeader: 'debts.confirmDelete',
+          deleteMessage: 'debts.confirmDeleteMessage',
+        }
+      : {
+          icon: 'pi pi-wallet',
+          title: 'savings.listTitle',
+          add: 'savings.addEntry',
+          empty: 'savings.empty',
+          toggleActive: 'savings.toggleActive',
+          deleteHeader: 'confirm.deleteEntry',
+          deleteMessage: 'confirm.deleteEntryMessage',
+        },
+  );
+
+  directionOf(entry: SavingsEntry): DebtDirection | null {
+    return this.isDebt() ? ((entry as Partial<DebtEntry>).direction ?? 'owe') : null;
+  }
+
+  directionLabel(entry: SavingsEntry): string {
+    return this.directionOf(entry) === 'owedToMe'
+      ? this.translate.instant('debts.owedToMe')
+      : this.translate.instant('debts.owe');
+  }
+
+  directionTagClass(entry: SavingsEntry): string {
+    return this.directionOf(entry) === 'owedToMe'
+      ? 'bg-emerald-50 text-emerald-700 dark:bg-emerald-500/15 dark:text-emerald-300'
+      : 'bg-rose-50 text-rose-700 dark:bg-rose-500/15 dark:text-rose-300';
+  }
+
+  directionIcon(entry: SavingsEntry): string {
+    return this.directionOf(entry) === 'owedToMe' ? 'pi pi-arrow-down-left' : 'pi pi-arrow-up-right';
+  }
+
+  /** Sign shown before the base-currency value: debts I owe are minus, owed to me is plus. */
+  valueSign(entry: SavingsEntry): string {
+    const direction = this.directionOf(entry);
+    if (direction === 'owe') return '−';
+    if (direction === 'owedToMe') return '+';
+    return '';
+  }
+
+  valueClass(entry: SavingsEntry): string {
+    return this.directionOf(entry) === 'owe'
+      ? 'font-semibold text-rose-600 dark:text-rose-400'
+      : 'font-semibold text-[var(--color-primary)]';
+  }
 
   entryType(entry: SavingsEntry): 'money' | 'metal' {
     return entry.type ?? 'money';
@@ -101,8 +163,8 @@ export class SavingsListComponent {
 
   confirmDelete(id: string): void {
     this.confirmService.confirm({
-      header: this.translate.instant('confirm.deleteEntry'),
-      message: this.translate.instant('confirm.deleteEntryMessage'),
+      header: this.translate.instant(this.text().deleteHeader),
+      message: this.translate.instant(this.text().deleteMessage),
       icon: 'pi pi-trash',
       actionText: this.translate.instant('common.delete'),
       actionSeverity: 'danger',

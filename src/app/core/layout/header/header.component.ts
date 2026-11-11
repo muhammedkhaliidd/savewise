@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
@@ -65,7 +65,7 @@ import { TAB_ITEMS } from '../../constants/nav-items';
           routerLink="/settings"
           class="flex items-center gap-2 px-3 py-2 rounded-full bg-[var(--color-primary)]/10 text-[var(--color-primary)] hover:bg-[var(--color-primary)]/15 transition-colors shrink-0"
           [attr.aria-label]="
-            ('savings.total' | translate) +
+            (totalLabelKey() | translate) +
             ': ' +
             (total() | number : '1.2-2') +
             ' ' +
@@ -85,7 +85,10 @@ import { TAB_ITEMS } from '../../constants/nav-items';
 })
 export class HeaderComponent {
   baseCurrency = input.required<string>();
+  /** Savings total, or the net total (savings ± debts) when `hasDebts` is true. */
   total = input.required<number>();
+  hasDebts = input(false);
+  readonly totalLabelKey = computed(() => (this.hasDebts() ? 'savings.netTotal' : 'savings.total'));
   readonly menuToggle = output<void>();
 
   readonly navItems = TAB_ITEMS;

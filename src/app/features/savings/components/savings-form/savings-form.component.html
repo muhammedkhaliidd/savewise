@@ -1,4 +1,29 @@
 <div class="grid gap-4">
+    @if (isDebt()) {
+    <div>
+      <span id="debt-direction-label" class="flex items-center gap-2 text-sm font-medium text-[var(--color-text-muted)] mb-1">
+        <i class="pi pi-arrow-right-arrow-left text-[var(--color-primary)] !text-xs" aria-hidden="true"></i>
+        {{ 'debts.form.direction' | translate }} <span class="text-red-500">*</span>
+      </span>
+      <p-selectButton
+        [options]="directionOptions()"
+        [ngModel]="direction()"
+        optionLabel="label"
+        optionValue="value"
+        [allowEmpty]="false"
+        (onChange)="direction.set($event.value)"
+        ariaLabelledBy="debt-direction-label"
+      >
+        <ng-template let-option pTemplate="item">
+          <span class="inline-flex items-center gap-2">
+            <i [class]="option.icon" aria-hidden="true"></i>
+            {{ option.label }}
+          </span>
+        </ng-template>
+      </p-selectButton>
+    </div>
+    }
+
     <div>
       <label for="type" class="flex items-center gap-2 text-sm font-medium text-[var(--color-text-muted)] mb-1">
         <i class="pi pi-tag text-[var(--color-primary)] !text-xs" aria-hidden="true"></i>
@@ -25,13 +50,13 @@
     <div>
       <label for="label" class="flex items-center gap-2 text-sm font-medium text-[var(--color-text-muted)] mb-1">
         <i class="pi pi-id-card text-[var(--color-primary)] !text-xs" aria-hidden="true"></i>
-        {{ 'savings.form.name' | translate }} <span class="text-red-500">*</span>
+        {{ text().name | translate }} <span class="text-red-500">*</span>
       </label>
       <input
         pInputText
         id="label"
         [(ngModel)]="labelValue"
-        [placeholder]="'savings.form.namePlaceholder' | translate"
+        [placeholder]="text().namePlaceholder | translate"
         class="w-full"
       />
     </div>
@@ -154,7 +179,7 @@
     </div>
 
   <p-button
-    [label]="editMode() ? ('common.save' | translate) : ('savings.form.addSavings' | translate)"
+    [label]="editMode() ? ('common.save' | translate) : (text().submit | translate)"
     [icon]="editMode() ? 'pi pi-check' : 'pi pi-plus'"
     (onClick)="addEntry()"
     [disabled]="!canAdd()"

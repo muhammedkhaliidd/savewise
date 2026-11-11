@@ -54,7 +54,8 @@
     <!-- Header -->
     <app-header
       [baseCurrency]="exchangeStore.currentBase()"
-      [total]="savingsStore.totalInBase()"
+      [total]="netTotal()"
+      [hasDebts]="debtsStore.hasEntries()"
       (menuToggle)="drawerVisible.set(true)"
     />
 

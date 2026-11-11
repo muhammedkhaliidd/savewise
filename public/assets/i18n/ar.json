@@ -124,6 +124,25 @@
       "addSavings": "إضافة مدخرة",
       "typeMoney": "نقد",
       "typeMetal": "معدن"
+    },
+    "netTotal": "صافي الإجمالي"
+  },
+  "debts": {
+    "listTitle": "الديون",
+    "addEntry": "إضافة دين",
+    "addDebt": "إضافة دين",
+    "editDebt": "تعديل الدين",
+    "empty": "لا توجد ديون بعد. أضف المال أو المعدن الذي عليك أو الذي لك عند الآخرين.",
+    "owe": "عليّ",
+    "owedToMe": "لي",
+    "toggleActive": "تفعيل/إيقاف الدين",
+    "confirmDelete": "حذف الدين",
+    "confirmDeleteMessage": "هل أنت متأكد من حذف هذا الدين؟",
+    "form": {
+      "direction": "الاتجاه",
+      "name": "اسم الدين",
+      "namePlaceholder": "مثال: قرض السيارة",
+      "addDebt": "إضافة دين"
     }
   },
   "goals": {
@@ -615,7 +634,9 @@
     "baseCurrencyChanged": "تم تغيير العملة الأساسية إلى {{code}}",
     "syncIntervalChanged": "تم تغيير فترة المزامنة",
     "metalsCleared": "تم مسح أسعار المعادن المخصصة",
-    "metalsClearedDetail": "كانت قيمها مرتبطة بالعملة الأساسية السابقة."
+    "metalsClearedDetail": "كانت قيمها مرتبطة بالعملة الأساسية السابقة.",
+    "debtAdded": "تمت إضافة الدين",
+    "debtUpdated": "تم تحديث الدين"
   },
   "confirm": {
     "deleteEntry": "حذف المدخرة",

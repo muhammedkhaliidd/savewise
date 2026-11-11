@@ -6,6 +6,7 @@ import { DashboardStatsComponent, NearestTarget } from './components/dashboard-s
 import { SavingsBreakdownComponent } from './components/savings-breakdown/savings-breakdown.component';
 import { GoalCardsComponent } from './components/goal-cards/goal-cards.component';
 import { SavingsStore } from '../../stores/savings.store';
+import { DebtsStore } from '../../stores/debts.store';
 import { ExchangeRateStore } from '../../stores/exchange-rate.store';
 import { MetalPriceStore } from '../../stores/metal-price.store';
 import { GoalsStore } from '../../stores/goals.store';
@@ -28,6 +29,7 @@ export class Dashboard implements OnInit {
   readonly exchangeStore = inject(ExchangeRateStore);
   readonly metalStore = inject(MetalPriceStore);
   readonly savingsStore = inject(SavingsStore);
+  readonly debtsStore = inject(DebtsStore);
   readonly goalsStore = inject(GoalsStore);
   readonly calcStore = inject(SavingsCalcStore);
 
@@ -55,6 +57,7 @@ export class Dashboard implements OnInit {
     this.exchangeStore.loadFromStorage();
     this.metalStore.loadFromStorage();
     this.savingsStore.loadFromStorage();
+    this.debtsStore.loadFromStorage();
     this.goalsStore.loadFromStorage();
     this.calcStore.loadFromStorage();
   }

@@ -3,22 +3,22 @@
 >
   <div class="flex items-center justify-between mb-4">
     <h3 class="flex items-center gap-2 text-base font-semibold text-[var(--color-text)] sm:text-lg">
-      <i class="pi pi-wallet text-[var(--color-primary)]"></i>
-      {{ 'savings.listTitle' | translate }}
+      <i [class]="text().icon + ' text-[var(--color-primary)]'" aria-hidden="true"></i>
+      {{ text().title | translate }}
     </h3>
     <p-button
       icon="pi pi-plus"
       severity="primary"
       [rounded]="true"
       size="small"
-      [ariaLabel]="'savings.addEntry' | translate"
+      [ariaLabel]="text().add | translate"
       (onClick)="addEntry.emit()"
     />
   </div>
 
   @if (entries().length === 0) {
   <p class="text-[var(--color-text-muted)] text-center py-4">
-    {{ 'savings.empty' | translate }}
+    {{ text().empty | translate }}
   </p>
   } @else {
   <div class="min-h-[400px] flex flex-col">
@@ -38,10 +38,19 @@
       >
         <i class="pi pi-bars cursor-grab text-[var(--color-text-muted)]" cdkDragHandle></i>
         <div class="flex-1 min-w-0">
-          <div class="flex items-center gap-2 min-w-0">
-            <p class="truncate font-semibold text-[var(--color-text)]">
+          <div class="flex flex-wrap items-center gap-x-2 gap-y-1 min-w-0">
+            <p class="truncate max-w-full font-semibold text-[var(--color-text)]">
               {{ entry.label || ('common.untitled' | translate) }}
             </p>
+            @if (isDebt()) {
+            <span
+              class="inline-flex items-center gap-1 rounded-full px-2 py-1 text-[10px] font-semibold leading-none whitespace-nowrap"
+              [class]="directionTagClass(entry)"
+            >
+              <i [class]="directionIcon(entry)" style="font-size: 10px" aria-hidden="true"></i>
+              {{ directionLabel(entry) }}
+            </span>
+            }
             <span
               class="inline-flex items-center gap-1 rounded-full px-2 py-1 text-[10px] font-semibold leading-none whitespace-nowrap"
               [class]="tagClass(entry)"
@@ -53,14 +62,14 @@
           <p class="text-xs text-[var(--color-text-muted)]">
             @if (entryType(entry) === 'money') {
               @if (entry.currency === baseCurrency()) {
-                <span class="text-[var(--color-primary)] font-semibold">
-                  {{ entry.amount | number : '1.2-2' }} {{ entry.currency! | displayCode | translate }}
+                <span [class]="valueClass(entry)">
+                  {{ valueSign(entry) }}{{ entry.amount | number : '1.2-2' }} {{ entry.currency! | displayCode | translate }}
                 </span>
               } @else {
                 {{ entry.amount | number : '1.2-4' }} {{ entry.currency! | displayCode | translate }}
                 =
-                <span class="text-[var(--color-primary)] font-semibold">
-                  {{ convertedAmount(entry) | number : '1.2-2' }}
+                <span [class]="valueClass(entry)">
+                  {{ valueSign(entry) }}{{ convertedAmount(entry) | number : '1.2-2' }}
                   {{ baseCurrency() | displayCode | translate }}
                 </span>
               }
@@ -72,8 +81,8 @@
                   'savings.priceUnavailable' | translate
                 }}</span>
               } @else {
-                <span class="text-[var(--color-primary)] font-semibold">
-                  {{ convertedAmount(entry) | number : '1.2-2' }}
+                <span [class]="valueClass(entry)">
+                  {{ valueSign(entry) }}{{ convertedAmount(entry) | number : '1.2-2' }}
                   {{ baseCurrency() | displayCode | translate }}
                 </span>
               }
@@ -84,7 +93,7 @@
           <p-toggleSwitch
             [ngModel]="entry.active !== false"
             (ngModelChange)="toggleActive.emit({ id: entry.id, active: $event })"
-            [ariaLabel]="'savings.toggleActive' | translate"
+            [ariaLabel]="text().toggleActive | translate"
           />
           <p-button
             icon="pi pi-pencil"

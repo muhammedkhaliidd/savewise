@@ -2,6 +2,8 @@
 
   <app-savings-total
     [total]="savingsStore.totalInBase()"
+    [owed]="debtsStore.owedInBase()"
+    [owedToMe]="debtsStore.owedToMeInBase()"
     [entryCount]="savingsStore.entryCount()"
     [baseCurrency]="exchangeStore.currentBase()"
   />

@@ -124,6 +124,25 @@
       "addSavings": "Add Savings",
       "typeMoney": "Money",
       "typeMetal": "Metal"
+    },
+    "netTotal": "Net Total"
+  },
+  "debts": {
+    "listTitle": "Debts",
+    "addEntry": "Add debt",
+    "addDebt": "Add Debt",
+    "editDebt": "Edit Debt",
+    "empty": "No debts yet. Add money or metal you owe, or that is owed to you.",
+    "owe": "I owe",
+    "owedToMe": "Owed to me",
+    "toggleActive": "Toggle debt active",
+    "confirmDelete": "Delete Debt",
+    "confirmDeleteMessage": "Are you sure you want to delete this debt?",
+    "form": {
+      "direction": "Direction",
+      "name": "Name of the debt",
+      "namePlaceholder": "e.g., Car loan",
+      "addDebt": "Add Debt"
     }
   },
   "goals": {
@@ -615,7 +634,9 @@
     "baseCurrencyChanged": "Base currency changed to {{code}}",
     "syncIntervalChanged": "Sync interval changed",
     "metalsCleared": "Custom metal prices cleared",
-    "metalsClearedDetail": "Their values were tied to the previous base currency."
+    "metalsClearedDetail": "Their values were tied to the previous base currency.",
+    "debtAdded": "Debt added",
+    "debtUpdated": "Debt updated"
   },
   "confirm": {
     "deleteEntry": "Delete Entry",

@@ -22,6 +22,10 @@ import { FormsModule } from '@angular/forms';
 import { CurrencySelectComponent } from '../../../currency/components/currency-select/currency-select.component';
 import { CurrencyService } from '../../../../core/services/currency.service';
 import type { SavingsEntry, SavingsEntryType } from '../../models/savings-entry.model';
+import type { DebtDirection } from '../../../debts/models/debt-entry.model';
+
+/** Value emitted by the form. `direction` is only set in the `debt` variant. */
+export type SavingsFormValue = Omit<SavingsEntry, 'id'> & { direction?: DebtDirection };
 import type { MetalCode } from '../../../metals/models/metal-price.model';
 import { METAL_OPTIONS, PURITY_OPTIONS } from '../../../metals/constants/metal-options';
 import {
@@ -60,7 +64,42 @@ export class SavingsFormComponent {
 
   baseCurrency = input.required<string>();
   editMode = input(false);
-  entryAdded = output<Omit<SavingsEntry, 'id'>>();
+  /** `debt` adds a direction (I owe / owed to me) and debt wording; same fields otherwise. */
+  variant = input<'savings' | 'debt'>('savings');
+  entryAdded = output<SavingsFormValue>();
+
+  readonly isDebt = computed(() => this.variant() === 'debt');
+
+  readonly directionOptions = computed(() => {
+    this.langTick();
+    return [
+      {
+        label: this.translate.instant('debts.owe'),
+        value: 'owe' as DebtDirection,
+        icon: 'pi pi-arrow-up-right text-rose-500',
+      },
+      {
+        label: this.translate.instant('debts.owedToMe'),
+        value: 'owedToMe' as DebtDirection,
+        icon: 'pi pi-arrow-down-left text-emerald-500',
+      },
+    ];
+  });
+
+  /** i18n keys that differ between the savings and debt variants. */
+  readonly text = computed(() =>
+    this.isDebt()
+      ? {
+          name: 'debts.form.name',
+          namePlaceholder: 'debts.form.namePlaceholder',
+          submit: 'debts.form.addDebt',
+        }
+      : {
+          name: 'savings.form.name',
+          namePlaceholder: 'savings.form.namePlaceholder',
+          submit: 'savings.form.addSavings',
+        },
+  );
 
   readonly allCurrencies = computed(() => this.currencyService.getAllCurrencies());
 
@@ -89,6 +128,7 @@ export class SavingsFormComponent {
   });
 
   type = signal<SavingsEntryType>('money');
+  direction = signal<DebtDirection>('owe');
 
   labelValue = signal('');
 
@@ -147,6 +187,7 @@ export class SavingsFormComponent {
     if (!this.canAdd()) return;
     const label = this.labelValue() || undefined;
     const active = this.activeValue();
+    const direction = this.isDebt() ? { direction: this.direction() } : {};
     if (this.type() === 'money') {
       this.entryAdded.emit({
         type: 'money',
@@ -154,6 +195,7 @@ export class SavingsFormComponent {
         currency: this.currency(),
         amount: this.amountValue() ?? 0,
         active,
+        ...direction,
       });
     } else {
       this.entryAdded.emit({
@@ -163,6 +205,7 @@ export class SavingsFormComponent {
         purityLabel: this.purityLabel(),
         grams: this.gramsValue() ?? 0,
         active,
+        ...direction,
       });
     }
     this.reset();
@@ -170,6 +213,7 @@ export class SavingsFormComponent {
 
   reset(): void {
     this.type.set('money');
+    this.direction.set('owe');
     this.labelValue.set('');
     this.currency.set(this.baseCurrency());
     this.amountValue.set(null);
@@ -179,11 +223,12 @@ export class SavingsFormComponent {
     this.activeValue.set(true);
   }
 
-  setValues(entry: SavingsEntry): void {
+  setValues(entry: SavingsEntry & { direction?: DebtDirection }): void {
     this.suppressCurrencyDefault = true;
     this.suppressPurityReset = true;
     const entryType = entry.type ?? 'money';
     this.type.set(entryType);
+    this.direction.set(entry.direction ?? 'owe');
     this.labelValue.set(entry.label ?? '');
     this.activeValue.set(entry.active !== false);
     if (entryType === 'money') {

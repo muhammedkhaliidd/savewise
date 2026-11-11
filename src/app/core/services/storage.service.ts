@@ -4,6 +4,7 @@ import type { SavingsState } from '../../features/savings/models/savings-entry.m
 import type { MetalPricesState } from '../../features/metals/models/metal-price.model';
 import type { GoalsState } from '../../features/goals/models/goal.model';
 import type { SavingsCalcState } from '../../features/savings-calc/models/savings-calc.model';
+import type { DebtsState } from '../../features/debts/models/debt-entry.model';
 
 const STORAGE_KEYS = {
   EXCHANGE_RATES: 'money-calc-rates',
@@ -11,6 +12,7 @@ const STORAGE_KEYS = {
   METAL_PRICES: 'money-calc-metals',
   GOALS: 'money-calc-goals',
   SAVINGS_CALC: 'money-calc-savings-calc',
+  DEBTS: 'money-calc-debts',
 } as const;
 
 @Injectable({
@@ -62,11 +64,21 @@ export class StorageService {
     return data ? JSON.parse(data) : null;
   }
 
+  saveDebts(state: DebtsState): void {
+    localStorage.setItem(STORAGE_KEYS.DEBTS, JSON.stringify(state));
+  }
+
+  loadDebts(): DebtsState | null {
+    const data = localStorage.getItem(STORAGE_KEYS.DEBTS);
+    return data ? JSON.parse(data) : null;
+  }
+
   clearAll(): void {
     localStorage.removeItem(STORAGE_KEYS.EXCHANGE_RATES);
     localStorage.removeItem(STORAGE_KEYS.SAVINGS);
     localStorage.removeItem(STORAGE_KEYS.METAL_PRICES);
     localStorage.removeItem(STORAGE_KEYS.GOALS);
     localStorage.removeItem(STORAGE_KEYS.SAVINGS_CALC);
+    localStorage.removeItem(STORAGE_KEYS.DEBTS);
   }
 }
